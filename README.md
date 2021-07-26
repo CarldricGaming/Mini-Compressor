@@ -94,3 +94,6 @@ Grab and use it whatever you like. Thanks to **pratikpatel8982**
 
 # Translator for Mini Compressor
 [Here](https://github.com/CarldricGaming/Translator-for-Mini-Compressor)
+
+# Mini Compressor - Freearc Plugins v2 updated
+[Here](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/MC_Freearc_v2)
