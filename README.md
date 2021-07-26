@@ -85,7 +85,7 @@ Recommended Spec:
 ![SS2](https://archive.org/download/capture_20210726/Capture.jpg)
 
 # Self-Extracting (SFX)
-Grab this file and extract on main folder next to MiniCompressor.exe file.
+Grab this file and extract on main folder next to **MiniCompressor.exe** file.
 [Here](https://github.com/CarldricGaming/SFX-for-Mini-Compressor)
 
 # Installer Plugins for Mini Compressor
