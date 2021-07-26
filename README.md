@@ -37,35 +37,35 @@ So you can get any you want to compress.
 * MC_ConvertBytes.dll - v1.0
 
 # Special thanks to 
-* 7-Zip: by Igor Pavlov and Shelwien
-* Anvil Forge Recompressor: by Edison007 and ProFrager
-* Razor Archiver: by Christian Martelock
-* CSArc: by Siyuan Fu
-* SQUID Demo Compressor: by Ilya Muravyov
-* Freearc, SREP and FAZip: by Bulat Ziganshin
-* ISDONE, LOLZ, UELR and MSC: by ProFrager
-* lzturbo: by Hamid Buzidi
-* Noodle: by Ramiro Cruzo
-* DisksPan, ZTool, pZLib and XTool: by Razor12911
-* Precomp: by Christian Schneider
-* ECM: by Neill Corlett
-* NanoZip: by Sami Runsas
-* UHARC: by Uwe Herklotz
-* Graphics Studio: by Razor12911
-* Game File Scanner: by Razor12911
-* OSCDIMG: by Microsoft
-* WinRAR: by Alexander Roshal
-* Inno Setup: by Jordan Russell
-* Directory Sclicer: by Mircea Dragomir
-* Masked Compression: by panker1992
-* Selft-Extract: by gozarck
-* hkSFV: by Big-O Software
-* ZCM: by Nania Francesco Antonio
-* SafeCopy: by Roman Ish
-* Installer Creator: by Razor12911 and Kitsune1982
-* PMT - Parallel Multithreaded encoder/decoder: by 78372
-* lrzip: by gozarck
-* AllDup: by MTSD
+* **7-Zip**: by **Igor Pavlov** and **Shelwien**
+* **Anvil Forge Recompressor**: by **Edison007** and **ProFrager**
+* **Razor Archiver**: by **Christian Martelock**
+* **CSArc**: by **Siyuan Fu**
+* **SQUID Demo Compressor**: by **Ilya Muravyov**
+* **Freearc**, **SREP** and **FAZip**: by **Bulat Ziganshin**
+* **ISDONE**, **LOLZ**, **UELR** and **MSC**: by **ProFrager**
+* **lzturbo**: by **Hamid Buzidi**
+* **Noodle**: by **Ramiro Cruzo**
+* **DisksPan**, **ZTool**, **pZLib** and **XTool**: by **Razor12911**
+* **Precomp**: by **Christian Schneider**
+* **ECM**: by **Neill Corlett**
+* **NanoZip**: by **Sami Runsas**
+* **UHARC**: by **Uwe Herklotz**
+* **Graphics Studio**: by **Razor12911**
+* **Game File Scanner**: by **Razor12911**
+* **OSCDIMG**: by **Microsoft**
+* **WinRAR**: by **Alexander Roshal**
+* **Inno Setup**: by **Jordan Russell**
+* **Directory Sclicer**: by **Mircea Dragomir**
+* **Masked Compression**: by **panker1992**
+* **Selft-Extract**: by **gozarck**
+* **hkSFV**: by **Big-O Software**
+* **ZCM**: by **Nania Francesco Antonio**
+* **SafeCopy**: by **Roman Ish**
+* **Installer Creator**: by **Razor12911** and **Kitsune1982**
+* **PMT - Parallel Multithreaded encoder/decoder**: by **78372**
+* **lrzip**: by **gozarck**
+* **AllDup**: by **MTSD**
 
 * and other stuff that I've forgotten... Many-many thanks to them of Creator's.
 
@@ -86,4 +86,8 @@ Recommended Spec:
 
 # Self-Extracting (SFX)
 Grab this file and extract on main folder next to MiniCompressor.exe file.
-https://github.com/CarldricGaming/SFX-for-Mini-Compressor
+[Here](https://github.com/CarldricGaming/SFX-for-Mini-Compressor)
+
+# Installer Plugins for Mini Compressor
+Grab and use it whatever you like. Thanks to **pratikpatel8982**
+[Here](https://fileforums.com/showpost.php?p=491935&postcount=173)
