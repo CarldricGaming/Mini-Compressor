@@ -1,5 +1,4 @@
 ![Logo](https://ia803001.us.archive.org/23/items/LogoMC/Logo%20MC.png)
-
 # Mini-Compressor
 Mini Compressor is the Toolset for most repacking games.
 It has included with Masked Compression v3.0 now.
@@ -80,3 +79,7 @@ Recommended Spec:
 * RAM: 8GB
 * Storage: 512GB
 * OS: Windows 7, 8, 8.1, 10 (x64 only)
+
+# Screenshot
+![SS1](https://archive.org/download/capture_20210726/213231213.jpg)
+![SS2](https://archive.org/download/capture_20210726/Capture.jpg)
