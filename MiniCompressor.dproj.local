@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2019/04/03 22:09:00.000.401,=C:\Users\Carldric Clement\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/04/03 22:09:56.000.201,=C:\Users\Carldric Clement\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/04/03 22:11:24.000.370,C:\Users\Carldric Clement\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit1.pas</Transaction>
+    <Transaction>2019/04/03 22:11:24.000.370,C:\Users\Carldric Clement\Documents\Embarcadero\Studio\Projects\Unit1.fmx=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit1.fmx</Transaction>
+    <Transaction>2019/04/03 22:11:41.000.940,C:\Users\Carldric Clement\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Carldric Clement\Desktop\Mini Compressor\MiniCompressor.dproj</Transaction>
+    <Transaction>2019/04/03 23:44:38.000.447,=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit2.pas</Transaction>
+    <Transaction>2019/04/03 23:45:08.000.091,=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit2.pas</Transaction>
+    <Transaction>2019/04/04 01:26:14.000.220,=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit3.pas</Transaction>
+    <Transaction>2019/04/08 22:23:32.000.334,=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit4.pas</Transaction>
+    <Transaction>2019/04/09 23:37:48.000.207,=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2019/04/14 16:52:45.000.070,=C:\Users\Carldric Clement\Desktop\Mini Compressor\Unit6.pas</Transaction>
+    <Transaction>2019/04/20 22:20:11.000.286,=C:\Users\Carldric Clement\Desktop\Mini Compressor\CommCtrlAdmin.rc</Transaction>
+    <Transaction>2019/04/20 22:36:03.000.032,C:\Users\Carldric Clement\Desktop\Mini Compressor\CommCtrlAdmin.rc=</Transaction>
+    <Transaction>2019/04/20 22:37:26.000.426,=C:\Users\Carldric Clement\Desktop\Mini Compressor\CommCtrlAdmin.manifest</Transaction>
+    <Transaction>2019/04/22 21:46:03.000.379,C:\Users\Carldric Clement\Desktop\Mini Compressor\CommCtrlAdmin.manifest=</Transaction>
+  </Transactions>
+</BorlandProject>

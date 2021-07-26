@@ -1,0 +1,492 @@
+object Form4: TForm4
+  Left = 0
+  Top = 0
+  Caption = 'MyTitie'
+  ClientHeight = 481
+  ClientWidth = 641
+  Position = MainFormCenter
+  StyleBook = Form1.StyleBook1
+  FormFactor.Width = 1280
+  FormFactor.Height = 1024
+  FormFactor.Devices = [Desktop]
+  OnKeyDown = FormKeyDown
+  DesignerMasterStyle = 0
+  object ToolbarHolder: TLayout
+    OnGesture = FormGesture
+    Align = Bottom
+    Locked = True
+    Position.Y = 520.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 75.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    object ToolbarPopup: TPopup
+      Touch.InteractiveGestures = [Pan]
+      OnGesture = FormGesture
+      Align = Bottom
+      DragMode = dmAutomatic
+      Placement = Absolute
+      PlacementRectangle.Left = -1.000000000000000000
+      PlacementRectangle.Top = -1.000000000000000000
+      PlacementRectangle.Right = -1.000000000000000000
+      PlacementRectangle.Bottom = -1.000000000000000000
+      Size.Width = 640.000000000000000000
+      Size.Height = 75.000000000000000000
+      Size.PlatformDefault = False
+      object ToolbarPopupAnimation: TFloatAnimation
+        AnimationType = Out
+        Duration = 0.200000002980232200
+        Interpolation = Cubic
+        PropertyName = 'Position.Y'
+        StartValue = 0.000000000000000000
+        StopValue = 0.000000000000000000
+        Trigger = 'IsOpen=true'
+        TriggerInverse = 'IsOpen=false'
+      end
+      object ToolBar1: TToolBar
+        StyleName = 'StyleBook1'
+        Align = Client
+        Padding.Left = 50.000000000000000000
+        Padding.Top = 5.000000000000000000
+        Padding.Right = 50.000000000000000000
+        Size.Width = 640.000000000000000000
+        Size.Height = 75.000000000000000000
+        Size.PlatformDefault = False
+        object ToolbarApplyButton: TButton
+          Align = Left
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 141.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'applybuttontext'
+          Text = 'Apply'
+        end
+        object ToolbarCloseButton: TButton
+          Align = Right
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 505.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'closebuttontext'
+          Text = 'Close App'
+          OnClick = ToolbarCloseButtonClick
+        end
+        object ToolbarAddButton: TButton
+          Align = Left
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 55.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 76.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'addbuttontext'
+          Text = 'Add'
+        end
+      end
+    end
+  end
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 641.000000000000000000
+    Size.Height = 481.000000000000000000
+    Size.PlatformDefault = False
+    TabIndex = 0
+    TabOrder = 1
+    TabPosition = None
+    Sizes = (
+      641s
+      481s
+      641s
+      481s
+      641s
+      481s
+      641s
+      481s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem1'
+      ExplicitSize.cx = 8.000000000000000000
+      ExplicitSize.cy = 8.000000000000000000
+      object Label1: TLabel
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 233.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 20.000000000000000000
+        Text = 'Are you sure about that??'
+        TabOrder = 0
+      end
+      object GroupBox1: TGroupBox
+        Position.X = 8.000000000000000000
+        Position.Y = 32.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 73.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'General'
+        TabOrder = 1
+        object Edit1: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 0
+          CanFocus = False
+          Position.X = 56.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 553.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label2: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 41.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Source'
+          TabOrder = 1
+        end
+        object Edit2: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 2
+          CanFocus = False
+          Position.X = 56.000000000000000000
+          Position.Y = 40.000000000000000000
+          Size.Width = 553.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label3: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 40.000000000000000000
+          Size.Width = 41.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Output'
+          TabOrder = 3
+        end
+      end
+      object GroupBox2: TGroupBox
+        Position.X = 8.000000000000000000
+        Position.Y = 104.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 97.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Option'
+        TabOrder = 2
+        object Edit3: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 0
+          CanFocus = False
+          Position.X = 64.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 545.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Edit4: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 1
+          CanFocus = False
+          Position.X = 64.000000000000000000
+          Position.Y = 40.000000000000000000
+          Size.Width = 545.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label4: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 49.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Memory'
+          TabOrder = 2
+        end
+        object Label5: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 40.000000000000000000
+          Size.Width = 49.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Method'
+          TabOrder = 3
+        end
+        object Edit7: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 4
+          Position.X = 64.000000000000000000
+          Position.Y = 64.000000000000000000
+          Size.Width = 545.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label12: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 64.000000000000000000
+          Size.Width = 57.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Password'
+          TabOrder = 5
+        end
+      end
+      object Button1: TButton
+        Position.X = 240.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'YES'
+        OnClick = Button1Click
+      end
+      object Button2: TButton
+        Position.X = 328.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 72.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        Text = 'NO'
+        OnClick = Button2Click
+      end
+    end
+    object TabItem2: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem2'
+      ExplicitSize.cx = 8.000000000000000000
+      ExplicitSize.cy = 8.000000000000000000
+      object Label6: TLabel
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 233.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 20.000000000000000000
+        Text = 'Are you sure about that??'
+        TabOrder = 0
+      end
+      object GroupBox3: TGroupBox
+        Position.X = 8.000000000000000000
+        Position.Y = 32.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 73.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'General'
+        TabOrder = 1
+        object Edit5: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 0
+          Position.X = 56.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 556.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label7: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 25.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'File'
+          TabOrder = 1
+        end
+        object Edit6: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 2
+          Position.X = 56.000000000000000000
+          Position.Y = 40.000000000000000000
+          Size.Width = 556.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label8: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 40.000000000000000000
+          Size.Width = 41.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Output'
+          TabOrder = 3
+        end
+      end
+      object Button4: TButton
+        Position.X = 240.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'YES'
+        OnClick = Button4Click
+      end
+      object Button5: TButton
+        Position.X = 328.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 72.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'NO'
+        OnClick = Button5Click
+      end
+    end
+    object TabItem3: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem3'
+      ExplicitSize.cx = 8.000000000000000000
+      ExplicitSize.cy = 8.000000000000000000
+      object Memo1: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        ShowScrollBars = False
+        StyledSettings = [Size, Style, FontColor]
+        TextSettings.Font.Family = 'Consolas'
+        CanFocus = False
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 433.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Viewport.Width = 625.000000000000000000
+        Viewport.Height = 433.000000000000000000
+      end
+      object Button3: TButton
+        Position.X = 328.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 72.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Close'
+        OnClick = Button3Click
+      end
+      object Button6: TButton
+        Position.X = 240.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Save report'
+        OnClick = Button6Click
+      end
+    end
+    object TabItem4: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem4'
+      ExplicitSize.cx = 8.000000000000000000
+      ExplicitSize.cy = 8.000000000000000000
+      object Label9: TLabel
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 433.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 36.000000000000000000
+        TextSettings.HorzAlign = Center
+        Text = 'WAITING FOR RESPONSE'
+        Visible = False
+        TabOrder = 0
+      end
+      object Button7: TButton
+        Position.X = 328.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 72.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Close'
+        OnClick = Button7Click
+      end
+      object Button8: TButton
+        Position.X = 240.000000000000000000
+        Position.Y = 448.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Save Report'
+      end
+      object Memo2: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        Position.X = 8.000000000000000000
+        Position.Y = 32.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 361.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Viewport.Width = 625.000000000000000000
+        Viewport.Height = 361.000000000000000000
+      end
+      object ProgressBar1: TProgressBar
+        Orientation = Horizontal
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object Label10: TLabel
+        Position.X = 16.000000000000000000
+        Position.Y = 400.000000000000000000
+        TabOrder = 5
+      end
+      object Label11: TLabel
+        Position.X = 16.000000000000000000
+        Position.Y = 424.000000000000000000
+        TabOrder = 6
+      end
+    end
+  end
+end

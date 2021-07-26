@@ -1,0 +1,117 @@
+object Form6: TForm6
+  Left = 0
+  Top = 0
+  Caption = 'Inno Maker: Changelog'
+  ClientHeight = 301
+  ClientWidth = 301
+  Position = Designed
+  StyleBook = Form1.StyleBook1
+  FormFactor.Width = 1280
+  FormFactor.Height = 1024
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  DesignerMasterStyle = 0
+  object ToolbarHolder: TLayout
+    OnGesture = FormGesture
+    Align = Bottom
+    Locked = True
+    Position.Y = 520.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 75.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    object ToolbarPopup: TPopup
+      Touch.InteractiveGestures = [Pan]
+      OnGesture = FormGesture
+      Align = Bottom
+      DragMode = dmAutomatic
+      Placement = Absolute
+      PlacementRectangle.Left = -1.000000000000000000
+      PlacementRectangle.Top = -1.000000000000000000
+      PlacementRectangle.Right = -1.000000000000000000
+      PlacementRectangle.Bottom = -1.000000000000000000
+      Size.Width = 640.000000000000000000
+      Size.Height = 75.000000000000000000
+      Size.PlatformDefault = False
+      object ToolbarPopupAnimation: TFloatAnimation
+        AnimationType = Out
+        Duration = 0.200000002980232200
+        Interpolation = Cubic
+        PropertyName = 'Position.Y'
+        StartValue = 0.000000000000000000
+        StopValue = 0.000000000000000000
+        Trigger = 'IsOpen=true'
+        TriggerInverse = 'IsOpen=false'
+      end
+      object ToolBar1: TToolBar
+        StyleName = 'StyleBook1'
+        Align = Client
+        Padding.Left = 50.000000000000000000
+        Padding.Top = 5.000000000000000000
+        Padding.Right = 50.000000000000000000
+        Size.Width = 640.000000000000000000
+        Size.Height = 75.000000000000000000
+        Size.PlatformDefault = False
+        object ToolbarApplyButton: TButton
+          Align = Left
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 141.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'applybuttontext'
+          Text = 'Apply'
+        end
+        object ToolbarCloseButton: TButton
+          Align = Right
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 505.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'closebuttontext'
+          Text = 'Close App'
+          OnClick = ToolbarCloseButtonClick
+        end
+        object ToolbarAddButton: TButton
+          Align = Left
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 55.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 76.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'addbuttontext'
+          Text = 'Add'
+        end
+      end
+    end
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Lines.Strings = (
+      'loaded text')
+    CanFocus = False
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 289.000000000000000000
+    Size.Height = 289.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 285.000000000000000000
+    Viewport.Height = 285.000000000000000000
+  end
+end
