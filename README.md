@@ -91,3 +91,6 @@ Grab this file and extract on main folder next to MiniCompressor.exe file.
 # Installer Plugins for Mini Compressor
 Grab and use it whatever you like. Thanks to **pratikpatel8982**
 [Here](https://fileforums.com/showpost.php?p=491935&postcount=173)
+
+# Translator for Mini Compressor
+[Here](https://github.com/CarldricGaming/Translator-for-Mini-Compressor)
