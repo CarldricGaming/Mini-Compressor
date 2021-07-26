@@ -83,3 +83,7 @@ Recommended Spec:
 # Screenshot
 ![SS1](https://archive.org/download/capture_20210726/213231213.jpg)
 ![SS2](https://archive.org/download/capture_20210726/Capture.jpg)
+
+# Self-Extracting (SFX)
+Grab this file and extract on main folder next to MiniCompressor.exe file.
+https://github.com/CarldricGaming/SFX-for-Mini-Compressor
