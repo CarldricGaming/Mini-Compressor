@@ -1,0 +1,32 @@
+ALLDUP (Portable Edition)
+
+Mit AllDup können Sie Ihre Festplatten nach Dateiduplikaten durchsuchen 
+und diese gezielt löschen. Die Software ist Freeware und darf kostenlos 
+genutzt werden.
+
+----------------------------------------------------------------
+
+INSTALLATIONSHINWEISE
+
+Entpacken Sie den Inhalt der Zipdatei in ein Verzeichnis und starten 
+Sie die Datei "AllDupPortable.exe".
+
+----------------------------------------------------------------
+
+SYSTEMANFORDERUNGEN
+
+AllDup ist kompatibel mit der 32-Bit und 64-Bit Version 
+der folgenden Betriebssysteme: 
+
+Microsoft Windows Server (alle Versionen)
+Microsoft Windows 10 (alle Versionen)
+Microsoft Windows 8 (alle Versionen)
+Microsoft Windows 7 (alle Versionen)
+Microsoft Windows Vista (alle Versionen)
+Microsoft Windows XP (alle Versionen)
+
+----------------------------------------------------------------
+
+KONTAKT
+
+http://www.AllDup.de

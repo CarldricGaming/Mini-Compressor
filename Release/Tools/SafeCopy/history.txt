@@ -1,0 +1,32 @@
+SafeCopy Free! utility
+http://www.elwinsoft.com/safecopy-free.html
+
++ new option, improvement or modification
+! bug fix 
+
+2.4 October 28, 2016
++ new option - include folder itself when copying files
++ improved error messages
++ removed confusing /Do not modify/ option
+! fixed bug with OLE date/time
+
+2.3 August 28, 2016
++ added option to copy folder structure without files
+
+2.2 March 03, 2016
++ added options: overwrite or skip existing files
++ unicode support
++ utility can read files from mobile devices via USB connection
+
+2.1 July 09, 2015
++ added folder recursion option
++ internal changes
+
+2.0 July 16, 2012
++ product redesigned
++ new date-time and attribute modification options
+
+1.0.1 Dec 19, 2002
+! application cannot find root folders;
+
+1.0.0 Oct 18, 2002 (original version)
