@@ -84,16 +84,7 @@ Recommended Spec:
 ![SS1](https://archive.org/download/capture_20210726/213231213.jpg)
 ![SS2](https://archive.org/download/capture_20210726/Capture.jpg)
 
-# Self-Extracting (SFX)
-Grab this file and extract on main folder next to **MiniCompressor.exe** file.
-[Here](https://github.com/CarldricGaming/SFX-for-Mini-Compressor)
-
 # Installer Plugins for Mini Compressor
 Grab and use it whatever you like. Thanks to **pratikpatel8982**
 [Here](https://fileforums.com/showpost.php?p=491935&postcount=173)
 
-# Translator for Mini Compressor
-[Here](https://github.com/CarldricGaming/Translator-for-Mini-Compressor)
-
-# Mini Compressor - Freearc Plugins v2 updated
-[Here](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/MC_Freearc_v2)
