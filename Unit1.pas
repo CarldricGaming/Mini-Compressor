@@ -229,6 +229,13 @@ type
     Memo8: TMemo;
     Button20: TButton;
     Button21: TButton;
+    Button22: TButton;
+    Button23: TButton;
+    Button24: TButton;
+    GroupBox24: TGroupBox;
+    CheckBox4: TCheckBox;
+    Edit26: TEdit;
+    ClearEditButton23: TClearEditButton;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -236,10 +243,8 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
-    procedure Memo1ChangeTracking(Sender: TObject);
     procedure SearchEditButton3Click(Sender: TObject);
     procedure SearchEditButton4Click(Sender: TObject);
-    procedure Memo4ChangeTracking(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
@@ -282,7 +287,13 @@ type
     procedure Button20Click(Sender: TObject);
     procedure SearchEditButton7Click(Sender: TObject);
     procedure SearchEditButton8Click(Sender: TObject);
+    procedure Button22Click(Sender: TObject);
+    procedure Button23Click(Sender: TObject);
+    procedure Button24Click(Sender: TObject);
+    procedure CheckBox4Change(Sender: TObject);
+    procedure Memo4ChangeTracking(Sender: TObject);
     procedure Memo8ChangeTracking(Sender: TObject);
+    procedure Memo1ChangeTracking(Sender: TObject);
   private
     { Private declarations }
   public
@@ -324,24 +335,24 @@ end;
 
 procedure UpdateLine2(const ACaption, AText: WideString);
 var
-  FormHandle: HWND;
+  FormHandle2: HWND;
 begin
-  FormHandle:= TWinWindowHandle(Form1.Memo4).Wnd;
+  FormHandle2:= TWinWindowHandle(Form1.Memo4).Wnd;
   Form1.Edit12.Text := ACaption;
   Form1.Memo4.Lines.Clear;
   Form1.Memo4.Lines.Add(AText);
-  SendMessage(FormHandle, EM_LINESCROLL, 0, Form1.Memo4.Lines.Count);
+  SendMessage(FormHandle2, EM_LINESCROLL, 0, Form1.Memo4.Lines.Count);
 end;
 
 procedure UpdateLine3(const ACaption, AText: WideString);
 var
-  FormHandle: HWND;
+  FormHandle3: HWND;
 begin
-  FormHandle:= TWinWindowHandle(Form1.Memo8).Wnd;
+  FormHandle3:= TWinWindowHandle(Form1.Memo8).Wnd;
   Form1.Edit25.Text := ACaption;
   Form1.Memo8.Lines.Clear;
   Form1.Memo8.Lines.Add(AText);
-  SendMessage(FormHandle, EM_LINESCROLL, 0, Form1.Memo8.Lines.Count);
+  SendMessage(FormHandle3, EM_LINESCROLL, 0, Form1.Memo8.Lines.Count);
 end;
 
 procedure Website(URL: string); stdcall; external 'Aio_FP.dll';
@@ -434,8 +445,25 @@ begin
 end;
 
 procedure TForm1.Button14Click(Sender: TObject);
+var
+  ReadError: HWND;
 begin
-  Exec(GetAnySource('..\Resources\MC_Protect2.exe'),'',true);
+  if FileExists(GetAnySource('..\Resources\ISD_List_Manual.txt')) then
+  begin
+    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+    MessageBox(ReadError,'The resource still exists. Would create a new another one for you.',
+      'Resource Exist', MB_ICONINFORMATION);
+
+    DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.txt'));
+
+    Application.ProcessMessages;
+    Sleep(150);
+
+    Exec(GetAnySource('..\Resources\MC_Update.exe'),'',true);
+  end
+  else
+  if not FileExists(GetAnySource('..\Resources\ISD_List_Manual.txt')) then
+    Exec(GetAnySource('..\Resources\MC_Update.exe'),'',true);
 end;
 
 procedure TForm1.Button15Click(Sender: TObject);
@@ -491,7 +519,7 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  SizeUninstWizard := NumberBox2.Value / 1024;
+  SizeUninstWizard := NumberBox2.Value * 1024 * 1024;
   SizeUninstWizardResult := Round(SizeUninstWizard);
 
   IniCreate(GetAnySource('..\Installer\Config.ini'),'Setup','Name',Edit15.Text);
@@ -504,14 +532,14 @@ begin
   IniCreate(GetAnySource('..\Installer\Config.ini'),'Option','CompressionSolid',PopupBox5.Text);
   IniCreate(GetAnySource('..\Installer\Config.ini'),'Option','CompressionThreads',PopupBox6.Text);
 
-  if Edit18.Text <> '' then
+  if CheckBox3.IsChecked = True then
   begin
-    IniCreate(GetAnySource('..\Installer\Config.ini'),'Setup','DiskSpan','yes');
+    IniCreate(GetAnySource('..\Installer\Config.ini'),'Option','DiskSpan','yes');
     IniCreate(GetAnySource('..\Installer\Config.ini'),'Game','Source',Edit18.Text);
   end
   else
-  if Edit18.Text = '' then
-    IniCreate(GetAnySource('..\Installer\Config.ini'),'Setup','DiskSpan','no');
+  if CheckBox3.IsChecked = False then
+    IniCreate(GetAnySource('..\Installer\Config.ini'),'Option','DiskSpan','no');
 
   IniCreate(GetAnySource('..\Installer\Config.ini'),'System','Processor',NumberBox3.Text);
   IniCreate(GetAnySource('..\Installer\Config.ini'),'System','VideoRAM',NumberBox4.Text);
@@ -543,6 +571,7 @@ begin
   DeleteFile(GetAnySource('..\Installer\Shortcut.txt'));
   DeleteFile(GetAnySource('..\Installer\Config.ini'));
   DeleteFile(GetAnySource('..\Installer\Resource\Music.mp3'));
+  DeleteFile(GetAnySource('..\Installer\Game.ico'));
   Edit19.Text := '';
 
   Application.ProcessMessages;
@@ -588,6 +617,7 @@ begin
     IMG_Error:= False
   else
     IMG_Error:= True;
+  Edit25.Text := 'Processing...';
 
   Application.ProcessMessages;
   Sleep(150);
@@ -694,6 +724,7 @@ begin
     FA_Error:= False
   else
     FA_Error:= True;
+  Edit6.Text:= 'Processing...';
 
   Application.ProcessMessages;
   Sleep(150);
@@ -751,6 +782,9 @@ begin
         Sleep(150);
 
         Exec(GetAnySource('SFX_Make.bat'),'',true);
+
+        Application.ProcessMessages;
+        Sleep(150);
 
         if FileExists(Edit2.Text +'\' +Edit5.Text) then
           DeleteFile(PChar(Edit2.Text +'\' +Edit5.Text));
@@ -814,6 +848,37 @@ begin
   TabControl5.TabIndex := 0;
 end;
 
+procedure TForm1.Button22Click(Sender: TObject);
+begin
+  Memo5.Lines.Clear;
+  Memo5.Lines.Add('[ShortcutFile1]');
+  Memo5.Lines.Add('Name=YourGame');
+  Memo5.Lines.Add('File={app}\Game.exe');
+  Memo5.Lines.Add('Icon={app}\Game.exe');
+  Memo5.Lines.Add('Working={app}');
+  Memo5.Lines.Add('Create=Both or Desktop or Startmenu');
+end;
+
+procedure TForm1.Button23Click(Sender: TObject);
+begin
+  Memo6.Lines.Clear;
+  Memo6.Lines.Add('[ArchiveFile1]');
+  Memo6.Lines.Add('Type=Freearc or 7Zip or Rar');
+  Memo6.Lines.Add('Source={src}\YourFile.arc');
+  Memo6.Lines.Add('Output={app}');
+  Memo6.Lines.Add('Disk=1');
+  Memo6.Lines.Add('Password=YourPass');
+end;
+
+procedure TForm1.Button24Click(Sender: TObject);
+begin
+  Memo7.Lines.Clear;
+  Memo7.Lines.Add('[RedistInstall1]');
+  Memo7.Lines.Add('Name=YourComponent');
+  Memo7.Lines.Add('Exec={src}\Component.Exe');
+  Memo7.Lines.Add('Params=');
+end;
+
 procedure TForm1.Button2Click(Sender: TObject);
 begin
   TabControl2.TabIndex := 0;
@@ -842,6 +907,7 @@ var
   Handle7z: HWND;
   Error7z: Boolean;
   ReadError: HWND;
+  SFXOutput, SFXCommand: string;
 begin
   TabControl3.TabIndex:= 1;
   Button6.Visible := False;
@@ -849,6 +915,12 @@ begin
   Memo3.Lines.Clear;
   Memo4.Lines.Clear;
   Edit12.Text:= 'Compressing...';
+
+  if CheckBox4.IsChecked = True then
+    SFXOutput:= Edit9.Text
+  else
+  if CheckBox4.IsChecked = False then
+    SFXOutput:= '';
 
   Application.ProcessMessages;
   Sleep(150);
@@ -886,6 +958,7 @@ begin
     Error7z:= False
   else
     Error7z:= True;
+  Edit12.Text:= 'Processing...';
 
   Application.ProcessMessages;
   Sleep(150);
@@ -907,6 +980,41 @@ begin
       Memo3.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
         TimeToStr(DateAndTimeZ));
       Memo3.GoToTextEnd;
+
+      if SFXOutput <> '' then
+      begin
+        SFXCommand:= 'copy /b "' +GetAnySource('..\Compression\7z.sfx') +'" + "'
+          +Edit9.Text +'\' +Edit11.Text + '" "' + SFXOutput + '\' + Edit26.Text + '"';
+
+        with TMemo.Create(nil) do
+        try
+          Lines.Add('@echo off');
+          Lines.Add('title SFX Processing...');
+          Lines.Add(SFXCommand +' > nul');
+          Lines.Add('timeout 2 > nul');
+          Lines.SaveToFile(GetAnySource('SFX_Make.bat'));
+        finally
+          Free;
+        end;
+
+        Application.ProcessMessages;
+        Sleep(150);
+
+        Exec(GetAnySource('SFX_Make.bat'),'',true);
+
+        Application.ProcessMessages;
+        Sleep(150);
+
+        if FileExists(Edit9.Text +'\' +Edit11.Text) then
+          DeleteFile(PChar(Edit9.Text +'\' +Edit11.Text));
+
+        if FileExists(GetAnySource('SFX_Make.bat')) then
+          DeleteFile(GetAnySource('SFX_Make.bat'));
+
+        Application.ProcessMessages;
+        Sleep(150);
+      end;
+
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
       MessageBox(ReadError,'Your compression was done.', 'Finished', MB_ICONINFORMATION);
       Edit12.Text:= 'Finished.';
@@ -1018,6 +1126,15 @@ begin
   else
   if CheckBox3.IsChecked = False then
     Edit18.Enabled := False;
+end;
+
+procedure TForm1.CheckBox4Change(Sender: TObject);
+begin
+  if CheckBox4.IsChecked = True then
+    Edit26.Enabled := True
+  else
+  if CheckBox4.IsChecked = False then
+    Edit26.Enabled := False;
 end;
 
 procedure TForm1.Edit13Change(Sender: TObject);
@@ -1198,16 +1315,19 @@ end;
 
 procedure TForm1.Memo1ChangeTracking(Sender: TObject);
 begin
+  Sleep(10);
   Memo1.GoToTextEnd;
 end;
 
 procedure TForm1.Memo4ChangeTracking(Sender: TObject);
 begin
+  Sleep(10);
   Memo4.GoToTextEnd;
 end;
 
 procedure TForm1.Memo8ChangeTracking(Sender: TObject);
 begin
+  Sleep(10);
   Memo8.GoToTextEnd;
 end;
 
