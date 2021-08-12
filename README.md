@@ -6,10 +6,6 @@ Which mean you can compress any games what you want.
 By the way, there's have a newly updated program.
 So you can get any you want to compress.
 
-# Support Language
-* English (Translate by me)
-* Urdu (Translate by Celestosapien)
-
 # Q & A
 * Q: Is there any updates for Mini Compressor?
 * A: Yes. If the "Mini Compressor" has been an update... Just click button Help > Check Updates.
