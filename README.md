@@ -62,6 +62,7 @@ So you can get any you want to compress.
 * **PMT - Parallel Multithreaded encoder/decoder**: by **78372**
 * **lrzip**: by **gozarck**
 * **AllDup**: by **MTSD**
+* **Metro UI**: by **Gupta**
 
 * and other stuff that I've forgotten... Many-many thanks to them of Creator's.
 
