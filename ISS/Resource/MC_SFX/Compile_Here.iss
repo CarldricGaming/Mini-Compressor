@@ -56,7 +56,7 @@ begin
     FileCopy(ExpandConstant('{tmp}\MC_SFX.ico'),ExpandConstant('{src}\..\MC_SFX.ico'),false);
 
   if FileExists(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe')) then
-    Exec(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\\..\MC_SFX.iss') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
+    Exec(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\\..\MC_SFX.engine') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
 
   Application.ProcessMessages;
   Sleep(2000);
