@@ -42,7 +42,7 @@ begin
   //  Exec2(ExpandConstant('{src}\MC.exe'),'',false)
   //else
 
-  ExtractTemporaryFile('MC_SFX.iss');
+  ExtractTemporaryFile('Script.iss');
   ExtractTemporaryFile('MC_SFX.ico');
 
   Exec(ExpandConstant('{src}\MC_Protect.exe'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
