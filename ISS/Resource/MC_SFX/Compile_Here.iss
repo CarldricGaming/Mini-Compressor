@@ -19,7 +19,7 @@ VersionInfoTextVersion={#InstallVersion}
 VersionInfoVersion={#InstallVersion}
 VersionInfoCompany={#Developer}
 AppCopyright=© {#Developer}
-OutputBaseFilename=Out
+OutputBaseFilename=MC_SFX
 OutputDir=.
 Uninstallable=no
 SetupIconFile=MC_SFX.ico
@@ -34,24 +34,6 @@ Source: "Script.iss"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "MC_SFX.ico"; DestDir: "{tmp}"; Flags: dontcopy
 
 [Code]
-type
-  TMsg = record hWnd: HWND; message: LongWord; wParam: Longint; lParam: Longint; Time: LongWord; pt: TPoint; end;
-
-function PeekMessage(var lpMsg: TMsg; hWnd: HWND; wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; external 'PeekMessageA@user32.dll stdcall';
-function TranslateMessage(const lpMsg: TMsg): BOOL; external 'TranslateMessage@user32.dll stdcall';
-function DispatchMessage(const lpMsg: TMsg): Longint; external 'DispatchMessageA@user32.dll stdcall';
-
-procedure AppProcessMessages;
-var
-  Msg: TMsg;
-begin
-  while PeekMessage(Msg, 0, 0, 0, 1) do
-  begin
-    TranslateMessage(Msg);
-    DispatchMessage(Msg);
-  end;
-end;
-
 function InitializeSetup: Boolean;
 var
   ERRCode: integer;
@@ -60,29 +42,29 @@ begin
   //  Exec2(ExpandConstant('{src}\MC.exe'),'',false)
   //else
 
-  ExtractTemporaryFile('Script.iss');
+  ExtractTemporaryFile('MC_SFX.iss');
   ExtractTemporaryFile('MC_SFX.ico');
 
   Exec(ExpandConstant('{src}\MC_Protect.exe'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   if FileExists(ExpandConstant('{tmp}\Script.iss')) then
-    FileCopy(ExpandConstant('{tmp}\Script.iss'),ExpandConstant('{src}\..\Script.iss'),false);
+    FileCopy(ExpandConstant('{tmp}\Script.iss'),ExpandConstant('{src}\..\MC_SFX.engine'),false);
   if FileExists(ExpandConstant('{tmp}\MC_SFX.ico')) then
     FileCopy(ExpandConstant('{tmp}\MC_SFX.ico'),ExpandConstant('{src}\..\MC_SFX.ico'),false);
 
   if FileExists(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe')) then
-    Exec(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\\..\Script.iss') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
+    Exec(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\\..\MC_SFX.iss') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(2000);
 
   if FileExists(ExpandConstant('{src}\..\MC.exe')) then
     FileCopy(ExpandConstant('{src}\..\MC.exe'),ExpandConstant('{src}\..\MC.sfx'),false);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(2000);
 
   if FileExists(ExpandConstant('{src}\..\Compression\MC.sfx')) then
@@ -90,22 +72,22 @@ begin
   if FileExists(ExpandConstant('{src}\..\Compression\Setup.db')) then
     DeleteFile(ExpandConstant('{src}\..\Compression\Setup.db'));
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   if FileExists(ExpandConstant('{src}\..\MC.sfx')) then
     FileCopy(ExpandConstant('{src}\..\MC.sfx'),ExpandConstant('{src}\..\Compression\MC.sfx'),false);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   if FileExists(ExpandConstant('{src}\Setup.db')) then
     FileCopy(ExpandConstant('{src}\Setup.db'),ExpandConstant('{src}\..\Compression\Setup.db'),false);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(2000);
 
-  DeleteFile(ExpandConstant('{src}\..\Script.iss'));
+  DeleteFile(ExpandConstant('{src}\..\MC_SFX.engine'));
   DeleteFile(ExpandConstant('{src}\..\MC_SFX.ico'));
   DeleteFile(ExpandConstant('{src}\..\MC.exe'));
   DeleteFile(ExpandConstant('{src}\..\MC.sfx'));

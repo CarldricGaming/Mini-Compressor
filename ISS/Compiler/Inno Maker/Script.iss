@@ -112,6 +112,14 @@
   #endif
 #endif
 
+#if ReadIni(SourcePath + "..\Resources\UnArc.ini","Config_UnArc","Protect","") != "0"
+  #define UnArc_Protect
+  #define UnArc_File2 ReadIni(SourcePath + "..\Resources\UnArc.ini","Files_Unarc","Protect","")
+#else
+  #define UnArc_None
+  #define UnArc_File1 ReadIni(SourcePath + "..\Resources\UnArc.ini","Files_Unarc","None","")
+#endif
+
 [Setup]
 AppName={#AppName}
 AppVersion=1.0
@@ -140,6 +148,12 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 #endif
 
 [Files]
+#ifdef UnArc_Protect
+  Source: "..\{#UnArc_File2}"; DestDir: "{tmp}"; Flags: dontcopy
+#endif
+#ifdef UnArc_None
+  Source: "..\{#UnArc_File1}"; DestDir: "{tmp}"; Flags: dontcopy
+#endif
 Source: "Resources\Dll\*"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "Resources\Graphics\*"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "Resources\Languages\*"; DestDir: "{tmp}"; Flags: dontcopy
@@ -1979,6 +1993,13 @@ begin
   #ifexist "Graphics\Music.mp3"
     if not FileExists(ExpandConstant('{tmp}\Music.mp3')) then
       ExtractTemporaryFile('Music.mp3');
+  #endif
+
+  #ifdef UnArc_Protect
+    ExtractTemporaryFile('unarc.dll');
+  #endif
+  #ifdef UnArc_None
+    ExtractTemporaryFile('unarc.dll');
   #endif
 
   // Seting up Languages

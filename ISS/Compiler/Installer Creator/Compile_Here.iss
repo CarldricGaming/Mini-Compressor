@@ -86,15 +86,15 @@ begin
   Sleep(150);
 
   if FileExists(ExpandConstant('{tmp}\Script.iss')) then
-    FileCopy(ExpandConstant('{tmp}\Scriptiss'),ExpandConstant('{src}\Script.iss'),false);
+    FileCopy(ExpandConstant('{tmp}\Script.iss'),ExpandConstant('{src}\Compiler.engine'),false);
 
   if FileExists(ExpandConstant('{src}\..\IS5\Compil32.exe')) then
-    Exec(ExpandConstant('{src}\..\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\Script.iss') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ErrorCode);
+    Exec(ExpandConstant('{src}\..\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\Compiler.engine') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ErrorCode);
 
   AppProcessMessages;
   Sleep(2000);
 
-  DeleteFile(ExpandConstant('{src}\Script.iss'));
+  DeleteFile(ExpandConstant('{src}\Compiler.engine'));
 
   Result:=False;
 end;

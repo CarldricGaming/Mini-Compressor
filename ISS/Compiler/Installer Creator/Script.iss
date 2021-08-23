@@ -1,6 +1,5 @@
 ﻿#define i 0
 
-#define IniFiles2 AddBackSlash(SourcePath) + "..\..\Resource\ISDone.ini"
 #if ReadIni(SourcePath	+ "\Temp\Setup.ini", "Files", "OutputDir", "") != ""
 #define OutputDir ReadIni(SourcePath	+ "\Temp\Setup.ini", "Files", "OutputDir", "")
 #endif
@@ -80,6 +79,14 @@
 #define Component ReadIni(SourcePath	+ "\Temp\Setup.ini", "ComponentSettings", "Component1Name", "")
 #endif
 
+#if ReadIni(SourcePath + "..\..\Resources\UnArc.ini","Config_UnArc","Protect","") != "0"
+  #define UnArc_Protect
+  #define UnArc_File2 ReadIni(SourcePath + "..\..\Resources\UnArc.ini","Files_Unarc","Protect","")
+#else
+  #define UnArc_None
+  #define UnArc_File1 ReadIni(SourcePath + "..\..\Resources\UnArc.ini","Files_Unarc","None","")
+#endif
+
 [Setup]
 AppId={code:ApplicationName}
 AppName={code:ApplicationName}
@@ -87,7 +94,12 @@ AppPublisher={code:ApplicationPublisher}
 AppVersion={code:ApplicationVersion}
 DefaultDirName={#DefaultDirPath}
 DefaultGroupName={#DefaultGroupPath}
+#ifexist ".\Temp\Resources\Icon.ico"
 UninstallDisplayIcon={uninstallexe}
+#else
+UninstallDisplayIcon=Uninst.ico
+#endif
+//UninstallDisplayIcon=Uninst.ico
 UninstallFilesDir={app}\Uninstall
 UsePreviousLanguage=no
 DirExistsWarning=false
@@ -103,8 +115,8 @@ SlicesPerDisk={#SlicesPerDisk}
 SolidCompression=true
 OutputDir={#OutputDir}
 OutputBaseFileName={#OutputExe}
-#ifexist "Icon.ico"
-#ifexist "Temp\Resources\Icon.ico"
+#ifexist ".\Icon.ico"
+#ifexist ".\Temp\Resources\Icon.ico"
 SetupIconFile=Temp\Resources\Icon.ico
 #else
 SetupIconFile=Icon.ico
@@ -1123,7 +1135,13 @@ Name: vit; MessagesFile: Include\Languages\Vietnamese.isl; LicenseFile: Temp\Lic
 #endif
 
 [Files]
-//#Include "Include\Unicode.dll"
+#Include "Include\Unicode.dll"
+#ifdef UnArc_Protect
+  Source: "..\..\{#UnArc_File2}"; DestDir: "{tmp}"; Flags: dontcopy
+#endif
+#ifdef UnArc_None
+  Source: "..\..\{#UnArc_File1}"; DestDir: "{tmp}"; Flags: dontcopy
+#endif
 Source: "..\..\Resources\7za.exe"; DestDir: "{tmp}"; Flags: dontcopy
 Source: Include\english.ini; DestDir: "{tmp}"; Flags: dontcopy
 Source: Include\bass.dll; DestDir: {tmp}; Flags: dontcopy
@@ -1408,6 +1426,7 @@ Source: Temp\Licenses\VietnameseReadme.rtf; DestDir: {tmp}; Flags: dontcopy
 Source: Temp\Licenses\VietnameseManual.pdf; DestDir: {tmp}; Flags: dontcopy
 #endif
 
+#define i 0
 #ifexist "Temp\Setup.ini"
 Source: Temp\Setup.ini; DestDir: {tmp}; Flags: dontcopy
 #endif
@@ -12090,6 +12109,12 @@ function InitializeSetup: Boolean;
 var
 VideoDiff: Extended;
 begin
+#ifdef UnArc_Protect
+ExtractTemporaryFile('unarc.dll');
+#endif
+#ifdef UnArc_None
+ExtractTemporaryFile('unarc.dll');
+#endif
 InfoAfter:=False;
 SplitPct:=0;
 #ifdef SerialCode
@@ -12979,12 +13004,14 @@ end else
 Installed := False;
 SetupRunning2 := True;
 Protection;
+
 if FileExists(ExpandConstant('{src}\Setup.db')) then
 Result := True
 else
 begin
 MsgBox('Missing file "Setup.db"', mbCriticalError, MB_OK);
 end;
+
 SetupRunning :=True;
 if Result = True then
 begin
@@ -13596,6 +13623,119 @@ begin
   Exec(ExpandConstant('{tmp}\7za.exe'), SevenZipCommand, TempISDone, SW_HIDE, ewWaitUntilTerminated, ErrorCode);
 end;
 
+procedure MC_V2;
+var
+Data: array of TData;
+i, x, MsgResult: Integer;
+OggFile, MergeFile: String;
+begin
+SourceDir := ExpandConstant('{src}');
+ISDoneError:=false;
+SplitPct:=0;
+if ISDoneInit(ExpandConstant('{tmp}\records.inf'), $F777, 0,0,0, MainForm.Handle, PerformanceChanger, @ProgressCallback) then
+repeat
+ChangeLanguage('English');
+if not SrepInit(ExpandConstant('{app}'),PerformanceChangerSREP,0) then
+ISDoneError := True;
+if not PrecompInit(ExpandConstant('{app}'),PerformanceChangerPCF,0) then
+ISDoneError := True;
+if not FileSearchInit(true) then
+ISDoneError := True;
+i:=0;
+repeat
+i := i + 1;
+if GetIniString('MC' + IntToStr(i),'Type','',ExpandConstant('{src}\MC.ini')) <> '' then
+begin
+SetArrayLength(Data,i);
+SetArrayLength(Data[i - 1].Arc,7);
+end;
+until GetIniString('MC' + IntToStr(i),'Type','',ExpandConstant('{src}\MC.ini')) = '';
+i:=0;
+repeat
+i := i + 1;
+if GetIniString('MC' + IntToStr(i),'Type','',ExpandConstant('{src}\MC.ini')) <> '' then
+begin
+Data[i - 1].Arc[0]:=GetIniString('MC' + IntToStr(i),'Type','',ExpandConstant('{src}\MC.ini'));
+Data[i - 1].Arc[1]:=GetIniString('MC' + IntToStr(i),'Source','',ExpandConstant('{src}\MC.ini'));
+Data[i - 1].Arc[2]:=ExpandConstant(GetIniString('MC' + IntToStr(i),'Output','',ExpandConstant('{src}\MC.ini')));
+Data[i - 1].Arc[3]:=GetIniString('MC' + IntToStr(i),'Disk','',ExpandConstant('{src}\MC.ini'));
+Data[i - 1].Arc[4]:=GetIniString('MC' + IntToStr(i),'Component','0',ExpandConstant('{src}\MC.ini'));
+Data[i - 1].Arc[5]:=GetIniString('MC' + IntToStr(i),'Task','0',ExpandConstant('{src}\MC.ini'));
+Data[i - 1].Arc[6]:=GetIniString('MC' + IntToStr(i),'Language','',ExpandConstant('{src}\MC.ini'));
+end;
+until GetIniString('MC' + IntToStr(i),'Type','',ExpandConstant('{src}\MC.ini')) = '';
+WizardForm.ProgressGauge.Position:=0;
+Wizardform.ProgressGauge.Max:=0;
+i:=0;
+if Data[0].Arc[0] <> '' then
+begin
+repeat
+i:= i + 1;
+if ((Data[i - 1].Arc[6] = '') or (LanguageTranslator(Data[i - 1].Arc[6]) = ActiveLanguage)) and ( ComponentsCheckFA(StrToInt(Data[i - 1].Arc[4]))) and (TaskCheckFA(StrToInt(Data[i - 1].Arc[5]))) then
+begin
+Wizardform.ProgressGauge.Max:=Wizardform.ProgressGauge.Max + 1000;
+end;
+until i = GetArrayLength(Data);
+end;
+i := 0;
+if Data[0].Arc[0] <> '' then
+begin
+repeat
+i:= i + 1;
+if ((Data[i - 1].Arc[6] = '') or (LanguageTranslator(Data[i - 1].Arc[6]) = ActiveLanguage)) and (ComponentsCheckFA(StrToInt(Data[i - 1].Arc[4]))) and (TaskCheckFA(StrToInt(Data[i - 1].Arc[5]))) then
+begin
+if Data[i - 1].Arc[0] = 'Freearc' then
+begin
+if not FileExists(UpdateSource(Data[i - 1].Arc[1],SourceDir)) then
+begin
+repeat
+MsgResult:=ShowDiskPromptBox(ExtractFileName(Data[i - 1].Arc[3]),ExtractFileName(Data[i - 1].Arc[1]));
+if MsgResult = mrCancel then
+WizardForm.CancelButton.OnClick(nil);
+until (FileExists(UpdateSource(Data[i - 1].Arc[1],SourceDir)) = True) or (ISDoneError = True);
+end;
+if ISDoneError = False then
+if not ISArcExtract(0, 0, UpdateSource(Data[i - 1].Arc[1],SourceDir), Data[i - 1].Arc[2], '', false, '',
+ExpandConstant('{tmp}\arc.ini'), Data[i - 1].Arc[2], false) then
+ISDoneError := True;
+end;
+if Data[i - 1].Arc[0] = '7Zip' then
+begin
+if not FileExists(UpdateSource(Data[i - 1].Arc[1],SourceDir)) then
+begin
+repeat
+MsgResult:=ShowDiskPromptBox(ExtractFileName(Data[i - 1].Arc[3]),ExtractFileName(Data[i - 1].Arc[1]));
+if MsgResult = mrCancel then
+WizardForm.CancelButton.OnClick(nil);
+until (FileExists(UpdateSource(Data[i - 1].Arc[1],SourceDir)) = True) or (ISDoneError = True);
+end;
+if ISDoneError = False then
+if not IS7ZipExtract(0, 0, UpdateSource(Data[i - 1].Arc[1],SourceDir), Data[i - 1].Arc[2], false, '') then
+ISDoneError := True;
+end;
+if Data[i - 1].Arc[0] = 'Rar' then
+begin
+if not FileExists(UpdateSource(Data[i - 1].Arc[1],SourceDir)) then
+begin
+repeat
+MsgResult:=ShowDiskPromptBox(ExtractFileName(Data[i - 1].Arc[3]),ExtractFileName(Data[i - 1].Arc[1]));
+if MsgResult = mrCancel then
+WizardForm.CancelButton.OnClick(nil);
+until (FileExists(UpdateSource(Data[i - 1].Arc[1],SourceDir)) = True) or (ISDoneError = True);
+end;
+if ISDoneError = False then
+if not ISRarExtract(0, 0, UpdateSource(Data[i - 1].Arc[1],SourceDir), Data[i - 1].Arc[2], false, '') then
+ISDoneError := True;
+end;
+if ISDoneError = True then
+break;
+end;
+until i = GetArrayLength(Data);
+end;
+until true;
+ISDoneStop;
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 var
 PCF, arcstr, rediststr: String;
@@ -13606,7 +13746,7 @@ FileCopy(ExpandConstant('{tmp}\FirewallInstallHelper.dll'),ExpandConstant('{app}
 FileCopy(ExpandConstant('{tmp}\GameuxInstallHelper.dll'),ExpandConstant('{app}\GameuxInstallHelper.dll'),False);
 if CurStep = ssInstall then begin
 ISDoneFiles;
-#define PCF ReadIni(SourcePath	+ "\Temp\Setup.ini", "ExternalMedia", "PrecompVer", "0.43")
+#define PCF ReadIni(SourcePath	+ "\Temp\Setup.ini", "ExternalMedia", "PrecompVer", "0.42")
 PCF:='{#PCF}';
 OveralPct:=0;
 InstallLabel3_3_1.Labl.Show;
@@ -13771,6 +13911,9 @@ ISDoneStop;
 end;
 #endif
 end;
+
+if (CurStep = ssInstall) and (ISDoneError = False) and FileExists(ExpandConstant('{src}\MC.ini')) then
+MC_V2;
 
 SetTaskBarTitle(FmtMessage(ExpandConstant('{cm:OtherMessage3_2}'), [ApplicationName('')]));
 WizardForm.Caption:=FmtMessage(ExpandConstant('{cm:OtherMessage3_2}'), [ApplicationName('')]);
