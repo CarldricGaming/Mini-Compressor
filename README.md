@@ -7,9 +7,9 @@ By the way, there's have a newly updated program.
 So you can get any you want to compress.
 
 # Latest version of Mini Compressor
-**Download latest** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.4e) &nbsp;
-**Previous version** - [Previous](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.3d) &nbsp;
-**Other version** - [Check here](https://github.com/CarldricGaming/Mini-Compressor/releases)
+- [x] **Download latest** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.4e)
+- [x] **Previous version** - [Previous](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.3d)
+- [x] **Other version** - [Check here](https://github.com/CarldricGaming/Mini-Compressor/releases)
 
 # Q & A
 * Q: Is there any updates for Mini Compressor?
