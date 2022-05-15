@@ -36,6 +36,7 @@ So you can get any you want to compress.
 * MC_Freearc.dll - v1.0
 * MC_Ini.dll - v1.0
 * MC_ConvertBytes.dll - v1.0
+* cmdout.dll - v1.0
 
 # Special thanks to 
 * **7-Zip**: by **Igor Pavlov** and **Shelwien**
