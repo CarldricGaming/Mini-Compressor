@@ -784,6 +784,8 @@ begin
   Edit38.Visible := True;
   Edit39.Visible := True;
   ArcTime1.Enabled := True;
+  Edit38.Text := '';
+  Edit39.Text := '';
 
   if CheckBox2.IsChecked = True then
     SFXOutput := Edit2.Text
@@ -1655,6 +1657,12 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
+  if FileExists(GetAnySource('Run_FA.bat')) then
+    DeleteFile(GetAnySource('Run_FA.bat'));
+
+  Application.ProcessMessages;
+  Sleep(150);
+
   if FA_Error = False then
   begin
     if FileExists(FA_Temp) then
@@ -1946,6 +1954,12 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
+  if FileExists(GetAnySource('Run_7Z.bat')) then
+    DeleteFile(GetAnySource('Run_7Z.bat'));
+
+  Application.ProcessMessages;
+  Sleep(150);
+
   if FileExists(GetAnySource('temp.7z')) then
   begin
     CopyFile(GetAnySource('temp.7z'),PChar(Edit9.Text +'\' +Edit11.Text),false);
@@ -2055,6 +2069,9 @@ begin
   Edit42.Visible := True;
   Edit43.Visible := True;
   ArcTime1.Enabled := True;
+  Edit42.Text := '';
+  Edit43.Text := '';
+
 
   if CheckBox4.IsChecked = True then
     SFXOutput:= Edit9.Text
