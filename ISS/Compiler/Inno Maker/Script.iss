@@ -141,6 +141,11 @@ ShowLanguageDialog=no
 Compression=lzma2/ultra64
 OutputDir={#OutputDir}
 OutputBaseFilename={#OutputExec}
+#ifdef AppFiles
+  InternalCompressLevel=ultra64
+  DiskSpanning=True
+  DiskSliceSize=736000000
+#endif
 
 [Languages]
 #ifexist "compiler:Languages\english.isl"
@@ -156,6 +161,7 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 #ifdef UnArc_None
   Source: "..\{#UnArc_File1}"; DestDir: "{tmp}"; Flags: dontcopy
 #endif
+Source: "..\Resources\ISDone\*.*"; DestDir: {tmp}; Flags: dontcopy;
 Source: "Resources\Dll\*"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "Resources\Graphics\*"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "Resources\Languages\*"; DestDir: "{tmp}"; Flags: dontcopy
@@ -2009,6 +2015,13 @@ begin
     Application.ProcessMessages;
     Sleep(150);
     DeleteFile(LangFile +'\Hungarian.txt');
+  end;
+  if LangSelect = 'French' then begin
+    ExtractTemporaryFile('French.txt');
+    FileCopy(LangFile +'\French.txt', LangFile +'\Language1.txt', false);
+    Application.ProcessMessages;
+    Sleep(150);
+    DeleteFile(LangFile +'\French.txt');
   end;
 
   #ifexist "Graphics\Music.mp3"

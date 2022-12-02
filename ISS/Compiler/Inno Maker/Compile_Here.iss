@@ -57,7 +57,8 @@ var
 begin
   ExtractTemporaryFile('Script.iss');
 
-  Exec(ExpandConstant('{src}\..\Resources\MC_Protect2.exe'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
+  if GetIniString('Installer','MC','0',ExpandConstant('{src}\Setup.ini')) = '1' then
+    Exec(ExpandConstant('{src}\..\Resources\MC_Protect2.exe'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
 
   AppProcessMessages;
   Sleep(150);
