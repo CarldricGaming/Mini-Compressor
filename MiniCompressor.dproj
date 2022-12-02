@@ -122,11 +122,11 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MajorVer>21</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=FileForums.Com;FileDescription=$(MSBuildProjectName);FileVersion=21.6.7.0;InternalName=;LegalCopyright=Created by Carldric Clement;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=FileForums.Com;FileDescription=$(MSBuildProjectName);FileVersion=21.7.8.0;InternalName=;LegalCopyright=Created by Carldric Clement;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <Icon_MainIcon>MiniCompressor_Icon.ico</Icon_MainIcon>
         <AppExecutionLevel>requireAdministrator</AppExecutionLevel>
-        <VerInfo_MinorVer>6</VerInfo_MinorVer>
-        <VerInfo_Release>7</VerInfo_Release>
+        <VerInfo_MinorVer>7</VerInfo_MinorVer>
+        <VerInfo_Release>8</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
