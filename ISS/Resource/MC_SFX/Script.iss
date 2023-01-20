@@ -48,12 +48,13 @@ DisableReadyPage=yes
 Source: "Resources\ISDone\english.ini"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\ISDone\ISDone.dll"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\7za.exe"; DestDir: "{tmp}"; Flags: "dontcopy";
+Source: "Resources\XHashNext.dll"; DestDir: "{tmp}"; Flags: "dontcopy";
 
 [Languages]
 Name: "eng"; MessagesFile: "compiler:Languages\english.isl";
 
 [Messages]
-ButtonNext=Install
+ButtonNext=Extract
 ButtonCancel=Cancel
 ButtonWizardBrowse=Browse
 SetupAppTitle={#GameName}
@@ -63,6 +64,11 @@ BeveledLabel=Masked x86
 Type: "filesandordirs"; Name: "{app}";
 
 [Code]
+#include "Resources\XHashNext.iss"
+
+var
+  HashErrCode: Integer;
+
 var
 FilesFound: Integer;
 FreeMB, TotalMB: Cardinal;
@@ -367,6 +373,38 @@ LabelPct2.Font.Color:= clMaroon;
 end;
 end;
 
+function ChkHashMultiCallback(FileName: WideString; FileSize: extended;
+  FileProgress, TotalProgress, TotalFiles, FileCounted,
+  StatusCode: Integer): Boolean;
+begin
+  PBar2.Position := TotalProgress;
+
+  HashErrCode := StatusCode;
+
+  if HashErrCode = H_HASH_OK then
+  begin
+    Inc(ok);
+    memo.Lines.Add(FileName + '  ... Ok!');
+  end;
+
+  if HashErrCode = H_BAD_FILE_HASH then
+  begin
+    Inc(bad);
+    memo.Lines.Add(FileName + '  ... Bad!');
+  end;
+
+  if HashErrCode = H_FILE_NOT_FOUND then
+  begin
+    Inc(missing);
+    memo.Lines.Add(FileName + '  ... Missing!');
+  end;
+
+  LabelPct2.Caption := 'Files: ' + Format(XH_VERIFYSTATUS, [FileCounted, TotalFiles, ok, bad, missing]);
+
+  ProcessMessages;
+  Result := CancelAll;
+end;
+
 procedure ISDoneFiles;
 var
   SetupDB: string;
@@ -387,79 +425,79 @@ var
   res, i, ResCode: integer;
   Data1, Data2: Array of String;
 begin
-If CurStep = ssInstall then
-  begin
-    ISDoneFiles;
-    WizardForm.CancelButton.OnClick := @CancelButtonOnClick;
-
-    if FileExists(ExpandConstant('{src}\records.ini')) then
+  If CurStep = ssInstall then
     begin
-      i:=1;
-      if (GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) <> '') then
+      ISDoneFiles;
+      WizardForm.CancelButton.OnClick := @CancelButtonOnClick;
+
+      if FileExists(ExpandConstant('{src}\records.ini')) then
       begin
-        WizardForm.ProgressGauge.Max:=0;
-        repeat
-          WizardForm.ProgressGauge.Max:= WizardForm.ProgressGauge.Max + 1000;
-          i:= i + 1;
-        until (GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) = '') ;
-      end;
-
-      if ISDoneInit(ExpandConstant('{tmp}\records.inf'), $F777, 0,0,0, MainForm.Handle, 512, @ProgressCallback) then begin
-      repeat
-        ChangeLanguage('English');
-        if not SrepInit('',512,0) then
-          ISDoneError := True;
-        if not PrecompInit('',128,0) then
-          ISDoneError := True;
-        if not FileSearchInit(true) then
-          ISDoneError := True;
-
-          i:=1;
-          if (GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) <> '') then
-          begin
-            SetArrayLength(Data1,5);
-            repeat
-              Data1[0]:=ExpandConstant(GetIniString('Record' + IntToStr(i),'Source','',ExpandConstant('{src}\records.ini')));
-              Data1[1]:=ExpandConstant(GetIniString('Record' + IntToStr(i),'Output','',ExpandConstant('{src}\records.ini')));
-              Data1[2]:=GetIniString('Record' + IntToStr(i),'Disk','1',ExpandConstant('{src}\records.ini'));
-              Data1[3]:=GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini'));
-              Data1[4]:=GetIniString('Record' + IntToStr(i),'Password','',ExpandConstant('{src}\records.ini'));
-
-              if Data1[3] = 'Freearc' then begin
-                if not FileExists(Data1[0]) then begin
-                  if MsgBox('Insert disc: ' + Data1[2], mbError, MB_OKCANCEL) = IDCANCEL then ISDoneError := True;
-                end
-                else
-                begin
-                  if not ISArcExtract( 0, 0, Data1[0], Data1[1], '', false, Data1[4], ExpandConstant('{tmp}\arc.ini'), ExpandConstant('{app}'), False) then ISDoneError := True;
-                  i:= i + 1;
-                end;
-              end;
-
-              if Data1[3] = '7Zip' then begin
-                if not FileExists(Data1[0]) then begin
-                  if MsgBox('Insert disc: ' + Data1[2], mbError, MB_OKCANCEL) = IDCANCEL then ISDoneError := True;
-                end
-                else
-                begin
-                  if not IS7ZipExtract( 0, 0, Data1[0], Data1[1], false, Data1[4]) then ISDoneError := True;
-                  i:= i + 1;
-                end;
-              end;
-
-              if Data1[3] = 'Rar' then begin
-                if not FileExists(Data1[0]) then begin
-                  if MsgBox('Insert disc: ' + Data1[2], mbError, MB_OKCANCEL) = IDCANCEL then ISDoneError := True;
-                end
-                else
-                begin
-                  if not ISRarExtract( 0, 0, Data1[0], Data1[1], false, Data1[4]) then ISDoneError := True;
-                  i:= i + 1;
-                end;
-              end;
-
-          until ((GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) = '') or (ISDoneError = True));
+        i:=1;
+        if (GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) <> '') then
+        begin
+          WizardForm.ProgressGauge.Max:=0;
+          repeat
+            WizardForm.ProgressGauge.Max:= WizardForm.ProgressGauge.Max + 1000;
+            i:= i + 1;
+          until (GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) = '') ;
         end;
+
+        if ISDoneInit(ExpandConstant('{tmp}\records.inf'), $F777, 0,0,0, MainForm.Handle, 512, @ProgressCallback) then begin
+        repeat
+          ChangeLanguage('English');
+          if not SrepInit('',512,0) then
+            ISDoneError := True;
+          if not PrecompInit('',128,0) then
+            ISDoneError := True;
+          if not FileSearchInit(true) then
+            ISDoneError := True;
+
+            i:=1;
+            if (GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) <> '') then
+            begin
+              SetArrayLength(Data1,5);
+              repeat
+                Data1[0]:=ExpandConstant(GetIniString('Record' + IntToStr(i),'Source','',ExpandConstant('{src}\records.ini')));
+                Data1[1]:=ExpandConstant(GetIniString('Record' + IntToStr(i),'Output','',ExpandConstant('{src}\records.ini')));
+                Data1[2]:=GetIniString('Record' + IntToStr(i),'Disk','1',ExpandConstant('{src}\records.ini'));
+                Data1[3]:=GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini'));
+                Data1[4]:=GetIniString('Record' + IntToStr(i),'Password','',ExpandConstant('{src}\records.ini'));
+
+                if Data1[3] = 'Freearc' then begin
+                  if not FileExists(Data1[0]) then begin
+                    if MsgBox('Insert disc: ' + Data1[2], mbError, MB_OKCANCEL) = IDCANCEL then ISDoneError := True;
+                  end
+                  else
+                  begin
+                    if not ISArcExtract( 0, 0, Data1[0], Data1[1], '', false, Data1[4], ExpandConstant('{tmp}\arc.ini'), ExpandConstant('{app}'), False) then ISDoneError := True;
+                    i:= i + 1;
+                  end;
+                end;
+
+                if Data1[3] = '7Zip' then begin
+                  if not FileExists(Data1[0]) then begin
+                    if MsgBox('Insert disc: ' + Data1[2], mbError, MB_OKCANCEL) = IDCANCEL then ISDoneError := True;
+                  end
+                  else
+                  begin
+                    if not IS7ZipExtract( 0, 0, Data1[0], Data1[1], false, Data1[4]) then ISDoneError := True;
+                    i:= i + 1;
+                  end;
+                end;
+
+                if Data1[3] = 'Rar' then begin
+                  if not FileExists(Data1[0]) then begin
+                    if MsgBox('Insert disc: ' + Data1[2], mbError, MB_OKCANCEL) = IDCANCEL then ISDoneError := True;
+                  end
+                  else
+                  begin
+                    if not ISRarExtract( 0, 0, Data1[0], Data1[1], false, Data1[4]) then ISDoneError := True;
+                    i:= i + 1;
+                  end;
+                end;
+
+            until ((GetIniString('Record' + IntToStr(i),'Type','',ExpandConstant('{src}\records.ini')) = '') or (ISDoneError = True));
+          end;
         until true;
         ISDoneStop;
       end;
@@ -537,7 +575,43 @@ If CurStep = ssInstall then
         ISDoneStop;
       end;
     end;
+
+    ProcessMessages;
+    Sleep(1000);
+
+    if FileExists(ExpandConstant('{app}\Hash.md5')) then
+    begin
+      memo.Lines.Add('');
+      memo.Lines.Add('MD5 File Detected...');
+      PBar2.Max:= 100;
+      PBar2.Position := 0;
+      LabelPct2.Caption := 'Hash.md5 scanning.';
+      ProcessMessages;
+      Sleep(1000);
+      LabelPct2.Caption := 'Hash.md5 scanning..';
+      ProcessMessages;
+      Sleep(1000);
+      LabelPct2.Caption := 'Hash.md5 scanning...';
+      ProcessMessages;
+      Sleep(1000);
+
+      CancelAll := False;
+      HashErrCode := H_ERROR_GENERAL;
+
+      if VerifyHashesFromFile(ExpandConstant('{app}\Hash.md5'), ExpandConstant('{app}'), 2, False, @ChkHashMultiCallback) <> H_PROCESS_DONE then
+      begin
+        memo.Lines.Add(#10'>>> Process ErrorCode:  ' + IntToStr(HashErrCode));
+        MsgBox('Hash verification failed!', mbError, MB_OK);
+      end;
+
+      ProcessMessages;
+      Sleep(1000);
+
+      if FileExists(ExpandConstant('{app}\Hash.md5')) then
+        DeleteFile(ExpandConstant('{app}\Hash.md5'));
+    end;
   end;
+
   if (CurStep=ssPostInstall) and ISDoneError then
     Exec(ExpandConstant('{uninstallexe}'), '/VERYSILENT','', sw_Hide, ewWaitUntilTerminated, ResCode);
 end;
