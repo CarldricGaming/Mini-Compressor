@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/01/14 19:54:44.000.804,=E:\Doc\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2023/01/14 19:55:07.000.590,E:\Doc\Mini Compressor\Unit5.pas=E:\Doc\Mini Compressor\XHashNet.pas</Transaction>
+    <Transaction>2023/01/14 20:01:38.000.543,E:\Doc\Mini Compressor\XHashNet.pas=</Transaction>
+    <Transaction>2023/01/14 20:02:02.000.157,=E:\Doc\Mini Compressor\FMX.ApplicationHelper.pas</Transaction>
+    <Transaction>2023/01/14 20:02:07.000.410,=E:\Doc\Mini Compressor\uTotalCpuUsagePct.pas</Transaction>
+    <Transaction>2023/01/14 20:02:11.000.170,=E:\Doc\Mini Compressor\XHashNet.pas</Transaction>
+    <Transaction>2023/01/14 20:04:58.000.245,=E:\Doc\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2023/01/14 20:07:58.000.922,=E:\Doc\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2023/01/15 11:04:51.000.811,=E:\Doc\Mini Compressor\Unit6.pas</Transaction>
+    <Transaction>2023/01/15 11:05:16.000.965,E:\Doc\Mini Compressor\Unit6.pas=E:\Doc\Mini Compressor\AIO_FP.pas</Transaction>
+    <Transaction>2023/01/15 11:24:18.000.502,E:\Doc\Mini Compressor\Unit5.pas=</Transaction>
+    <Transaction>2023/01/15 11:24:53.000.889,=E:\Doc\Mini Compressor\Unit6.pas</Transaction>
+    <Transaction>2023/01/15 11:25:53.000.478,E:\Doc\Mini Compressor\Unit6.pas=E:\Doc\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2023/01/15 11:25:53.000.478,E:\Doc\Mini Compressor\Unit6.fmx=E:\Doc\Mini Compressor\Unit5.fmx</Transaction>
+    <Transaction>2023/01/15 11:35:14.000.547,E:\Doc\Mini Compressor\Unit5.pas=</Transaction>
+    <Transaction>2023/01/15 11:35:16.000.548,E:\Doc\Mini Compressor\XHashNet.pas=</Transaction>
+    <Transaction>2023/01/15 23:17:30.000.986,=E:\Doc\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2023/01/15 23:18:02.000.503,E:\Doc\Mini Compressor\Unit5.pas=E:\Doc\Mini Compressor\XHashNet.pas</Transaction>
+    <Transaction>2023/01/15 23:49:30.000.042,=E:\Doc\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2023/01/15 23:49:47.000.548,E:\Doc\Mini Compressor\Unit5.pas=E:\Doc\Mini Compressor\CmdOut.pas</Transaction>
+    <Transaction>2023/01/16 15:24:03.000.953,=E:\Doc\Mini Compressor\Unit5.pas</Transaction>
+    <Transaction>2023/01/20 00:39:36.000.032,=E:\Doc\Mini Compressor\Unit6.pas</Transaction>
+    <Transaction>2023/01/20 00:58:59.000.933,E:\Doc\Mini Compressor\Unit6.pas=</Transaction>
+  </Transactions>
+</BorlandProject>

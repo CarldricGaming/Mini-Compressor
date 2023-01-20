@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, MMSystem, Windows;
+  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, MMSystem, Windows,
+  FMX.Ani;
 
 type
   TForm3 = class(TForm)
@@ -16,12 +17,13 @@ type
     Timer1: TTimer;
     Label3: TLabel;
     StyleNote: TStyleBook;
-    Timer2: TTimer;
-    Arc1: TArc;
     Image2: TImage;
+    Rectangle1: TRectangle;
+    FloatAnimation1: TFloatAnimation;
+    FloatAnimation2: TFloatAnimation;
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Timer2Timer(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -68,17 +70,17 @@ begin
   //Form1.TabControl9.TabIndex := 0;
 end;
 
+procedure TForm3.FormShow(Sender: TObject);
+begin
+  FloatAnimation2.Enabled:= False;
+  FloatAnimation2.Enabled:= True;
+end;
+
 procedure TForm3.Timer1Timer(Sender: TObject);
 begin
   Timer1.Enabled := False;
-  Timer2.Enabled := False;
   //Form1.TabControl9.TabIndex := 1;
   Close;
-end;
-
-procedure TForm3.Timer2Timer(Sender: TObject);
-begin
-  Arc1.StartAngle := Arc1.StartAngle + 5;
 end;
 
 end.

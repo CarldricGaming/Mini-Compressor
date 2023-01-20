@@ -9,25 +9,70 @@ uses
   FMX.Objects, FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.ExtCtrls,
   FMX.ScrollBox, FMX.Memo, Winapi.Messages, Winapi.Windows, FMX.Platform.Win,
   Math, System.IOUtils, MMSystem, FMX.SpinBox, System.Win.Registry,
-  FMX.Memo.Types, FMX.Layouts, psAPI;
+  FMX.Memo.Types, FMX.Layouts, psAPI, FMX.Ani;
 
 type
   TForm1 = class(TForm)
     Panel1: TPanel;
     StyleBook1: TStyleBook;
-    TabControl1: TTabControl;
+    Timer1: TTimer;
+    OpenDialog1: TOpenDialog;
+    SaveDialog1: TSaveDialog;
+    StyleBook2: TStyleBook;
+    ArcTime1: TTimer;
+    TabControl9: TTabControl;
+    TabItem25: TTabItem;
+    TabItem26: TTabItem;
+    Image1: TImage;
     MenuBar1: TMenuBar;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem24: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem12: TMenuItem;
+    MenuItem10: TMenuItem;
+    MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
+    MenuItem11: TMenuItem;
+    MenuItem21: TMenuItem;
+    MenuItem13: TMenuItem;
+    MenuItem14: TMenuItem;
+    MenuItem15: TMenuItem;
+    MenuItem18: TMenuItem;
+    MenuItem20: TMenuItem;
+    MenuItem19: TMenuItem;
+    MenuItem22: TMenuItem;
+    MenuItem23: TMenuItem;
+    MenuItem25: TMenuItem;
+    MenuItem29: TMenuItem;
+    MenuItem26: TMenuItem;
+    MenuItem27: TMenuItem;
+    MenuItem28: TMenuItem;
+    CheckBox1: TCheckBox;
+    CheckBox8: TCheckBox;
     MenuBar2: TMenuBar;
     MenuItem1: TMenuItem;
-    Image1: TImage;
+    MenuItem2: TMenuItem;
+    MenuItem17: TMenuItem;
+    MenuItem16: TMenuItem;
+    MenuItem3: TMenuItem;
+    TabControl8: TTabControl;
+    TabItem23: TTabItem;
+    TabControl1: TTabControl;
     TabItem1: TTabItem;
+    TabControl6: TTabControl;
+    TabItem19: TTabItem;
+    TabControl2: TTabControl;
+    TabItem2: TTabItem;
+    Button1: TButton;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Edit1: TEdit;
-    Label2: TLabel;
-    Edit2: TEdit;
     SearchEditButton1: TSearchEditButton;
     ClearEditButton1: TClearEditButton;
+    Label2: TLabel;
+    Edit2: TEdit;
     SearchEditButton2: TSearchEditButton;
     ClearEditButton2: TClearEditButton;
     GroupBox2: TGroupBox;
@@ -44,19 +89,66 @@ type
     GroupBox4: TGroupBox;
     Edit5: TEdit;
     ClearEditButton5: TClearEditButton;
-    Button1: TButton;
-    TabItem2: TTabItem;
+    GroupBox5: TGroupBox;
+    Edit7: TEdit;
+    ClearEditButton6: TClearEditButton;
+    GroupBox10: TGroupBox;
+    CheckBox2: TCheckBox;
+    Edit14: TEdit;
+    ClearEditButton12: TClearEditButton;
+    CheckBox5: TCheckBox;
+    Button36: TButton;
     TabItem3: TTabItem;
     Edit6: TEdit;
     Memo1: TMemo;
     Button2: TButton;
-    GroupBox5: TGroupBox;
-    Edit7: TEdit;
-    ClearEditButton6: TClearEditButton;
-    TabControl2: TTabControl;
     Memo2: TMemo;
     Button3: TButton;
+    Edit38: TEdit;
+    Edit39: TEdit;
+    Panel7: TPanel;
+    Arc1: TArc;
+    TabItem20: TTabItem;
+    TabControl7: TTabControl;
+    TabItem21: TTabItem;
+    GroupBox26: TGroupBox;
+    Label27: TLabel;
+    Edit32: TEdit;
+    SearchEditButton10: TSearchEditButton;
+    ClearEditButton29: TClearEditButton;
+    Label28: TLabel;
+    Edit33: TEdit;
+    SearchEditButton11: TSearchEditButton;
+    ClearEditButton30: TClearEditButton;
+    GroupBox27: TGroupBox;
+    Label29: TLabel;
+    SpinBox6: TSpinBox;
+    Label31: TLabel;
+    SpinBox7: TSpinBox;
+    GroupBox28: TGroupBox;
+    Edit35: TEdit;
+    ClearEditButton32: TClearEditButton;
+    Button31: TButton;
+    Memo11: TMemo;
+    GroupBox29: TGroupBox;
+    Edit37: TEdit;
+    ClearEditButton33: TClearEditButton;
+    CheckBox6: TCheckBox;
+    CheckBox7: TCheckBox;
+    Edit34: TEdit;
+    Button37: TButton;
+    TabItem22: TTabItem;
+    Edit36: TEdit;
+    Memo12: TMemo;
+    Button32: TButton;
+    Button33: TButton;
+    Panel8: TPanel;
+    Arc2: TArc;
+    Edit40: TEdit;
+    Edit41: TEdit;
     TabItem4: TTabItem;
+    TabControl3: TTabControl;
+    TabItem5: TTabItem;
     GroupBox6: TGroupBox;
     Label5: TLabel;
     Edit8: TEdit;
@@ -66,9 +158,6 @@ type
     Edit9: TEdit;
     SearchEditButton4: TSearchEditButton;
     ClearEditButton8: TClearEditButton;
-    TabControl3: TTabControl;
-    TabItem5: TTabItem;
-    TabItem6: TTabItem;
     GroupBox7: TGroupBox;
     Label7: TLabel;
     PopupBox2: TPopupBox;
@@ -82,53 +171,35 @@ type
     Edit11: TEdit;
     ClearEditButton10: TClearEditButton;
     Button4: TButton;
+    GroupBox9: TGroupBox;
+    Edit13: TEdit;
+    ClearEditButton11: TClearEditButton;
+    GroupBox24: TGroupBox;
+    CheckBox4: TCheckBox;
+    Edit26: TEdit;
+    ClearEditButton23: TClearEditButton;
+    Button38: TButton;
+    TabItem6: TTabItem;
     Edit12: TEdit;
     Memo3: TMemo;
     Memo4: TMemo;
     Button5: TButton;
     Button6: TButton;
-    GroupBox9: TGroupBox;
-    Edit13: TEdit;
-    ClearEditButton11: TClearEditButton;
-    CheckBox1: TCheckBox;
-    Timer1: TTimer;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
-    MenuItem10: TMenuItem;
-    MenuItem11: TMenuItem;
-    MenuItem12: TMenuItem;
-    MenuItem13: TMenuItem;
-    MenuItem14: TMenuItem;
-    MenuItem15: TMenuItem;
-    CheckBox2: TCheckBox;
-    GroupBox10: TGroupBox;
-    Edit14: TEdit;
-    ClearEditButton12: TClearEditButton;
-    MenuItem16: TMenuItem;
-    MenuItem17: TMenuItem;
-    MenuItem18: TMenuItem;
-    MenuItem19: TMenuItem;
-    MenuItem20: TMenuItem;
-    OpenDialog1: TOpenDialog;
-    TabItem7: TTabItem;
+    Panel9: TPanel;
+    Arc3: TArc;
+    Edit42: TEdit;
+    Edit43: TEdit;
     TabItem15: TTabItem;
     TabControl5: TTabControl;
     TabItem16: TTabItem;
-    TabItem17: TTabItem;
     GroupBox21: TGroupBox;
     Label38: TLabel;
     Edit21: TEdit;
     ClearEditButton19: TClearEditButton;
+    SearchEditButton7: TSearchEditButton;
     Label39: TLabel;
     Edit22: TEdit;
     ClearEditButton20: TClearEditButton;
-    SearchEditButton7: TSearchEditButton;
     SearchEditButton8: TSearchEditButton;
     GroupBox22: TGroupBox;
     Edit23: TEdit;
@@ -137,17 +208,13 @@ type
     Edit24: TEdit;
     ClearEditButton22: TClearEditButton;
     Button19: TButton;
+    TabItem17: TTabItem;
     Edit25: TEdit;
     Memo8: TMemo;
     Button20: TButton;
     Button21: TButton;
-    GroupBox24: TGroupBox;
-    CheckBox4: TCheckBox;
-    Edit26: TEdit;
-    ClearEditButton23: TClearEditButton;
-    MenuItem21: TMenuItem;
+    TabItem7: TTabItem;
     TabControl4: TTabControl;
-    Button7: TButton;
     TabItem8: TTabItem;
     GroupBox11: TGroupBox;
     Label10: TLabel;
@@ -181,7 +248,9 @@ type
     Edit20: TEdit;
     SearchEditButton5: TSearchEditButton;
     ClearEditButton18: TClearEditButton;
-    Button9: TButton;
+    GroupBox18: TGroupBox;
+    Edit28: TEdit;
+    ClearEditButton25: TClearEditButton;
     TabItem9: TTabItem;
     GroupBox16: TGroupBox;
     Label18: TLabel;
@@ -200,32 +269,24 @@ type
     NumberBox3: TNumberBox;
     Label24: TLabel;
     NumberBox4: TNumberBox;
-    GroupBox18: TGroupBox;
-    Edit28: TEdit;
-    ClearEditButton25: TClearEditButton;
-    Button10: TButton;
     TabItem10: TTabItem;
     Memo5: TMemo;
     Button11: TButton;
     Button12: TButton;
     NumberBox5: TNumberBox;
-    Button13: TButton;
     TabItem11: TTabItem;
     Memo6: TMemo;
     Button14: TButton;
     Button15: TButton;
     NumberBox6: TNumberBox;
-    Button16: TButton;
     TabItem12: TTabItem;
     Memo7: TMemo;
     Button17: TButton;
-    Button18: TButton;
     TabItem13: TTabItem;
     Button22: TButton;
     Button23: TButton;
     Memo9: TMemo;
     NumberBox7: TNumberBox;
-    Button24: TButton;
     TabItem14: TTabItem;
     GroupBox19: TGroupBox;
     Panel3: TPanel;
@@ -243,92 +304,63 @@ type
     Label26: TLabel;
     Edit31: TEdit;
     ClearEditButton28: TClearEditButton;
-    Button26: TButton;
-    Button27: TButton;
+    PopupBox5: TPopupBox;
+    Label30: TLabel;
     TabItem18: TTabItem;
     Button28: TButton;
     Memo10: TMemo;
+    Button7: TButton;
+    Button9: TButton;
+    Button10: TButton;
+    Button13: TButton;
+    Button16: TButton;
+    Button18: TButton;
+    Button24: TButton;
+    Button26: TButton;
+    Button27: TButton;
     Panel4: TPanel;
     Button29: TButton;
     Button30: TButton;
-    MenuItem22: TMenuItem;
-    MenuItem23: TMenuItem;
-    TabControl6: TTabControl;
-    TabItem19: TTabItem;
-    TabItem20: TTabItem;
-    TabControl7: TTabControl;
-    TabItem21: TTabItem;
-    TabItem22: TTabItem;
-    GroupBox26: TGroupBox;
-    Label27: TLabel;
-    Edit32: TEdit;
-    SearchEditButton10: TSearchEditButton;
-    ClearEditButton29: TClearEditButton;
-    Label28: TLabel;
-    Edit33: TEdit;
-    SearchEditButton11: TSearchEditButton;
-    ClearEditButton30: TClearEditButton;
-    GroupBox27: TGroupBox;
-    Label29: TLabel;
-    SpinBox6: TSpinBox;
-    Label31: TLabel;
-    SpinBox7: TSpinBox;
-    GroupBox28: TGroupBox;
-    Edit35: TEdit;
-    Button31: TButton;
-    Memo11: TMemo;
-    Edit36: TEdit;
-    Memo12: TMemo;
-    Button32: TButton;
-    Button33: TButton;
-    GroupBox29: TGroupBox;
-    Edit37: TEdit;
-    ClearEditButton32: TClearEditButton;
-    ClearEditButton33: TClearEditButton;
-    CheckBox5: TCheckBox;
-    MenuItem24: TMenuItem;
-    MenuItem25: TMenuItem;
-    CheckBox6: TCheckBox;
-    CheckBox7: TCheckBox;
-    SaveDialog1: TSaveDialog;
-    MenuItem26: TMenuItem;
-    Edit34: TEdit;
-    MenuItem27: TMenuItem;
-    MenuItem28: TMenuItem;
-    StyleBook2: TStyleBook;
-    MenuItem29: TMenuItem;
-    TabControl8: TTabControl;
-    TabItem23: TTabItem;
-    TabItem24: TTabItem;
+    Panel6: TPanel;
+    Panel5: TPanel;
+    Image4: TImage;
     GroupBox30: TGroupBox;
     PopupBox4: TPopupBox;
     Button34: TButton;
     Button35: TButton;
-    Panel5: TPanel;
-    Image4: TImage;
-    Panel6: TPanel;
-    PopupBox5: TPopupBox;
-    Label30: TLabel;
-    ArcTime1: TTimer;
-    Edit38: TEdit;
-    Edit39: TEdit;
-    Arc1: TArc;
-    Panel7: TPanel;
-    Panel8: TPanel;
-    Arc2: TArc;
-    Edit40: TEdit;
-    Edit41: TEdit;
-    Panel9: TPanel;
-    Arc3: TArc;
-    Edit42: TEdit;
-    Edit43: TEdit;
-    CheckBox8: TCheckBox;
-    Button36: TButton;
-    Button37: TButton;
-    Button38: TButton;
-    TabControl9: TTabControl;
-    TabItem25: TTabItem;
-    TabItem26: TTabItem;
+    Layout1: TLayout;
+    Rectangle1: TRectangle;
+    FloatAnimation1: TFloatAnimation;
+    FloatAnimation2: TFloatAnimation;
+    FloatAnimation3: TFloatAnimation;
+    SkinPic: TTimer;
+    TabItem24: TTabItem;
+    GroupBox31: TGroupBox;
+    Label32: TLabel;
+    Label33: TLabel;
+    Edit44: TEdit;
+    Edit45: TEdit;
+    SearchEditButton12: TSearchEditButton;
+    ClearEditButton31: TClearEditButton;
+    SearchEditButton13: TSearchEditButton;
+    ClearEditButton34: TClearEditButton;
+    GroupBox32: TGroupBox;
+    Label34: TLabel;
+    PopupBox6: TPopupBox;
+    PopupBox7: TPopupBox;
+    NumberBox8: TNumberBox;
+    ProgressBar1: TProgressBar;
+    Button39: TButton;
+    Memo13: TMemo;
+    Button40: TButton;
+    GroupBox33: TGroupBox;
+    Edit46: TEdit;
+    CheckBox9: TCheckBox;
+    ProgressBar2: TProgressBar;
+    CheckBox10: TCheckBox;
+    CheckBox11: TCheckBox;
+    MenuItem30: TMenuItem;
+    MenuItem31: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -417,10 +449,24 @@ type
     procedure Button36Click(Sender: TObject);
     procedure Button37Click(Sender: TObject);
     procedure Button38Click(Sender: TObject);
+    procedure FloatAnimation2Finish(Sender: TObject);
+    procedure SkinPicTimer(Sender: TObject);
+    procedure SearchEditButton12Click(Sender: TObject);
+    procedure SearchEditButton13Click(Sender: TObject);
+    procedure PopupBox6Change(Sender: TObject);
+    procedure Memo13ChangeTracking(Sender: TObject);
+    procedure Button39Click(Sender: TObject);
+    procedure Button40Click(Sender: TObject);
+    procedure MenuItem30Click(Sender: TObject);
+    procedure MenuItem31Click(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    function GenHashMultiCallback(FileName: WideString; FileSize: extended;
+      FileProgress, TotalProgress, TotalFiles, FileCounted, StatusCode: Integer): Boolean;
+    function ChkHashMultiCallback(FileName: WideString; FileSize: extended;
+      FileProgress, TotalProgress, TotalFiles, FileCounted, StatusCode: Integer): Boolean;
   end;
 
 var
@@ -428,25 +474,49 @@ var
 
 implementation
 
+uses
+  ShellApi,
+  FMX.ApplicationHelper,
+  uTotalCpuUsagePct,
+  AIO_FP,
+  CmdOut,
+  XHashNet,
+  Unit2, Unit3, Unit4, Unit5;
+
 {$R *.fmx}
 
-uses
-  FMX.ApplicationHelper, Unit2, uTotalCpuUsagePct, Unit3, Unit4;
+var
+  CancelAll: Boolean    = False;
+  PauseAll: Boolean     = False;
+  Ok, Bad, Missing: Integer;
+  HashErrCode: Integer  = H_ERROR_GENERAL;
 
-type
-  TConsoleCallback = procedure(const ACaption, AText: WideString);
+procedure ExecAndWait(const AProgram, AParams, AWorking: string);
+var
+  EAWInfo: TShellExecuteInfo;
+  ExitCode: DWORD;
+begin
+  FillChar(EAWInfo, SizeOf(EAWInfo), 0);
+  EAWInfo.cbSize:= SizeOf(TShellExecuteInfo);
 
-function ISCmdInit(const WinHandle: LongInt): Boolean; stdcall;
-  external 'cmdout.dll';
-function ISCmdRun(const ExeFile, ExePara: widestring;
-  Callback: TConsoleCallback): Boolean; stdcall; external 'cmdout.dll';
-function ISCmdSuspend: Boolean; stdcall; external 'cmdout.dll';
-function ISCmdResume: Boolean; stdcall; external 'cmdout.dll';
-function ISCmdStop: Boolean; stdcall; external 'cmdout.dll';
+  with EAWInfo do
+  begin
+    fMask := SEE_MASK_NOCLOSEPROCESS;
+    Wnd := TWinWindowHandle(Form1).Wnd;
+    lpFile := PChar(AProgram);
+    lpParameters := PChar(AParams);
+    lpDirectory := PChar(AWorking);
+    nShow := SW_SHOWNORMAL;
+  end;
 
-function ISCmdCusKill(const AppName: WideString): Boolean; stdcall; external 'cmdout.dll';
-function ISCmdCusSuspend(const AppName: WideString): Boolean; stdcall; external 'cmdout.dll';
-function ISCmdCusResume(const AppName: WideString): Boolean; stdcall; external 'cmdout.dll';
+  if ShellExecuteEx(@EAWInfo) then
+  begin
+    repeat
+      Application.ProcessMessages;
+      GetExitCodeProcess(EAWInfo.hProcess, ExitCode);
+    until (ExitCode <> STILL_ACTIVE) or Application.Terminated;
+  end;
+end;
 
 function ProcessMemory: longint;
 var
@@ -468,10 +538,10 @@ var
   FormHandle: HWND;
 begin
   FormHandle:= TWinWindowHandle(Form1.Memo1).Wnd;
-  Form1.Edit6.Text := ACaption;
   Form1.Memo1.Lines.Clear;
   Form1.Memo1.Lines.Add(AText);
   SendMessage(FormHandle, EM_LINESCROLL, 0, Form1.Memo1.Lines.Count);
+  Form1.Edit6.Text := ACaption;
 end;
 
 procedure UpdateLine2(const ACaption, AText: WideString);
@@ -479,10 +549,10 @@ var
   FormHandle2: HWND;
 begin
   FormHandle2:= TWinWindowHandle(Form1.Memo4).Wnd;
-  Form1.Edit12.Text := ACaption;
   Form1.Memo4.Lines.Clear;
   Form1.Memo4.Lines.Add(AText);
   SendMessage(FormHandle2, EM_LINESCROLL, 0, Form1.Memo4.Lines.Count);
+  Form1.Edit12.Text := ACaption;
 end;
 
 procedure UpdateLine3(const ACaption, AText: WideString);
@@ -490,10 +560,10 @@ var
   FormHandle3: HWND;
 begin
   FormHandle3:= TWinWindowHandle(Form1.Memo8).Wnd;
-  Form1.Edit25.Text := ACaption;
   Form1.Memo8.Lines.Clear;
   Form1.Memo8.Lines.Add(AText);
   SendMessage(FormHandle3, EM_LINESCROLL, 0, Form1.Memo8.Lines.Count);
+  Form1.Edit25.Text := ACaption;
 end;
 
 procedure UpdateLine4(const ACaption, AText: WideString);
@@ -501,22 +571,11 @@ var
   FormHandle4: HWND;
 begin
   FormHandle4:= TWinWindowHandle(Form1.Memo12).Wnd;
-  Form1.Edit36.Text := ACaption;
   Form1.Memo12.Lines.Clear;
   Form1.Memo12.Lines.Add(AText);
   SendMessage(FormHandle4, EM_LINESCROLL, 0, Form1.Memo12.Lines.Count);
+  Form1.Edit36.Text := ACaption;
 end;
-
-procedure Website(URL: string); stdcall; external 'Aio_FP.dll';
-procedure Exec(sExe, sCommandLine: string; wait: Boolean); stdcall; external 'Aio_FP.dll';
-function SelDir: string; stdcall; external 'Aio_FP.dll';
-procedure B_PlayMusic(Files: string); stdcall; external 'Aio_FP.dll';
-procedure B_PauseMusic; stdcall; external 'Aio_FP.dll';
-procedure B_ResumeMusic; stdcall; external 'Aio_FP.dll';
-procedure B_StopMusic; stdcall; external 'Aio_FP.dll';
-
-function IniRead(Filez, A, B: string): string; stdcall; external 'MC_Ini.dll';
-procedure IniCreate(Filez, A, B, C: string); stdcall; external 'MC_Ini.dll';
 
 function GetAnySource(FileSource: string): PChar;
 begin
@@ -787,6 +846,15 @@ begin
   Edit38.Text := '';
   Edit39.Text := '';
 
+  if CheckBox9.IsChecked = True then
+    with TForm5.Create(nil) do
+    try
+      FA_SingleTime.Enabled:= True;
+      ShowModal;
+    finally
+      Free;
+    end;
+
   if CheckBox2.IsChecked = True then
     SFXOutput := Edit2.Text
   else
@@ -837,6 +905,7 @@ begin
   Memo2.Lines.Add('    Output: ' +Edit2.Text +'\' +Edit5.Text);
   Memo2.Lines.Add('    Method: ' +FA_Method);
   Memo2.GoToTextEnd;
+
 
   FA_Handle := TWinWindowHandle(Form1).Wnd;
   FA_Error := False;
@@ -946,6 +1015,9 @@ begin
       MessageBox(0,'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit6.Text:= 'Finished.';
+
+      if FileExists(Edit1.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
     end
     else
     if not FileExists(Edit2.Text +'\' +Edit5.Text) then
@@ -965,6 +1037,9 @@ begin
 
       if FileExists(GetAnySource('\arc\freearc1.tmp')) then
         DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
+
+      if FileExists(Edit1.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
     end;
   end
   else
@@ -979,12 +1054,15 @@ begin
       TimeToStr(DateAndTimeZ));
     Memo2.GoToTextEnd;
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was not done.', 'Failed',
+    MessageBox(0,'Your compression was failed.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit6.Text:= 'Failed.';
 
     if FileExists(GetAnySource('\arc\freearc1.tmp')) then
       DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
+
+      if FileExists(Edit1.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
   end;
   if DirectoryExists(GetAnySource('\arc')) then
     TDirectory.Delete(GetAnySource('\arc'));
@@ -996,8 +1074,11 @@ begin
 end;
 
 procedure TForm1.Button20Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Memo8.Lines.SaveToFile(SelDir +'\OSCDIMG_Result.txt');
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Memo8.Lines.SaveToFile(Dir +'\OSCDIMG_Result.txt');
 end;
 
 procedure TForm1.Button21Click(Sender: TObject);
@@ -1404,6 +1485,15 @@ begin
   Edit41.Visible := True;
   ArcTime1.Enabled := True;
 
+  if CheckBox10.IsChecked = True then
+    with TForm5.Create(nil) do
+    try
+      FA_SplitTime.Enabled:= True;
+      ShowModal;
+    finally
+      Free;
+    end;
+
   FA_Command:= 'a -ma9 -ds -di -i1 -ep1 -ed -r -s; -w_Temp\ ';
   FA_Memory:= '-lc'+SpinBox6.Text +' -ld' +SpinBox6.Text +' ';
   FA_Method:= '-m'+ Edit35.Text
@@ -1492,6 +1582,9 @@ begin
       MessageBox(0,'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit36.Text:= 'Finished.';
+
+      if FileExists(Edit32.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
     end
     else
     if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
@@ -1506,13 +1599,16 @@ begin
 
       if FileExists(PChar(Edit33.Text +'\MC.ini')) then
         DeleteFile(PChar(Edit33.Text +'\MC.ini'));
+
+      if FileExists(Edit32.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
     end;
   end
   else
   if FA_Error = True then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was crash.', 'Failed',
+    MessageBox(0,'Your compression was failed.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit36.Text:= 'Failed.';
 
@@ -1521,6 +1617,9 @@ begin
 
     if FileExists(PChar(Edit33.Text +'\MC.ini')) then
       DeleteFile(PChar(Edit33.Text +'\MC.ini'));
+
+      if FileExists(Edit32.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
   end;
   Button32.Visible:= True;
   Button33.Visible:= True;
@@ -1532,8 +1631,10 @@ end;
 procedure TForm1.Button32Click(Sender: TObject);
 var
   FA_SplitResult: string;
+  Dir: string;
 begin
-  FA_SplitResult:= SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    FA_SplitResult:= Dir;
 
   if FA_SplitResult <> '' then
     Memo12.Lines.SaveToFile(PChar(FA_SplitResult +'\Split_Result.txt'));
@@ -1549,6 +1650,7 @@ var
   LoadSkinConfig: string;
   Apply_Skin: string;
   Skin_Set1, Skin_Set2: string;
+  FormHandle: HWND;
 begin
   LoadSkinConfig:= GetAnySource('..\Resources\Skin\_Skin.Ini');
   Apply_Skin := '..\Resources\Skin\';
@@ -1556,20 +1658,36 @@ begin
   Skin_Set2:= IniRead(LoadSkinConfig,'Skin_Files',Skin_Set1);
   IniCreate(LoadSkinConfig,'Skin_Use','Set',Skin_Set1);
 
-  Hide;
-  Form1.StyleBook := StyleBook2;
+  //FormHandle:= TWinWindowHandle(Form1).Wnd;
+  //ShowWindowAsync(FormHandle, SW_MAXIMIZE);
 
-  Application.ProcessMessages;
-  Sleep(150);
+  if (Self.WindowState = TWindowState.wsMaximized)
+    or (CheckBox8.IsChecked = True) then
+  begin
+    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+    MessageBox(0,'Failed to apply skin.' +#13
+      +'Please do not Maximize Window or Full Screen first.', 'Error', MB_ICONEXCLAMATION or MB_OK);
+  end
+  else
+  if not (Self.WindowState = TWindowState.wsMaximized)
+    or (CheckBox8.IsChecked = True) then
+  begin
+    Hide;
+    Form1.StyleBook := StyleBook2;
 
-  StyleBook1.LoadFromFile(GetAnySource(Apply_Skin) +Skin_Set2);
-  Form1.StyleBook := StyleBook1;
-  Show;
+    Application.ProcessMessages;
+    Sleep(150);
+
+    StyleBook1.LoadFromFile(GetAnySource(Apply_Skin) +Skin_Set2);
+    Form1.StyleBook := StyleBook1;
+    Show;
+  end;
 end;
 
 procedure TForm1.Button35Click(Sender: TObject);
 begin
-  TabControl8.TabIndex:= 0;
+  FloatAnimation2.Enabled:= False;
+  FloatAnimation2.Enabled:= True;
 end;
 
 procedure TForm1.Button36Click(Sender: TObject);
@@ -1583,6 +1701,15 @@ var
   DateAndTimeZ: TDateTime;
   SFXOutput, SFXCommand: string;
 begin
+  if CheckBox9.IsChecked = True then
+    with TForm5.Create(nil) do
+    try
+      FA_SingleTime.Enabled:= True;
+      ShowModal;
+    finally
+      Free;
+    end;
+
   if CheckBox2.IsChecked = True then
     SFXOutput := Edit2.Text
   else
@@ -1740,6 +1867,9 @@ begin
       MessageBox(0,'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit6.Text:= 'Finished.';
+
+      if FileExists(Edit1.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
     end
     else
     if not FileExists(Edit2.Text +'\' +Edit5.Text) then
@@ -1751,6 +1881,9 @@ begin
 
       if FileExists(GetAnySource('\arc\freearc1.tmp')) then
         DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
+
+      if FileExists(Edit1.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
     end;
   end
   else
@@ -1763,6 +1896,9 @@ begin
 
     if FileExists(GetAnySource('\arc\freearc1.tmp')) then
       DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
+
+      if FileExists(Edit1.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
   end;
   if DirectoryExists(GetAnySource('\arc')) then
     TDirectory.Delete(GetAnySource('\arc'));
@@ -1787,6 +1923,15 @@ begin
   FA_Source:= '"' +Edit32.Text +'\*"';
 
   FA_Result:= FA_Command +FA_Memory +FA_Method +FA_Output +FA_Source;
+
+  if CheckBox10.IsChecked = True then
+    with TForm5.Create(nil) do
+    try
+      FA_SplitTime.Enabled:= True;
+      ShowModal;
+    finally
+      Free;
+    end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1868,6 +2013,9 @@ begin
       MessageBox(0,'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit36.Text:= 'Finished.';
+
+      if FileExists(Edit32.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
     end
     else
     if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
@@ -1882,13 +2030,16 @@ begin
 
       if FileExists(PChar(Edit33.Text +'\MC.ini')) then
         DeleteFile(PChar(Edit33.Text +'\MC.ini'));
+
+      if FileExists(Edit32.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
     end;
   end
   else
   if FA_Error = True then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was crash.', 'Failed',
+    MessageBox(0,'Your compression was failed.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit36.Text:= 'Failed.';
 
@@ -1897,6 +2048,9 @@ begin
 
     if FileExists(PChar(Edit33.Text +'\MC.ini')) then
       DeleteFile(PChar(Edit33.Text +'\MC.ini'));
+
+      if FileExists(Edit32.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
   end;
 end;
 
@@ -1914,6 +2068,15 @@ begin
   else
   if CheckBox4.IsChecked = False then
     SFXOutput:= '';
+
+  if CheckBox11.IsChecked = True then
+    with TForm5.Create(nil) do
+    try
+      SevenZip_Time.Enabled:= True;
+      ShowModal;
+    finally
+      Free;
+    end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -2015,6 +2178,9 @@ begin
       MessageBox(0,'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit12.Text:= 'Finished.';
+
+      if FileExists(Edit8.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end
     else
     if not FileExists(Edit9.Text +'\' +Edit11.Text) then
@@ -2023,15 +2189,78 @@ begin
       MessageBox(0,'Your compression was not done.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit12.Text:= 'Failed.';
+
+      if FileExists(Edit8.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end;
   end
   else
   if Error7z = True then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was not done.', 'Failed',
+    MessageBox(0,'Your compression was failed.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit12.Text:= 'Failed.';
+
+    if FileExists(Edit8.Text + '\Hash.md5') then
+      DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
+  end;
+end;
+
+function TForm1.GenHashMultiCallback(FileName: WideString; FileSize: extended;
+  FileProgress, TotalProgress, TotalFiles, FileCounted,
+  StatusCode: Integer): Boolean;
+begin
+  ProgressBar1.Value  := FileProgress;
+  ProgressBar2.Value  := TotalProgress;
+
+  case StatusCode of
+    H_FILE_HASHING_DONE:
+      Memo13.Lines.Add(FileName + '  ... Done!');
+
+    -1,-4,-5,-6,-7,-8,-9,-10,-12,-13:
+      Memo13.Lines.Add('>>> Error code:  ' + IntToStr(StatusCode));
+  end;
+
+  Edit46.Text := 'Files:' +#9#9+
+    Format(VC_GEN_STATUS_MSG, [FileCounted, TotalFiles]);
+
+  Application.ProcessMessages;
+  Result := CancelAll;
+end;
+
+procedure TForm1.Button39Click(Sender: TObject);
+var
+  HashResult: Integer;
+  HashStr: WideString;
+begin
+  Memo13.Lines.Clear;
+  CancelAll := False;
+
+  HashResult := CalculateHashesForDir(Edit45.Text, Edit44.Text,
+    StrToInt(NumberBox8.Text), GenHashMultiCallback);
+
+  case HashResult of
+    H_PROCESS_DONE:
+      MessageBox(0, 'Hash generation successful!', 'XHash', MB_OK or MB_ICONINFORMATION);
+
+    H_HASH_GENERATE_ERROR:
+      MessageBox(0,'Hash generation failed!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+
+    H_INVALID_DIRECTORY:
+      MessageBox(0,'Invalid directory!', 'XHash', MB_OK or MB_ICONERROR);
+
+    H_PROCESS_ABORTED:
+      MessageBox(0,'Hash generation was canceled by user!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+
+    H_EMPTY_DIRECTORY:
+      MessageBox(0,'Empty directory!', 'XHash', MB_OK or MB_ICONERROR);
+
+    H_CANNOT_CREATE_HASH_FILE:
+      MessageBox(0,'Cannot create hash file!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+
+    H_INTERNAL_ERROR:
+      MessageBox(0,'Hash generation failed, Internal error!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
   end;
 end;
 
@@ -2039,15 +2268,87 @@ procedure TForm1.Button3Click(Sender: TObject);
 var
   FA_Report: string;
 begin
-  FA_Report := SelDir;
-  if FA_Report <> '' then
-  begin
-    Memo2.Lines.SaveToFile(FA_Report +'\MC_Result1.txt');
-    Memo1.Lines.SaveToFile(FA_Report +'\MC_Result2.txt');
-  end
-  else
-  if FA_Report = '' then
-    ShowMessage('Failed to save.');
+  if SelectDirectory('Select Folder', GetCurrentDir, FA_Report) then
+    if FA_Report <> '' then
+    begin
+      Memo2.Lines.SaveToFile(FA_Report +'\MC_Result1.txt');
+      Memo1.Lines.SaveToFile(FA_Report +'\MC_Result2.txt');
+    end
+    else
+    if FA_Report = '' then
+      MessageBox(0, 'Failed to save result.', 'Error', MB_OK or MB_ICONEXCLAMATION);
+end;
+
+function TForm1.ChkHashMultiCallback(FileName: WideString; FileSize: extended;
+  FileProgress, TotalProgress, TotalFiles, FileCounted,
+  StatusCode: Integer): Boolean;
+begin
+  ProgressBar1.Value  := FileProgress;
+  ProgressBar2.Value  := TotalProgress;
+
+  case StatusCode of
+    H_HASH_OK:
+      begin
+        Inc(ok);
+        Memo13.Lines.Add(FileName + '  ... Ok!');
+      end;
+
+    H_BAD_FILE_HASH:
+      begin
+        Inc(bad);
+        Memo13.Lines.Add(FileName + '  ... Bad!');
+      end;
+
+    H_FILE_NOT_FOUND:
+      begin
+        Inc(missing);
+        Memo13.Lines.Add(FileName + '  ... Missing!');
+      end;
+
+    -1,-4,-5,-6,-7,-8,-9,-10,-11,-15:
+      Memo13.Lines.Add('>>> Error code:  ' + IntToStr(StatusCode));
+  end;
+
+  Edit46.Text := 'Files:' +#9#9+
+    Format(VC_STATUS_MSG, [FileCounted, TotalFiles, ok, bad, missing]);
+
+  Application.ProcessMessages;
+  Result := CancelAll;
+end;
+
+procedure TForm1.Button40Click(Sender: TObject);
+var
+  HashResult: Integer;
+  HashHex: WideString;
+begin
+  Memo13.Lines.Clear;
+  CancelAll := False;
+
+  HashResult := VerifyHashesFromFile(Edit45.Text, Edit44.Text,
+    StrToInt(NumberBox8.Text), False, ChkHashMultiCallback);
+
+  case HashResult of
+    H_PROCESS_DONE:
+      MessageBox(0, 'Hash verification successful!', 'XHash', MB_OK or MB_ICONINFORMATION);
+
+    H_HASH_GENERATE_ERROR:
+      MessageBox(0,'Hash verification failed!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+
+    H_INVALID_DIRECTORY:
+      MessageBox(0,'Invalid directory!', 'XHash', MB_OK or MB_ICONERROR);
+
+    H_PROCESS_ABORTED:
+      MessageBox(0,'Hash verification was canceled by user!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+
+    H_EMPTY_DIRECTORY:
+      MessageBox(0,'Empty directory!', 'XHash', MB_OK or MB_ICONERROR);
+
+    H_CANNOT_CREATE_HASH_FILE:
+      MessageBox(0,'Cannot create hash file!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+
+    H_INTERNAL_ERROR:
+      MessageBox(0,'Hash verification failed, Internal error!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+  end;
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
@@ -2072,6 +2373,14 @@ begin
   Edit42.Text := '';
   Edit43.Text := '';
 
+  if CheckBox11.IsChecked = True then
+    with TForm5.Create(nil) do
+    try
+      SevenZip_Time.Enabled:= True;
+      ShowModal;
+    finally
+      Free;
+    end;
 
   if CheckBox4.IsChecked = True then
     SFXOutput:= Edit9.Text
@@ -2194,6 +2503,9 @@ begin
       MessageBox(0,'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit12.Text:= 'Finished.';
+
+      if FileExists(Edit8.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end
     else
     if not FileExists(Edit9.Text +'\' +Edit11.Text) then
@@ -2210,6 +2522,9 @@ begin
       MessageBox(0,'Your compression was not done.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit12.Text:= 'Failed.';
+
+      if FileExists(Edit8.Text + '\Hash.md5') then
+        DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end;
   end
   else
@@ -2224,9 +2539,12 @@ begin
       TimeToStr(DateAndTimeZ));
     Memo3.GoToTextEnd;
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was not done.', 'Failed',
+    MessageBox(0,'Your compression was failed.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit12.Text:= 'Failed.';
+
+    if FileExists(Edit8.Text + '\Hash.md5') then
+      DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
   end;
   Button6.Visible := True;
   Button5.Visible := True;
@@ -2243,8 +2561,10 @@ end;
 procedure TForm1.Button6Click(Sender: TObject);
 var
   Report7z: string;
+  Dir: string;
 begin
-  Report7z:= Seldir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Report7z:= Dir;
   if Report7z <> '' then
   begin
     Memo3.Lines.SaveToFile(Seldir + '\MC_Result1.txt');
@@ -2352,6 +2672,11 @@ begin
   IniCreate(GetAnySource('..\Compression\FreeArc.ini'),'Setting','cmd',Edit7.Text);
 end;
 
+procedure TForm1.FloatAnimation2Finish(Sender: TObject);
+begin
+  Rectangle1.Visible := False;
+end;
+
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   B_StopMusic;
@@ -2392,6 +2717,7 @@ var
   Apply_Skin: string;
   Skin_Set1, Skin_Set2: string;
   Skin_SS_Set: string;
+  HashExistFile: boolean;
 begin
   sndPlaySound(GetAnySource('..\Resources\MC_Open.wav'),SND_ASYNC);
   with TForm3.Create(nil) do
@@ -2400,6 +2726,29 @@ begin
     //Width := 561;
     ShowModal;
     Free;
+  end;
+
+  if FileExists(GetAnySource('..\Resources\Hash_Type.db')) and
+    FileExists(GetAnySource('..\Resources\Hash_Ext.db')) then
+    HashExistFile := True
+  else
+    HashExistFile := False;
+
+  if HashExistFile = True then
+  begin
+    PopupBox6.Items.LoadFromFile(GetAnySource('..\Resources\Hash_Type.db'));
+    PopupBox6.ItemIndex := 1;
+
+    PopupBox7.Items.LoadFromFile(GetAnySource('..\Resources\Hash_Ext.db'));
+    PopupBox7.ItemIndex := PopupBox6.ItemIndex;
+  end
+  else
+  if HashExistFile = False then
+  begin
+    sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
+    MessageBox(0,'Missing file' +#13 +#13
+      +'"Resources\Hash_Type.db"', 'Error',
+      MB_ICONERROR or MB_OK);
   end;
 
   TimeAndDateYo:= Now;
@@ -2419,6 +2768,9 @@ begin
     until IniRead(GetAnySource('..\Resources\Skin\_Skin.ini'), 'Skin' ,IntToStr(j)) = '';
     PopupBox4.Text:=IniRead(GetAnySource('..\Resources\Skin\_Skin.ini'),
         'Skin_Use' ,'Set');
+
+    PopupBox4.ItemIndex := StrToInt(IniRead(GetAnySource('..\Resources\Skin\_Skin.Ini'),
+      'Skin_Use', 'Set')) - 1;
 
     LoadSkinConfig:= GetAnySource('..\Resources\Skin\_Skin.Ini');
     Form1.StyleBook := StyleBook2;
@@ -2629,6 +2981,11 @@ begin
   Memo12.GoToTextEnd;
 end;
 
+procedure TForm1.Memo13ChangeTracking(Sender: TObject);
+begin
+  Memo13.GoToTextEnd;
+end;
+
 procedure TForm1.Memo1ChangeTracking(Sender: TObject);
 begin
   Memo1.GoToTextEnd;
@@ -2646,7 +3003,8 @@ end;
 
 procedure TForm1.MenuItem10Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\IS5\Compil32.exe'), '', False);
+  ExecAndWait(GetAnySource('..\Tools\IS5\Compil32.exe'), '',
+    GetAnySource('..\Tools\IS5'));
 end;
 
 procedure TForm1.MenuItem11Click(Sender: TObject);
@@ -2900,8 +3258,10 @@ end;
 procedure TForm1.MenuItem26Click(Sender: TObject);
 var
   OutDB: string;
+  Dir: string;
 begin
-  OutDB:= SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    OutDB:= Dir;
 
   if OutDB <> '' then
   begin
@@ -2948,32 +3308,85 @@ end;
 
 procedure TForm1.MenuItem29Click(Sender: TObject);
 begin
-  TabControl8.TabIndex:= 1;
+  Rectangle1.Visible := True;
+  FloatAnimation1.Enabled:= False;
+  FloatAnimation1.Enabled:= True;
+end;
+
+procedure TForm1.MenuItem30Click(Sender: TObject);
+begin
+  ExecAndWait(GetAnySource('..\Resources\XTool\XTool_Plugin.exe'), '',
+    GetAnySource('..\Resources\XTool'));
+
+  if FileExists(GetAnySource('..\Resources\XTool\xtool_inj.exe')) then
+    if MessageBox(0, '"xtool_inj.exe" detected.' +#13#13 +
+      'Do you wanna update your Freearc?',
+      'XTool Plugin', MB_YESNO or MB_ICONQUESTION) = IDYES then
+    begin
+      CopyFile(GetAnySource('..\Resources\XTool\xtool_inj.exe'),
+        GetAnySource('..\Compression\FreeArc\XTool\xtool.exe'), false);
+
+      Application.ProcessMessages;
+      Sleep(500);
+
+      CopyFile(GetAnySource('..\Resources\XTool\xtool_inj.exe'),
+        GetAnySource('..\Resources\ISDone_resource\xtool.exe'), false);
+
+      Application.ProcessMessages;
+      Sleep(500);
+
+      DeleteFile(GetAnySource('..\Resources\XTool\xtool_inj.exe'));
+
+      MessageBox(0, 'XTool has been updated.', 'XTool Plugin',
+        MB_OK or MB_ICONINFORMATION);
+    end
+    else
+    begin
+      MessageBox(0, 'XTool has canceled.' +#13
+        +'Looks like you want a manual update yourself huh?' +#13#13
+        +'Here''s how if you don''t want it automatically,' +#13
+        +'you can go through the "Resources\XTool"' +#13
+        +'folder to identify it.' +#13
+        +'Then you can finally copy & paste through'+#13
+        +'folder "Compression" and such.',
+        'XTool Plugin', MB_OK or MB_ICONINFORMATION);
+    end;
+end;
+
+procedure TForm1.MenuItem31Click(Sender: TObject);
+begin
+  ExecAndWait(GetAnySource('..\Tools\ASC\asc.exe'), '',
+    GetAnySource('..\Tools\ASC'));
 end;
 
 procedure TForm1.MenuItem5Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\AllDup\AllDupPortable.exe'), '', False);
+  ExecAndWait(GetAnySource('..\Tools\AllDup\AllDupPortable.exe'), '',
+    GetAnySource('..\Tools\AllDup'));
 end;
 
 procedure TForm1.MenuItem6Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\DirectorySlicer\DirectorySlicer.exe'),'',False);
+  ExecAndWait(GetAnySource('..\Tools\DirectorySlicer\DirectorySlicer.exe'), '',
+    GetAnySource('..\Tools\DirectorySlicer'));
 end;
 
 procedure TForm1.MenuItem7Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\GFS\GFS.exe'),'',False);
+  ExecAndWait(GetAnySource('..\Tools\GFS\GFS.exe'), '',
+    GetAnySource('..\Tools\GFS'));
 end;
 
 procedure TForm1.MenuItem8Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\InnoSProtect\InnoSProtect.exe'),'',False);
+  ExecAndWait(GetAnySource('..\Tools\InnoSProtect\InnoSProtect.exe'), '',
+    GetAnySource('..\Tools\InnoSProtect'));
 end;
 
 procedure TForm1.MenuItem9Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\InstallerCreator\Bin\InstallerCreator.exe'),'',False);
+  ExecAndWait(GetAnySource('..\Tools\InstallerCreator\Bin\InstallerCreator.exe'), '',
+    GetAnySource('..\Tools\InstallerCreator\Bin'));
 end;
 
 procedure TForm1.PopupBox1Change(Sender: TObject);
@@ -3008,44 +3421,94 @@ begin
   Skin_SS_Set:= IniRead(LoadFileSkin,'Skin_Screenshot',LoadSSFileSkin);
 
 
-  Application.ProcessMessages;
-  Sleep(150);
-  Image4.Bitmap.LoadFromFile(GetAnySource('..\Resources\Skin\') +Skin_SS_Set);
+  //Application.ProcessMessages;
+  //Sleep(150);
+  FloatAnimation3.Enabled := False;
+  FloatAnimation3.Enabled := True;
+  SkinPic.Enabled:= True;
+end;
+
+procedure TForm1.PopupBox6Change(Sender: TObject);
+begin
+  PopupBox7.ItemIndex := PopupBox6.ItemIndex;
+  NumberBox8.Text := IntToStr(PopupBox6.ItemIndex + 1);
+  if Edit45.Text <> '' then
+    Edit45.Text := SaveDialog1.FileName + Popupbox7.Text;
 end;
 
 procedure TForm1.SearchEditButton10Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit32.Text:= SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit32.Text:= Dir;
 end;
 
 procedure TForm1.SearchEditButton11Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit33.Text:= SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit33.Text:= Dir;
+end;
+
+procedure TForm1.SearchEditButton12Click(Sender: TObject);
+var
+  Dir: string;
+begin
+  if SelectDirectory('Select source folder', GetCurrentDir, Dir) then
+    Edit44.Text := Dir;
+end;
+
+procedure TForm1.SearchEditButton13Click(Sender: TObject);
+begin
+  SaveDialog1.Title := 'Save your hash file';
+  SaveDialog1.Filter := 'All files|*.*';
+  SaveDialog1.Execute;
+  if SaveDialog1.FileName <> '' then
+    Edit45.Text := SaveDialog1.FileName + Popupbox7.Text;
 end;
 
 procedure TForm1.SearchEditButton1Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit1.Text := SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit1.Text := Dir;
 end;
 
 procedure TForm1.SearchEditButton2Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit2.Text := SelDir;
+  //Edit2.Text := SelDir;
+
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit2.Text := Dir;
 end;
 
 procedure TForm1.SearchEditButton3Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit8.Text := SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit8.Text := Dir;
 end;
 
 procedure TForm1.SearchEditButton4Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit9.Text := SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit9.Text := Dir;
 end;
 
 procedure TForm1.SearchEditButton5Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit20.Text := SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit20.Text := Dir;
 end;
 
 procedure TForm1.SearchEditButton6Click(Sender: TObject);
@@ -3072,18 +3535,43 @@ begin
 end;
 
 procedure TForm1.SearchEditButton7Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit21.Text := SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit21.Text := Dir;
 end;
 
 procedure TForm1.SearchEditButton8Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit22.Text := SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit22.Text := Dir;
 end;
 
 procedure TForm1.SearchEditButton9Click(Sender: TObject);
+var
+  Dir: string;
 begin
-  Edit30.Text := SelDir;
+  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+    Edit30.Text := Dir;
+end;
+
+procedure TForm1.SkinPicTimer(Sender: TObject);
+var
+  LoadFileSkin: string;
+  Skin_ScreenShot: string;
+  Skin_SS_Set: string;
+  LoadSSFileSkin: string;
+begin
+  LoadFileSkin:= GetAnySource('..\Resources\Skin\_Skin.Ini');
+  Skin_ScreenShot:= '..\Resources\Skin\SS\';
+  LoadSSFileSkin:= IniRead(LoadFileSkin,'Skin_No',PopupBox4.Text);
+  Skin_SS_Set:= IniRead(LoadFileSkin,'Skin_Screenshot',LoadSSFileSkin);
+
+  Image4.Bitmap.LoadFromFile(GetAnySource('..\Resources\Skin\') +Skin_SS_Set);
+  SkinPic.Enabled:= False;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
