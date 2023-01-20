@@ -7,8 +7,8 @@ By the way, there's have a newly updated program.
 So you can get any you want to compress.
 
 # Download Mini Compressor
-- [x] **Latest version** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.7h)
-- [x] **Previous version** - [Previous](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.6g)
+- [x] **Latest version** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.8i)
+- [x] **Previous version** - [Previous](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v21.7h)
 - [x] **Other version** - [Check here](https://github.com/CarldricGaming/Mini-Compressor/releases)
 
 # Q & A
@@ -37,6 +37,7 @@ So you can get any you want to compress.
 * MC_Ini.dll - v1.0
 * MC_ConvertBytes.dll - v1.0
 * cmdout.dll - v1.0
+* XHashNext.dll - v1.0
 
 # Special thanks to 
 * **7-Zip**: by **Igor Pavlov** and **Shelwien**
@@ -69,8 +70,10 @@ So you can get any you want to compress.
 * **lrzip**: by **gozarck**
 * **AllDup**: by **MTSD**
 * **Metro UI**: by **Gupta**
+* **XHash Library**: by **BLACKFIRE69**
+* **CmdOut**: by **Ele**
 
-* and other stuff that I've forgotten... Many-many thanks to them of Creator's.
+* And other things I forgot... Many thanks to the Creator.
 
 # System Requiredments
 Minimum Spec:
