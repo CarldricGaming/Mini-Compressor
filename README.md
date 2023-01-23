@@ -1,4 +1,5 @@
-![Logo](https://ia803001.us.archive.org/23/items/LogoMC/Logo%20MC.png)
+![Logo](https://user-images.githubusercontent.com/46277745/214106133-1d304a0c-b909-42c3-a20b-93bdcaedb9ae.png)
+
 # Mini-Compressor
 Mini Compressor is the Toolset for most repacking games.
 It has included with Masked Compression v3.0 now.
