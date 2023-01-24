@@ -2,7 +2,6 @@
   <img src="https://user-images.githubusercontent.com/46277745/214106133-1d304a0c-b909-42c3-a20b-93bdcaedb9ae.png" />
 </p>
 
-# Mini-Compressor
 Mini Compressor is the Toolset for most repacking games.
 It has included with Masked Compression v3.0 now.
 Which mean you can compress any games what you want.
