@@ -35,7 +35,6 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     MenuItem11: TMenuItem;
-    MenuItem21: TMenuItem;
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
@@ -360,7 +359,6 @@ type
     CheckBox10: TCheckBox;
     CheckBox11: TCheckBox;
     MenuItem30: TMenuItem;
-    MenuItem31: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -401,7 +399,6 @@ type
     procedure Memo4ChangeTracking(Sender: TObject);
     procedure Memo8ChangeTracking(Sender: TObject);
     procedure Memo1ChangeTracking(Sender: TObject);
-    procedure MenuItem21Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure CheckBox3Change(Sender: TObject);
     procedure Button8Click(Sender: TObject);
@@ -458,7 +455,6 @@ type
     procedure Button39Click(Sender: TObject);
     procedure Button40Click(Sender: TObject);
     procedure MenuItem30Click(Sender: TObject);
-    procedure MenuItem31Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -634,6 +630,67 @@ begin
 end;
 
 //========== _+_ ==========
+//========== _+_ ==========
+//========== _+_ ==========
+
+function TForm1.GenHashMultiCallback(FileName: WideString; FileSize: extended;
+  FileProgress, TotalProgress, TotalFiles, FileCounted,
+  StatusCode: Integer): Boolean;
+begin
+  ProgressBar1.Value  := FileProgress;
+  ProgressBar2.Value  := TotalProgress;
+
+  case StatusCode of
+    H_FILE_HASHING_DONE:
+      Memo13.Lines.Add(FileName + '  ... Done!');
+
+    -1,-4,-5,-6,-7,-8,-9,-10,-12,-13:
+      Memo13.Lines.Add('>>> Error code:  ' + IntToStr(StatusCode));
+  end;
+
+  Edit46.Text := 'Files:' +#9#9+
+    Format(VC_GEN_STATUS_MSG, [FileCounted, TotalFiles]);
+
+  Application.ProcessMessages;
+  Result := CancelAll;
+end;
+
+function TForm1.ChkHashMultiCallback(FileName: WideString; FileSize: extended;
+  FileProgress, TotalProgress, TotalFiles, FileCounted,
+  StatusCode: Integer): Boolean;
+begin
+  ProgressBar1.Value  := FileProgress;
+  ProgressBar2.Value  := TotalProgress;
+
+  case StatusCode of
+    H_HASH_OK:
+      begin
+        Inc(ok);
+        Memo13.Lines.Add(FileName + '  ... Ok!');
+      end;
+
+    H_BAD_FILE_HASH:
+      begin
+        Inc(bad);
+        Memo13.Lines.Add(FileName + '  ... Bad!');
+      end;
+
+    H_FILE_NOT_FOUND:
+      begin
+        Inc(missing);
+        Memo13.Lines.Add(FileName + '  ... Missing!');
+      end;
+
+    -1,-4,-5,-6,-7,-8,-9,-10,-11,-15:
+      Memo13.Lines.Add('>>> Error code:  ' + IntToStr(StatusCode));
+  end;
+
+  Edit46.Text := 'Files:' +#9#9+
+    Format(VC_STATUS_MSG, [FileCounted, TotalFiles, ok, bad, missing]);
+
+  Application.ProcessMessages;
+  Result := CancelAll;
+end;
 
 procedure TForm1.ArcTime1Timer(Sender: TObject);
 var
@@ -970,14 +1027,17 @@ begin
 
       if SFXOutput <> '' then
       begin
-        SFXCommand:= 'copy /b "' +GetAnySource('..\Compression\MC.sfx') +'" + "'
-          +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '"';
+        SFXCommand:= 'copy /b "' +GetAnySource('..\MC.sfx') +'" + "'
+          +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '.exe"';
 
-        IniCreate(SFXOutput +'\records.ini','Record1','Type','Freearc');
-        IniCreate(SFXOutput +'\records.ini','Record1','Source','{src}\' +Edit14.Text);
-        IniCreate(SFXOutput +'\records.ini','Record1','Output','{app}');
-        IniCreate(SFXOutput +'\records.ini','Record1','Disk','1');
-        IniCreate(SFXOutput +'\records.ini','Record1','Password',Edit3.Text);
+        IniCreate('..\Resources\records.ini','Output','Folder',Edit14.Text);
+        IniCreate('..\Resources\records.ini','Record1','Type','Freearc');
+        IniCreate('..\Resources\records.ini','Record1','Source','{src}\' +Edit14.Text +'.exe');
+        IniCreate('..\Resources\records.ini','Record1','Output','{app}');
+        IniCreate('..\Resources\records.ini','Record1','Disk','1');
+        IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
+
+        Exec(GetAnySource('..\Resources\MC_SFX2.exe'), '', True);
 
         with TMemo.Create(nil) do
         try
@@ -990,13 +1050,28 @@ begin
           Free;
         end;
 
-        CopyFile(GetAnySource('..\Compression\Setup.db'),
+        CopyFile(GetAnySource('..\Setup.db'),
           PChar(SFXOutput +'\Setup.db'),false);
 
         Application.ProcessMessages;
         Sleep(150);
 
         Exec(GetAnySource('SFX_Make.bat'),'',true);
+
+        with TMemo.Create(nil) do
+        begin
+          Lines.Add('[Output]');
+          Lines.Add('Folder=');
+          Lines.Add('');
+          Lines.Add('[Record1]');
+          Lines.Add('Type=');
+          Lines.Add('Source=');
+          Lines.Add('Output=');
+          Lines.Add('Disk=');
+          Lines.Add('Password=');
+          Lines.SaveToFile(GetAnySource('..\Resources\records.ini'));
+          Free;
+        end;
 
         Application.ProcessMessages;
         Sleep(150);
@@ -1006,6 +1081,12 @@ begin
 
         if FileExists(GetAnySource('SFX_Make.bat')) then
           DeleteFile(GetAnySource('SFX_Make.bat'));
+
+        if FileExists(GetAnySource('..\Setup.db')) then
+          DeleteFile(GetAnySource('..\Setup.db'));
+
+        if FileExists(GetAnySource('..\MC.sfx')) then
+          DeleteFile(GetAnySource('..\MC.sfx'));
 
         Application.ProcessMessages;
         Sleep(150);
@@ -1822,14 +1903,17 @@ begin
 
       if SFXOutput <> '' then
       begin
-        SFXCommand:= 'copy /b "' +GetAnySource('..\Compression\MC.sfx') +'" + "'
-          +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '"';
+        SFXCommand:= 'copy /b "' +GetAnySource('..\MC.sfx') +'" + "'
+          +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '.exe"';
 
-        IniCreate(SFXOutput +'\records.ini','Record1','Type','Freearc');
-        IniCreate(SFXOutput +'\records.ini','Record1','Source','{src}\' +Edit14.Text);
-        IniCreate(SFXOutput +'\records.ini','Record1','Output','{app}');
-        IniCreate(SFXOutput +'\records.ini','Record1','Disk','1');
-        IniCreate(SFXOutput +'\records.ini','Record1','Password',Edit3.Text);
+        IniCreate('..\Resources\records.ini','Output','Folder',Edit14.Text);
+        IniCreate('..\Resources\records.ini','Record1','Type','Freearc');
+        IniCreate('..\Resources\records.ini','Record1','Source','{src}\' +Edit14.Text +'.exe');
+        IniCreate('..\Resources\records.ini','Record1','Output','{app}');
+        IniCreate('..\Resources\records.ini','Record1','Disk','1');
+        IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
+
+        Exec(GetAnySource('..\Resources\MC_SFX2.exe'), '', True);
 
         with TMemo.Create(nil) do
         try
@@ -1842,13 +1926,28 @@ begin
           Free;
         end;
 
-        CopyFile(GetAnySource('..\Compression\Setup.db'),
+        CopyFile(GetAnySource('..\Setup.db'),
           PChar(SFXOutput +'\Setup.db'),false);
 
         Application.ProcessMessages;
         Sleep(150);
 
         Exec(GetAnySource('SFX_Make.bat'),'',true);
+
+        with TMemo.Create(nil) do
+        begin
+          Lines.Add('[Output]');
+          Lines.Add('Folder=');
+          Lines.Add('');
+          Lines.Add('[Record1]');
+          Lines.Add('Type=');
+          Lines.Add('Source=');
+          Lines.Add('Output=');
+          Lines.Add('Disk=');
+          Lines.Add('Password=');
+          Lines.SaveToFile(GetAnySource('..\Resources\records.ini'));
+          Free;
+        end;
 
         Application.ProcessMessages;
         Sleep(150);
@@ -1858,6 +1957,12 @@ begin
 
         if FileExists(GetAnySource('SFX_Make.bat')) then
           DeleteFile(GetAnySource('SFX_Make.bat'));
+
+        if FileExists(GetAnySource('..\Setup.db')) then
+          DeleteFile(GetAnySource('..\Setup.db'));
+
+        if FileExists(GetAnySource('..\MC.sfx')) then
+          DeleteFile(GetAnySource('..\MC.sfx'));
 
         Application.ProcessMessages;
         Sleep(150);
@@ -2207,28 +2312,6 @@ begin
   end;
 end;
 
-function TForm1.GenHashMultiCallback(FileName: WideString; FileSize: extended;
-  FileProgress, TotalProgress, TotalFiles, FileCounted,
-  StatusCode: Integer): Boolean;
-begin
-  ProgressBar1.Value  := FileProgress;
-  ProgressBar2.Value  := TotalProgress;
-
-  case StatusCode of
-    H_FILE_HASHING_DONE:
-      Memo13.Lines.Add(FileName + '  ... Done!');
-
-    -1,-4,-5,-6,-7,-8,-9,-10,-12,-13:
-      Memo13.Lines.Add('>>> Error code:  ' + IntToStr(StatusCode));
-  end;
-
-  Edit46.Text := 'Files:' +#9#9+
-    Format(VC_GEN_STATUS_MSG, [FileCounted, TotalFiles]);
-
-  Application.ProcessMessages;
-  Result := CancelAll;
-end;
-
 procedure TForm1.Button39Click(Sender: TObject);
 var
   HashResult: Integer;
@@ -2279,43 +2362,6 @@ begin
       MessageBox(0, 'Failed to save result.', 'Error', MB_OK or MB_ICONEXCLAMATION);
 end;
 
-function TForm1.ChkHashMultiCallback(FileName: WideString; FileSize: extended;
-  FileProgress, TotalProgress, TotalFiles, FileCounted,
-  StatusCode: Integer): Boolean;
-begin
-  ProgressBar1.Value  := FileProgress;
-  ProgressBar2.Value  := TotalProgress;
-
-  case StatusCode of
-    H_HASH_OK:
-      begin
-        Inc(ok);
-        Memo13.Lines.Add(FileName + '  ... Ok!');
-      end;
-
-    H_BAD_FILE_HASH:
-      begin
-        Inc(bad);
-        Memo13.Lines.Add(FileName + '  ... Bad!');
-      end;
-
-    H_FILE_NOT_FOUND:
-      begin
-        Inc(missing);
-        Memo13.Lines.Add(FileName + '  ... Missing!');
-      end;
-
-    -1,-4,-5,-6,-7,-8,-9,-10,-11,-15:
-      Memo13.Lines.Add('>>> Error code:  ' + IntToStr(StatusCode));
-  end;
-
-  Edit46.Text := 'Files:' +#9#9+
-    Format(VC_STATUS_MSG, [FileCounted, TotalFiles, ok, bad, missing]);
-
-  Application.ProcessMessages;
-  Result := CancelAll;
-end;
-
 procedure TForm1.Button40Click(Sender: TObject);
 var
   HashResult: Integer;
@@ -2323,6 +2369,10 @@ var
 begin
   Memo13.Lines.Clear;
   CancelAll := False;
+
+  Ok      := 0;
+  Bad     := 0;
+  Missing := 0;
 
   HashResult := VerifyHashesFromFile(Edit45.Text, Edit44.Text,
     StrToInt(NumberBox8.Text), False, ChkHashMultiCallback);
@@ -3082,11 +3132,6 @@ begin
   end;
 end;
 
-procedure TForm1.MenuItem21Click(Sender: TObject);
-begin
-  Exec(GetAnySource('..\Bin\SFXMaker.exe'), '', False);
-end;
-
 procedure TForm1.MenuItem22Click(Sender: TObject);
 const
   IC_Root = '.icp';
@@ -3353,12 +3398,6 @@ begin
     end;
 end;
 
-procedure TForm1.MenuItem31Click(Sender: TObject);
-begin
-  ExecAndWait(GetAnySource('..\Tools\ASC\asc.exe'), '',
-    GetAnySource('..\Tools\ASC'));
-end;
-
 procedure TForm1.MenuItem5Click(Sender: TObject);
 begin
   ExecAndWait(GetAnySource('..\Tools\AllDup\AllDupPortable.exe'), '',
@@ -3462,6 +3501,7 @@ end;
 
 procedure TForm1.SearchEditButton13Click(Sender: TObject);
 begin
+  Edit45.Text := '';
   SaveDialog1.Title := 'Save your hash file';
   SaveDialog1.Filter := 'All files|*.*';
   SaveDialog1.Execute;

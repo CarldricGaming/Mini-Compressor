@@ -71,7 +71,6 @@ type
     FileProgress, TotalProgress, TotalFiles, FileCounted, StatusCode: Integer):
     Boolean of object;
 
-
 function CalculateHashesForDir(ChecksumFile, BasePath: WideString;
   HashAlgo: Integer; Callback: TMultiHashCallback): Integer; stdcall;
   external 'XHashNext.dll';

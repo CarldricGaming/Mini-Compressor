@@ -44,9 +44,9 @@ type
     { Private declarations }
   public
     { Public declarations }
-  function GenHashMD5FreeARCCallback(FileName: WideString; FileSize: extended;
-    FileProgress, TotalProgress, TotalFiles, FileCounted,
-    StatusCode: Integer): Boolean;
+    function GenHashMD5FreeARCCallback(FileName: WideString; FileSize: extended;
+      FileProgress, TotalProgress, TotalFiles, FileCounted,
+      StatusCode: Integer): Boolean;
   end;
 
 var
