@@ -19,7 +19,7 @@ VersionInfoTextVersion={#InstallVersion}
 VersionInfoVersion={#InstallVersion}
 VersionInfoCompany={#Developer}
 AppCopyright=© {#Developer}
-OutputBaseFilename=MC_Protect2
+OutputBaseFilename=Out
 OutputDir=.
 Uninstallable=no
 SetupIconFile=MC_SFX.ico
@@ -33,24 +33,6 @@ DisableReadyPage=yes
 Source: "MC_Protect2.bat"; DestDir: {tmp}; Flags: dontcopy;
 
 [Code]
-type
-  TMsg = record hWnd: HWND; message: LongWord; wParam: Longint; lParam: Longint; Time: LongWord; pt: TPoint; end;
-
-function PeekMessage(var lpMsg: TMsg; hWnd: HWND; wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; external 'PeekMessageA@user32.dll stdcall';
-function TranslateMessage(const lpMsg: TMsg): BOOL; external 'TranslateMessage@user32.dll stdcall';
-function DispatchMessage(const lpMsg: TMsg): Longint; external 'DispatchMessageA@user32.dll stdcall';
-
-procedure AppProcessMessages;
-var
-  Msg: TMsg;
-begin
-  while PeekMessage(Msg, 0, 0, 0, 1) do
-  begin
-    TranslateMessage(Msg);
-    DispatchMessage(Msg);
-  end;
-end;
-
 function InitializeSetup: Boolean;
 var
   ResultCode: integer;
@@ -58,12 +40,12 @@ begin
   ExtractTemporaryFile('MC_Protect2.bat');
   FileCopy(ExpandConstant('{tmp}\MC_Protect2.bat'),ExpandConstant('{src}\MC_Protect2.bat'),false);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   Exec(ExpandConstant('{src}\MC_Protect2.bat'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ResultCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   DeleteFile(ExpandConstant('{src}\MC_Protect2.bat'));
