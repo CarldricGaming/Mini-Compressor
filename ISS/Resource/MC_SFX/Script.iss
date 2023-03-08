@@ -39,7 +39,7 @@ OutputDir=.
 Uninstallable=no
 SetupIconFile=MC_SFX.ico
 DirExistsWarning=no
-MinVersion= 0,6.1
+//MinVersion= 0,5.01sp3
 DisableProgramGroupPage=yes
 DisableWelcomePage=yes
 DisableReadyPage=yes
@@ -53,7 +53,7 @@ DisableReadyPage=yes
 #endif
 Source: "Resources\ISDone\english.ini"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\ISDone\ISDone.dll"; DestDir: "{tmp}"; Flags: "dontcopy";
-Source: "Resources\7za.exe"; DestDir: "{tmp}"; Flags: "dontcopy";
+Source: "Resources\uha.exe"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\XHashNext.dll"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\records.ini"; DestDir: "{tmp}"; Flags: "dontcopy";
 
@@ -419,12 +419,12 @@ var
   SevenZipCommand: string;
   ErrorCode: integer;
 begin
-  ExtractTemporaryFile('7za.exe');
+  ExtractTemporaryFile('uha.exe');
   SetupDB := ExpandConstant('{src}\Setup.db');
   TempISDone := ExpandConstant('{tmp}');
-  SevenZipCommand := 'x -p"DontTouch" ' +SetupDB +' -o"' +TempISDone +'"';
+  SevenZipCommand := 'x -t"' + TempISDone + '" "' + SetupDB + '"';
 
-  Exec(ExpandConstant('{tmp}\7za.exe'), SevenZipCommand, TempISDone, SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  Exec(ExpandConstant('{tmp}\uha.exe'), SevenZipCommand, TempISDone, SW_HIDE, ewWaitUntilTerminated, ErrorCode);
 end;
 //=-==-==-==-==-==-=-
 procedure CurStepChanged(CurStep: TSetupStep);
