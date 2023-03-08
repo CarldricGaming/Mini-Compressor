@@ -1142,7 +1142,7 @@ Name: vit; MessagesFile: Include\Languages\Vietnamese.isl; LicenseFile: Temp\Lic
 #ifdef UnArc_None
   Source: "..\..\{#UnArc_File1}"; DestDir: "{tmp}"; Flags: dontcopy
 #endif
-Source: "..\..\Resources\7za.exe"; DestDir: "{tmp}"; Flags: dontcopy
+Source: "..\..\Resources\uha.exe"; DestDir: "{tmp}"; Flags: dontcopy
 Source: Include\english.ini; DestDir: "{tmp}"; Flags: dontcopy
 Source: Include\bass.dll; DestDir: {tmp}; Flags: dontcopy
 Source: Include\botva2.dll; DestDir: {tmp}; Flags: dontcopy
@@ -13614,13 +13614,13 @@ var
   SevenZipCommand: string;
   ErrorCode: integer;
 begin
-  ExtractTemporaryFile('7za.exe');
+  ExtractTemporaryFile('uha.exe');
   ExtractTemporaryFile('english.ini');
   SetupDB := ExpandConstant('{src}\Setup.db');
   TempISDone := ExpandConstant('{tmp}');
-  SevenZipCommand := 'x -p"DontTouch" ' +SetupDB +' -o"' +TempISDone +'"';
+  SevenZipCommand := 'x -t"' + TempISDone + '" "' + SetupDB + '"';
 
-  Exec(ExpandConstant('{tmp}\7za.exe'), SevenZipCommand, TempISDone, SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  Exec(ExpandConstant('{tmp}\uha.exe'), SevenZipCommand, TempISDone, SW_HIDE, ewWaitUntilTerminated, ErrorCode);
 end;
 
 procedure MC_V2;
