@@ -11,12 +11,12 @@ timeout 2 > nul
 
 title Packing ISDone Protect...
 
-7za.exe a -bb3 -mmt2 -mx9 -i@ISD_List.txt -p"DontTouch" Setup.db
+uha.exe a -r+ -ed- -p- -m1 -mm+ -md+ -md32768 -b32768 Setup.db "ISDone_resource\*" @ISD_List.txt
 
 exit
 
 :ISDManualSFX
 
-7za.exe a -bb3 -mmt2 -mx9 -i@ISD_List_Manual_SFX.txt -p"DontTouch" Setup.db
+uha.exe a -r+ -ed- -p- -m1 -mm+ -md+ -md32768 -b32768 Setup.db "ISDone_resource\*" @ISD_List_Manual_SFX.txt
 
 exit
