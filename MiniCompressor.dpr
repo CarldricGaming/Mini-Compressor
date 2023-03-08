@@ -9,10 +9,12 @@ uses
   Unit4 in 'Unit4.pas' {Form4},
   FMX.ApplicationHelper in 'FMX.ApplicationHelper.pas',
   uTotalCpuUsagePct in 'uTotalCpuUsagePct.pas',
-  AIO_FP in 'AIO_FP.pas',
   XHashNet in 'XHashNet.pas',
   CmdOut in 'CmdOut.pas',
-  Unit5 in 'Unit5.pas' {Form5};
+  Unit5 in 'Unit5.pas' {Form5},
+  MC_DLL in 'MC_DLL.pas',
+  bass in 'bass.pas',
+  Unit6 in 'Unit6.pas' {Form6};
 
 {$R *.res}
 
@@ -22,5 +24,6 @@ begin
   Application.CreateForm(TForm2, Form2);
   Application.CreateForm(TForm3, Form3);
   Application.CreateForm(TForm5, Form5);
+  Application.CreateForm(TForm6, Form6);
   Application.Run;
 end.

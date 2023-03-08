@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{963E1685-338D-4638-9A78-EB3001D78B39}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="MiniCompressor_Library.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MiniCompressor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="MiniCompressor_Library">
+        <MSBuild Projects="MiniCompressor_Library.dproj"/>
+    </Target>
+    <Target Name="MiniCompressor_Library:Clean">
+        <MSBuild Projects="MiniCompressor_Library.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MiniCompressor_Library:Make">
+        <MSBuild Projects="MiniCompressor_Library.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MiniCompressor">
+        <MSBuild Projects="MiniCompressor.dproj"/>
+    </Target>
+    <Target Name="MiniCompressor:Clean">
+        <MSBuild Projects="MiniCompressor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MiniCompressor:Make">
+        <MSBuild Projects="MiniCompressor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="MiniCompressor_Library;MiniCompressor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="MiniCompressor_Library:Clean;MiniCompressor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="MiniCompressor_Library:Make;MiniCompressor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

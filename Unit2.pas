@@ -41,12 +41,10 @@ var
 implementation
 
 uses
+  MC_Dll,
   Unit1;
 
 {$R *.fmx}
-
-function IniRead(Filez, A, B: string): string; stdcall; external 'MC_Ini.dll';
-procedure IniCreate(Filez, A, B, C: string); stdcall; external 'MC_Ini.dll';
 
 function GetAnySource(FileSource: string): PChar;
 begin

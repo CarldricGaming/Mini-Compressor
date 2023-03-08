@@ -37,10 +37,9 @@ implementation
 
 {$R *.fmx}
 
-uses Unit1;
-
-function IniRead(Filez, A, B: string): string; stdcall; external 'MC_Ini.dll';
-procedure IniCreate(Filez, A, B, C: string); stdcall; external 'MC_Ini.dll';
+uses
+  MC_DLL,
+  Unit1;
 
 function GetAnySource(FileSource: string): PChar;
 begin

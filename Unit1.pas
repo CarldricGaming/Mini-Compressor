@@ -359,6 +359,8 @@ type
     CheckBox10: TCheckBox;
     CheckBox11: TCheckBox;
     MenuItem30: TMenuItem;
+    MenuItem21: TMenuItem;
+    MenuItem31: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -459,6 +461,9 @@ type
     { Private declarations }
   public
     { Public declarations }
+    var
+      BassHandle, BassMusicPlayer: HWND;
+      BassMusicFile: PChar;
     function GenHashMultiCallback(FileName: WideString; FileSize: extended;
       FileProgress, TotalProgress, TotalFiles, FileCounted, StatusCode: Integer): Boolean;
     function ChkHashMultiCallback(FileName: WideString; FileSize: extended;
@@ -474,10 +479,11 @@ uses
   ShellApi,
   FMX.ApplicationHelper,
   uTotalCpuUsagePct,
-  AIO_FP,
+  MC_DLL,
   CmdOut,
   XHashNet,
-  Unit2, Unit3, Unit4, Unit5;
+  bass,
+  Unit2, Unit3, Unit4, Unit5, Unit6;
 
 {$R *.fmx}
 
@@ -530,46 +536,34 @@ begin
 end;
 
 procedure UpdateLine(const ACaption, AText: WideString);
-var
-  FormHandle: HWND;
 begin
-  FormHandle:= TWinWindowHandle(Form1.Memo1).Wnd;
   Form1.Memo1.Lines.Clear;
   Form1.Memo1.Lines.Add(AText);
-  SendMessage(FormHandle, EM_LINESCROLL, 0, Form1.Memo1.Lines.Count);
+  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo1.Lines.Count);
   Form1.Edit6.Text := ACaption;
 end;
 
 procedure UpdateLine2(const ACaption, AText: WideString);
-var
-  FormHandle2: HWND;
 begin
-  FormHandle2:= TWinWindowHandle(Form1.Memo4).Wnd;
   Form1.Memo4.Lines.Clear;
   Form1.Memo4.Lines.Add(AText);
-  SendMessage(FormHandle2, EM_LINESCROLL, 0, Form1.Memo4.Lines.Count);
+  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo4.Lines.Count);
   Form1.Edit12.Text := ACaption;
 end;
 
 procedure UpdateLine3(const ACaption, AText: WideString);
-var
-  FormHandle3: HWND;
 begin
-  FormHandle3:= TWinWindowHandle(Form1.Memo8).Wnd;
   Form1.Memo8.Lines.Clear;
   Form1.Memo8.Lines.Add(AText);
-  SendMessage(FormHandle3, EM_LINESCROLL, 0, Form1.Memo8.Lines.Count);
+  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo8.Lines.Count);
   Form1.Edit25.Text := ACaption;
 end;
 
 procedure UpdateLine4(const ACaption, AText: WideString);
-var
-  FormHandle4: HWND;
 begin
-  FormHandle4:= TWinWindowHandle(Form1.Memo12).Wnd;
   Form1.Memo12.Lines.Clear;
   Form1.Memo12.Lines.Add(AText);
-  SendMessage(FormHandle4, EM_LINESCROLL, 0, Form1.Memo12.Lines.Count);
+  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo12.Lines.Count);
   Form1.Edit36.Text := ACaption;
 end;
 
@@ -1037,7 +1031,7 @@ begin
         IniCreate('..\Resources\records.ini','Record1','Disk','1');
         IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
 
-        Exec(GetAnySource('..\Resources\MC_SFX2.exe'), '', True);
+        ExecAndWait(GetAnySource('..\Resources\MC_SFX2.exe'), '', GetAnySource('..\Resources'));
 
         with TMemo.Create(nil) do
         try
@@ -1056,7 +1050,7 @@ begin
         Application.ProcessMessages;
         Sleep(150);
 
-        Exec(GetAnySource('SFX_Make.bat'),'',true);
+        ExecAndWait(GetAnySource('SFX_Make.bat'), '', GetAnySource(''));
 
         with TMemo.Create(nil) do
         begin
@@ -1264,14 +1258,16 @@ begin
   begin
     CopyFile(GetAnySource('..\Resources\IM_Bg2.jpg'),
       GetAnySource('..\Installer\Graphics\Background.jpg'), False);
-    Exec(GetAnySource('..\Installer\Compiler.exe'), '', True);
+    ExecAndWait(GetAnySource('..\Installer\Compiler.exe'), '',
+      GetAnySource('..\Installer'));
 
     Application.ProcessMessages;
     Sleep(150);
 
     DeleteFile(GetAnySource('..\Installer\Graphics\Background.jpg'));
   end else
-    Exec(GetAnySource('..\Installer\Compiler.exe'), '', True);
+    ExecAndWait(GetAnySource('..\Installer\Compiler.exe'), '',
+      GetAnySource('..\Installer'));
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1316,11 +1312,13 @@ begin
     MessageBox(0, 'Looks like the file still exist. Would create another one.', 'Resource Exist',
       MB_ICONINFORMATION or MB_OK);
     DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.txt'));
-    Exec(GetAnySource('..\Resources\MC_Update.exe'), '', True);
+    ExecAndWait(GetAnySource('..\Resources\MC_Update.exe'),'',
+      GetAnySource('..\Resources'));
   end
   else
   if not FileExists(GetAnySource('..\Resources\ISD_List_Manual.txt')) then
-    Exec(GetAnySource('..\Resources\MC_Update.exe'), '', True);
+    ExecAndWait(GetAnySource('..\Resources\MC_Update.exe'),'',
+      GetAnySource('..\Resources'))
 end;
 
 procedure TForm1.Button29Click(Sender: TObject);
@@ -1387,8 +1385,9 @@ begin
     Application.ProcessMessages;
     Sleep(150);
 
-    Exec(GetAnySource('..\Resources\7za.exe'),'a -bb3 -r0 -mmt2 -mx9 -pIMP "'
-      +FileNameProj +'.7z" "' +GetAnySource('..\Resources\Project') +'\*"', true);
+    ExecAndWait(GetAnySource('..\Resources\7za.exe'),'a -bb3 -r0 -mmt2 -mx9 -pIMP "'
+      +FileNameProj +'.7z" "' +GetAnySource('..\Resources\Project') +'\*"',
+      GetAnySource('..\Resources'));
 
     Application.ProcessMessages;
     Sleep(150);
@@ -1452,9 +1451,9 @@ begin
     Application.ProcessMessages;
     Sleep(150);
 
-    Exec(GetAnySource('..\Resources\7za.exe'),
-      'x -pIMP -O"' +GetAnySource('..\Resources\Project') +'" "'
-      +PChar(LoadProj) +'"', true);
+    ExecAndWait(GetAnySource('..\Resources\7za.exe'),'x -pIMP -O"'
+      +GetAnySource('..\Resources\Project') +'" "' +PChar(LoadProj) +'"',
+      GetAnySource('..\Resources'));
 
     Application.ProcessMessages;
     Sleep(150);
@@ -1854,7 +1853,7 @@ begin
   Sleep(150);
 
   FA_Error := False;
-  Exec(GetAnySource('Run_FA.bat'), '', True);
+  ExecAndWait(GetAnySource('Run_FA.bat'),'',GetAnySource(''));
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1913,7 +1912,7 @@ begin
         IniCreate('..\Resources\records.ini','Record1','Disk','1');
         IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
 
-        Exec(GetAnySource('..\Resources\MC_SFX2.exe'), '', True);
+        ExecAndWait(GetAnySource('..\Resources\MC_SFX2.exe'),'',GetAnySource('..\Resources'));
 
         with TMemo.Create(nil) do
         try
@@ -1932,7 +1931,7 @@ begin
         Application.ProcessMessages;
         Sleep(150);
 
-        Exec(GetAnySource('SFX_Make.bat'),'',true);
+        ExecAndWait(GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
 
         with TMemo.Create(nil) do
         begin
@@ -2062,7 +2061,7 @@ begin
   Sleep(150);
 
   FA_Error := False;
-  Exec(GetAnySource('Run_FA.bat'), '', True);
+  ExecAndWait(GetAnySource('Run_FA.bat'),'',GetAnySource(''));
 
   Application.ProcessMessages;
   Sleep(150);
@@ -2216,7 +2215,7 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  Exec(GetAnySource('Run_7Z.bat'), '', True);
+  ExecAndWait(GetAnySource('Run_7Z.bat'), '', GetAnySource(''));
   Error7z:= False;
 
   Application.ProcessMessages;
@@ -2264,7 +2263,7 @@ begin
         Application.ProcessMessages;
         Sleep(150);
 
-        Exec(GetAnySource('SFX_Make.bat'),'',true);
+        ExecAndWait(GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
 
         Application.ProcessMessages;
         Sleep(150);
@@ -2534,7 +2533,7 @@ begin
         Application.ProcessMessages;
         Sleep(150);
 
-        Exec(GetAnySource('SFX_Make.bat'),'',true);
+        ExecAndWait(GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
 
         Application.ProcessMessages;
         Sleep(150);
@@ -2613,12 +2612,14 @@ var
   Report7z: string;
   Dir: string;
 begin
+  Report7z:= '';
   if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
     Report7z:= Dir;
+
   if Report7z <> '' then
   begin
-    Memo3.Lines.SaveToFile(Seldir + '\MC_Result1.txt');
-    Memo4.Lines.SaveToFile(Seldir + '\MC_Result1.txt');
+    Memo3.Lines.SaveToFile(Report7z + '\MC_Result1.txt');
+    Memo4.Lines.SaveToFile(Report7z + '\MC_Result1.txt');
   end
   else
   if Report7z = '' then
@@ -2661,10 +2662,10 @@ end;
 procedure TForm1.CheckBox1Change(Sender: TObject);
 begin
   if CheckBox1.IsChecked = True then
-    B_PauseMusic
+    BASS_ChannelPause(BassMusicPlayer)
   else
-  if CheckBox1.IsChecked = False then
-    B_ResumeMusic;
+  if BASS_ChannelIsActive(BassMusicPlayer) = BASS_ACTIVE_PAUSED then
+    BASS_ChannelPlay(BassMusicPlayer, false);
 end;
 
 procedure TForm1.CheckBox2Change(Sender: TObject);
@@ -2729,7 +2730,7 @@ end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  B_StopMusic;
+	BASS_Free();
   Hide;
 
   sndPlaySound(GetAnySource('..\Resources\MC_Close.wav'),SND_ASYNC);
@@ -2769,6 +2770,9 @@ var
   Skin_SS_Set: string;
   HashExistFile: boolean;
 begin
+  BassHandle := TWinWindowHandle(Handle).Wnd;
+  BASS_Init(-1, 44100, 0, BassHandle, 0);
+
   sndPlaySound(GetAnySource('..\Resources\MC_Open.wav'),SND_ASYNC);
   with TForm3.Create(nil) do
   begin
@@ -3015,7 +3019,13 @@ begin
   end;
 
   if FileExists(GetAnySource('..\Resources\Music.mp3')) then
-    B_PlayMusic(GetAnySource('..\Resources\Music.mp3'))
+  begin
+    BassMusicFile := PChar(GetAnySource('..\Resources\Music.mp3'));
+    BassMusicPlayer := BASS_StreamCreateFile(False, BassMusicFile, 0, 0,
+      BASS_SAMPLE_LOOP {$IFDEF UNICODE} or BASS_UNICODE {$ENDIF});
+    BASS_Start();
+		BASS_ChannelPlay(BassMusicPlayer, False);
+  end
   else
   if not FileExists(GetAnySource('..\Resources\Music.mp3')) then
   begin
@@ -3059,24 +3069,24 @@ end;
 
 procedure TForm1.MenuItem11Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\SafeCopy\SafeCopyFree.exe'), '', False);
+  ExecAndWait(GetAnySource('..\Tools\SafeCopy\SafeCopyFree.exe'), '', GetAnySource('..\Tools\SafeCopy'));
 end;
 
 procedure TForm1.MenuItem12Click(Sender: TObject);
 begin
-  Exec(GetAnySource('..\Tools\GraphicStudio.exe'), '', False);
+  ExecAndWait(GetAnySource('..\Tools\GraphicStudio.exe'), '', GetAnySource('..\Tools'));
 end;
 
 procedure TForm1.MenuItem14Click(Sender: TObject);
 begin
   sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  Exec(GetAnySource('..\Resources\MC_SFX.exe'), '', True);
+  ExecAndWait(GetAnySource('..\Resources\MC_SFX.exe'), '', GetAnySource('..\Resources'));
 end;
 
 procedure TForm1.MenuItem15Click(Sender: TObject);
 begin
   sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  Exec(GetAnySource('..\Resources\MC_UpdateSFX.exe'), '', True);
+  ExecAndWait(GetAnySource('..\Resources\MC_UpdateSFX.exe'), '', GetAnySource('..\Resources'));
 end;
 
 procedure TForm1.MenuItem19Click(Sender: TObject);
@@ -3106,29 +3116,11 @@ begin
 end;
 
 procedure TForm1.MenuItem20Click(Sender: TObject);
-var
-  ChangeMP3File: string;
 begin
-  OpenDialog1.FileName := '';
-  OpenDialog1.Title:= 'Choose your music';
-  OpenDialog1.Filter:= '.mp3|*.mp3|All Files|*.*';
-
-  OpenDialog1.Execute;
-  ChangeMP3File := OpenDialog1.FileName;
-
-  if ChangeMP3File = '' then
+  with TForm6.Create(nil) do
   begin
-    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Failed to change music.', 'Error',
-      MB_ICONEXCLAMATION or MB_OK);
-  end
-  else
-  if ChangeMP3File <> '' then
-  begin
-    B_StopMusic;
-    B_PlayMusic(ChangeMP3File);
-    CopyFile(PChar(ChangeMP3File), GetAnySource('..\Resources\Music.mp3'),
-      False);
+    ShowModal;
+    Free;
   end;
 end;
 
@@ -3167,10 +3159,10 @@ begin
     if IC_ConfirmReg = '' then
     begin
       if IC_CreateShortcut = True then
-        Exec(GetAnySource('..\Resources\IC_Registry2.exe'),'/verysilent',False)
+        ExecAndWait(GetAnySource('..\Resources\IC_Registry2.exe'),'/verysilent',GetAnySource('..\Resources'))
       else
       if IC_CreateShortcut = False then
-        Exec(GetAnySource('..\Resources\IC_Registry.exe'),'/verysilent',False);
+        ExecAndWait(GetAnySource('..\Resources\IC_Registry.exe'),'/verysilent',GetAnySource('..\Resources'));
     end;
 
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
@@ -3258,7 +3250,7 @@ begin
   end;
 
   if FileExists(FA_Filename) then
-    Exec(GetAnySource('..\Tools\FreeArc_P.exe'), '"' +FA_Filename +'"', false)
+    ExecAndWait(GetAnySource('..\Tools\FreeArc_P.exe'), '"' +FA_Filename +'"', GetAnySource('..\Tools'))
   else
   if not FileExists(FA_Filename) then
   begin
@@ -3310,10 +3302,10 @@ begin
 
   if OutDB <> '' then
   begin
-    Exec(GetAnySource('..\Resources\ISDone_List_Manual_SFX.exe'),'',True);
-    Exec('C:\Windows\notepad.exe', GetAnySource('..\Resources\ISD_List_Manual_SFX.txt'), True);
-    Exec(GetAnySource('..\Resources\7za.exe'),
-      'a -bb3 -mmt2 -mx9 -i@"' +GetAnySource('..\Resources\ISD_List_Manual_SFX.txt') +'" -p"DontTouch" "' +OutDB +'\Setup.db"', True);
+    ExecAndWait(GetAnySource('..\Resources\ISDone_List_Manual_SFX.exe'),'',GetAnySource('..\Resources'));
+    ExecAndWait('C:\Windows\notepad.exe', GetAnySource('..\Resources\ISD_List_Manual_SFX.txt'), 'C:\Windows');
+    ExecAndWait(GetAnySource('..\Resources\uha.exe'),
+      'a -r+ -ed- -p- -m1 -mm+ -md+ -md32768 -b32768 "' + OutDB + '\Setup.db"' + '"ISDone_resource\*" @ISD_List_Manual_SFX.txt', GetAnySource('..\Resources'));
     Application.ProcessMessages;
     Sleep(150);
 
@@ -3620,6 +3612,7 @@ var
 begin
   TimeAndDateYo:= Now;
   MenuItem3.Text:= DateToStr(TimeAndDateYo) +' | ' +TimeToStr(TimeAndDateYo);
+  MenuItem31.Text := 'BASS_CPU: ' + FloatToStrF(BASS_GetCPU, ffFixed, 4, 2);
 end;
 
 end.

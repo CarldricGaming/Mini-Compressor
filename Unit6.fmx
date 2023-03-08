@@ -1,0 +1,81 @@
+object Form6: TForm6
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = Single
+  Caption = 'BASS Setting'
+  ClientHeight = 105
+  ClientWidth = 273
+  Position = MainFormCenter
+  StyleBook = Form1.StyleBook1
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Client
+    Size.Width = 273.000000000000000000
+    Size.Height = 105.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Rectangle1: TRectangle
+      Align = Client
+      Fill.Bitmap.WrapMode = Tile
+      Fill.Kind = Bitmap
+      Size.Width = 273.000000000000000000
+      Size.Height = 105.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object GroupBox1: TGroupBox
+        Size.Width = 273.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Volume'
+        TabOrder = 0
+        object TrackBar1: TTrackBar
+          CanParentFocus = True
+          Orientation = Horizontal
+          Position.X = 16.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 241.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 38
+          OnChange = TrackBar1Change
+        end
+      end
+      object GroupBox2: TGroupBox
+        Position.Y = 48.000000000000000000
+        Size.Width = 273.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Change Music'
+        TabOrder = 1
+        object Button1: TButton
+          Position.X = 16.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 241.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 38
+          Text = 'Browse'
+          OnClick = Button1Click
+        end
+      end
+    end
+    object FloatAnimation1: TFloatAnimation
+      AnimationType = InOut
+      Enabled = True
+      Duration = 1.000000000000000000
+      Interpolation = Exponential
+      PropertyName = 'Opacity'
+      StartValue = 0.000000000000000000
+      StopValue = 1.000000000000000000
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 120
+    Top = 56
+  end
+end
