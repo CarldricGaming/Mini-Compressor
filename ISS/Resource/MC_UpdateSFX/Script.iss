@@ -19,7 +19,7 @@ VersionInfoTextVersion={#InstallVersion}
 VersionInfoVersion={#InstallVersion}
 VersionInfoCompany={#Developer}
 AppCopyright=© {#Developer}
-OutputBaseFilename=MC_UpdateSFX
+OutputBaseFilename=Out
 OutputDir=.
 Uninstallable=no
 SetupIconFile=MC_SFX.ico
@@ -30,42 +30,24 @@ DisableWelcomePage=yes
 DisableReadyPage=yes
 
 [Files]
-Source: "MC_UpdateSFX.bat"; DestDir: {tmp}; Flags: dontcopy;
+Source: "MC_Update.bat"; DestDir: {tmp}; Flags: dontcopy;
 
 [Code]
-type
-  TMsg = record hWnd: HWND; message: LongWord; wParam: Longint; lParam: Longint; Time: LongWord; pt: TPoint; end;
-
-function PeekMessage(var lpMsg: TMsg; hWnd: HWND; wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; external 'PeekMessageA@user32.dll stdcall';
-function TranslateMessage(const lpMsg: TMsg): BOOL; external 'TranslateMessage@user32.dll stdcall';
-function DispatchMessage(const lpMsg: TMsg): Longint; external 'DispatchMessageA@user32.dll stdcall';
-
-procedure AppProcessMessages;
-var
-  Msg: TMsg;
-begin
-  while PeekMessage(Msg, 0, 0, 0, 1) do
-  begin
-    TranslateMessage(Msg);
-    DispatchMessage(Msg);
-  end;
-end;
-
 function InitializeSetup: Boolean;
 var
   ResultCode: integer;
 begin
-  ExtractTemporaryFile('MC_UpdateSFX.bat');
-  FileCopy(ExpandConstant('{tmp}\MC_UpdateSFX.bat'),ExpandConstant('{src}\MC_UpdateSFX.bat'),false);
+  ExtractTemporaryFile('MC_Update.bat');
+  FileCopy(ExpandConstant('{tmp}\MC_Update.bat'),ExpandConstant('{src}\MC_Update.bat'),false);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
-  Exec(ExpandConstant('{src}\MC_UpdateSFX.bat'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ResultCode);
+  Exec(ExpandConstant('{src}\MC_Update.bat'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ResultCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
-  DeleteFile(ExpandConstant('{src}\MC_UpdateSFX.bat'));
+  DeleteFile(ExpandConstant('{src}\MC_Update.bat'));
   Result:=False;
 end;
