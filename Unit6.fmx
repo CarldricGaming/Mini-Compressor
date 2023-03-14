@@ -4,7 +4,7 @@ object Form6: TForm6
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = Single
   Caption = 'BASS Setting'
-  ClientHeight = 105
+  ClientHeight = 193
   ClientWidth = 273
   Position = MainFormCenter
   StyleBook = Form1.StyleBook1
@@ -16,51 +16,94 @@ object Form6: TForm6
   object Layout1: TLayout
     Align = Client
     Size.Width = 273.000000000000000000
-    Size.Height = 105.000000000000000000
+    Size.Height = 193.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object Rectangle1: TRectangle
       Align = Client
-      Fill.Bitmap.WrapMode = Tile
+      Fill.Bitmap.WrapMode = TileStretch
       Fill.Kind = Bitmap
       Size.Width = 273.000000000000000000
-      Size.Height = 105.000000000000000000
+      Size.Height = 193.000000000000000000
       Size.PlatformDefault = False
       Stroke.Kind = None
-      object GroupBox1: TGroupBox
+      object Panel1: TPanel
+        Align = Client
         Size.Width = 273.000000000000000000
-        Size.Height = 49.000000000000000000
+        Size.Height = 193.000000000000000000
         Size.PlatformDefault = False
-        Text = 'Volume'
         TabOrder = 0
-        object TrackBar1: TTrackBar
-          CanParentFocus = True
-          Orientation = Horizontal
-          Position.X = 16.000000000000000000
-          Position.Y = 16.000000000000000000
-          Size.Width = 241.000000000000000000
-          Size.Height = 19.000000000000000000
+        object GroupBox1: TGroupBox
+          Size.Width = 273.000000000000000000
+          Size.Height = 49.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 38
-          OnChange = TrackBar1Change
+          Text = 'Volume'
+          TabOrder = 0
+          object TrackBar1: TTrackBar
+            CanParentFocus = True
+            Orientation = Horizontal
+            Position.X = 16.000000000000000000
+            Position.Y = 16.000000000000000000
+            Size.Width = 241.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 38
+            OnChange = TrackBar1Change
+          end
         end
-      end
-      object GroupBox2: TGroupBox
-        Position.Y = 48.000000000000000000
-        Size.Width = 273.000000000000000000
-        Size.Height = 49.000000000000000000
-        Size.PlatformDefault = False
-        Text = 'Change Music'
-        TabOrder = 1
-        object Button1: TButton
-          Position.X = 16.000000000000000000
-          Position.Y = 16.000000000000000000
-          Size.Width = 241.000000000000000000
-          Size.Height = 22.000000000000000000
+        object GroupBox2: TGroupBox
+          Position.Y = 48.000000000000000000
+          Size.Width = 273.000000000000000000
+          Size.Height = 49.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 38
-          Text = 'Browse'
-          OnClick = Button1Click
+          Text = 'Change Music'
+          TabOrder = 1
+          object Button1: TButton
+            Position.X = 16.000000000000000000
+            Position.Y = 16.000000000000000000
+            Size.Width = 241.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 38
+            Text = 'Browse'
+            OnClick = Button1Click
+          end
+        end
+        object GroupBox3: TGroupBox
+          Position.Y = 96.000000000000000000
+          Size.Width = 273.000000000000000000
+          Size.Height = 97.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Playing'
+          TabOrder = 2
+          object Label1: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 16.000000000000000000
+            Size.Width = 241.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Center
+            Text = 'Label1'
+            TabOrder = 38
+          end
+          object ProgressBar1: TProgressBar
+            Orientation = Horizontal
+            Position.X = 16.000000000000000000
+            Position.Y = 40.000000000000000000
+            Size.Width = 241.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object CheckBox1: TCheckBox
+            Position.X = 16.000000000000000000
+            Position.Y = 64.000000000000000000
+            Size.Width = 49.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 40
+            Text = '||'
+            OnChange = CheckBox1Change
+          end
         end
       end
     end
@@ -75,7 +118,13 @@ object Form6: TForm6
     end
   end
   object OpenDialog1: TOpenDialog
-    Left = 120
-    Top = 56
+    Left = 240
+    Top = 144
+  end
+  object Timer1: TTimer
+    Interval = 1
+    OnTimer = Timer1Timer
+    Left = 208
+    Top = 144
   end
 end
