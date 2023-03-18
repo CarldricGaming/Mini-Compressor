@@ -225,6 +225,10 @@
             <Form>Form6</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="Unit7.pas">
+            <Form>Form7</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

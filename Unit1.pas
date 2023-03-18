@@ -35,9 +35,6 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     MenuItem11: TMenuItem;
-    MenuItem13: TMenuItem;
-    MenuItem14: TMenuItem;
-    MenuItem15: TMenuItem;
     MenuItem18: TMenuItem;
     MenuItem20: TMenuItem;
     MenuItem19: TMenuItem;
@@ -387,8 +384,6 @@ type
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
-    procedure MenuItem14Click(Sender: TObject);
-    procedure MenuItem15Click(Sender: TObject);
     procedure CheckBox2Change(Sender: TObject);
     procedure MenuItem19Click(Sender: TObject);
     procedure MenuItem20Click(Sender: TObject);
@@ -487,7 +482,7 @@ uses
   CmdOut,
   XHashNet,
   bass,
-  Unit2, Unit3, Unit4, Unit5, Unit6;
+  Unit2, Unit3, Unit4, Unit5, Unit6, Unit7;
 
 {$R *.fmx}
 
@@ -496,6 +491,11 @@ var
   PauseAll: Boolean     = False;
   Ok, Bad, Missing: Integer;
   HashErrCode: Integer  = H_ERROR_GENERAL;
+
+function MC_Handle: HWND;
+begin
+  Result := TWinWindowHandle(Form1).Wnd;
+end;
 
 function ProcessMemory: longint;
 var
@@ -1541,7 +1541,17 @@ var
   FA_Split: TMemo;
   FA_Exec: PChar;
   SFXOutput, SFXCommand: string;
+  SFX_Confirm: Boolean;
 begin
+  if CheckBox7.IsChecked = True then
+    if MessageBox(MC_Handle,
+      'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
+      'Mini Compressor SFX',
+      MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
+      SFX_Confirm := True
+    else
+      SFX_Confirm := False;
+
   TabControl7.TabIndex := 1;
   Button32.Visible:= False;
   Button33.Visible:= False;
@@ -1631,6 +1641,26 @@ begin
     begin
       if SFXOutput <> '' then
       begin
+        if SFX_Confirm = True then
+        begin
+          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('..\Resources\MC_SFX.exe'), '',
+            GetAnySource('..\Resources'));
+        end else
+        begin
+          MessageBox(MC_Handle,
+            'Please make sure that you following your method you used for tools.'
+            +#13 +'For incase that you don''t know how to make it,'
+            +#13 +'Just use Auto if you need.',
+            'Mini Compressor SFX',
+            MB_OK or MB_ICONINFORMATION);
+          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
+            GetAnySource('..\Resources'));
+        end;
+
         CopyFile(GetAnySource('..\Compression\MC.sfx'),
           PChar(SFXOutput +'\' +Edit34.Text),false);
 
@@ -1642,6 +1672,13 @@ begin
 
         Application.ProcessMessages;
         Sleep(150);
+
+        DeleteFile(GetAnySource('..\Compression\MC.sfx'));
+
+        Application.ProcessMessages;
+        Sleep(150);
+
+        DeleteFile(GetAnySource('..\Compression\Setup.db'));
       end;
 
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
@@ -2007,7 +2044,17 @@ var
   FA_Split: TMemo;
   FA_Exec: PChar;
   SFXOutput, SFXCommand: string;
+  SFX_Confirm: Boolean;
 begin
+  if CheckBox7.IsChecked = True then
+    if MessageBox(MC_Handle,
+      'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
+      'Mini Compressor SFX',
+      MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
+      SFX_Confirm := True
+    else
+      SFX_Confirm := False;
+
   FA_Command:= 'a -ma9 -ds -di -i1 -ep1 -ed -r -s; -w_Temp\ ';
   FA_Memory:= '-lc'+SpinBox6.Text +' -ld' +SpinBox6.Text +' ';
   FA_Method:= '-m'+ Edit35.Text
@@ -2090,6 +2137,26 @@ begin
     begin
       if SFXOutput <> '' then
       begin
+        if SFX_Confirm = True then
+        begin
+          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('..\Resources\MC_SFX.exe'), '',
+            GetAnySource('..\Resources'));
+        end else
+        begin
+          MessageBox(MC_Handle,
+            'Please make sure that you following your method you used for tools.'
+            +#13 +'For incase that you don''t know how to make it,'
+            +#13 +'Just use Auto if you need.',
+            'Mini Compressor SFX',
+            MB_OK or MB_ICONINFORMATION);
+          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
+            GetAnySource('..\Resources'));
+        end;
+
         CopyFile(GetAnySource('..\Compression\MC.sfx'),
           PChar(SFXOutput +'\' +Edit34.Text),false);
 
@@ -2101,6 +2168,13 @@ begin
 
         Application.ProcessMessages;
         Sleep(150);
+
+        DeleteFile(GetAnySource('..\Compression\MC.sfx'));
+
+        Application.ProcessMessages;
+        Sleep(150);
+
+        DeleteFile(GetAnySource('..\Compression\Setup.db'));
       end;
 
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
@@ -2237,7 +2311,7 @@ begin
     begin
       if SFXOutput <> '' then
       begin
-        SFXCommand:= 'copy /b "' +GetAnySource('..\Compression\7z.sfx') +'" + "'
+        SFXCommand:= 'copy /b "' +GetAnySource('..\Compression\7-Zip\7z.sfx') +'" + "'
           +Edit9.Text +'\' +Edit11.Text + '" "' + SFXOutput + '\' + Edit26.Text + '"';
 
         with TMemo.Create(nil) do
@@ -2513,7 +2587,7 @@ begin
 
       if SFXOutput <> '' then
       begin
-        SFXCommand:= 'copy /b "' +GetAnySource('..\Compression\7z.sfx') +'" + "'
+        SFXCommand:= 'copy /b "' +GetAnySource('..\Compression\7-Zip\7z.sfx') +'" + "'
           +Edit9.Text +'\' +Edit11.Text + '" "' + SFXOutput + '\' + Edit26.Text + '"';
 
         with TMemo.Create(nil) do
@@ -2767,9 +2841,38 @@ var
   Skin_Set1, Skin_Set2: string;
   Skin_SS_Set: string;
   HashExistFile: boolean;
+  AFDate: TDateTime;
+  AFDateStr1, AFDateStr2, AFDateStr3: string;
+  AFD1, AFD2, AFD3: int64;
+  BASS_UrlRadio: string;
 begin
+  AFDate:= Now;
+  AFD1 := StrToInt64(IniRead(GetAnySource('..\Resources\AFD.db'),'April_Fools_Date','Day'));
+  AFD2 := StrToInt64(IniRead(GetAnySource('..\Resources\AFD.db'),'April_Fools_Date','Month'));
+  AFD3 := StrToInt64(IniRead(GetAnySource('..\Resources\AFD.db'),'April_Fools_Date','Year'));
+
+  AFDateStr1 := DateToStr(AFDate);
+  AFDateStr2 := IntToStr(AFD1) + '/' + IntToStr(AFD2) + '/' + IntToStr(AFD3);
+  AFDateStr3 := IntToStr(AFD1 + 1) + '/' + IntToStr(AFD2) + '/' + IntToStr(AFD3);
+
+  if AFDateStr1 = AFDateStr3 then
+  begin
+    if IniRead(GetAnySource('..\Resources\AFD.db'),'Prank','NextYear') <> '' then
+    begin
+      IniCreate(GetAnySource('..\Resources\AFD.db'),'April_Fools_Date','Year',IntToStr(AFD3 + 1));
+      IniCreate(GetAnySource('..\Resources\AFD.db'),'Prank','NextYear','');
+    end else
+    if IniRead(GetAnySource('..\Resources\AFD.db'),'Prank','NextYear') = '' then
+      ShowMessage('Done updated.');
+  end;
+
   BassHandle := TWinWindowHandle(Handle).Wnd;
   BASS_Init(-1, 44100, 0, BassHandle, 0);
+  BASS_Start();
+
+  BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1);
+  BASS_PluginLoad('bassopus.dll', BASS_Unicode);
+  BASS_PluginLoad('basshls.dll', BASS_Unicode);
 
   sndPlaySound(GetAnySource('..\Resources\MC_Open.wav'),SND_ASYNC);
   with TForm3.Create(nil) do
@@ -2778,6 +2881,17 @@ begin
     //Width := 561;
     ShowModal;
     Free;
+  end;
+
+  if AFDateStr1 = AFDateStr2 then
+  begin
+    if IniRead(GetAnySource('..\Resources\AFD.db'),'Prank','NextYear') = '' then
+      IniCreate(GetAnySource('..\Resources\AFD.db'),'Prank','NextYear',IntToStr(AFD3 + 1));
+    with TForm7.Create(nil) do
+    begin
+      ShowModal;
+      Free;
+    end;
   end;
 
   if FileExists(GetAnySource('..\Resources\Hash_Type.db')) and
@@ -3016,27 +3130,40 @@ begin
       MB_ICONERROR or MB_OK);
   end;
 
-  if FileExists(GetAnySource('..\Resources\Music.mp3')) then
+  BASS_UrlRadio:= IniRead(GetAnySource('..\Resources\BASS_Setting.ini'),'BASS','Radio');
+  if BASS_UrlRadio <> '' then
   begin
-    BassMusicFile := PChar(GetAnySource('..\Resources\Music.mp3'));
-    BassMusicPlayer := BASS_StreamCreateFile(False, BassMusicFile, 0, 0,
-      BASS_SAMPLE_LOOP {$IFDEF UNICODE} or BASS_UNICODE {$ENDIF});
+    BassMusicPlayer := BASS_StreamCreateURL(PChar(BASS_UrlRadio),0,
+      BASS_STREAM_BLOCK or BASS_STREAM_STATUS or BASS_STREAM_AUTOFREE {$IFDEF UNICODE} or BASS_UNICODE {$ENDIF},nil,0);
 
-    BassVolume := StrToFloat(IniRead(GetAnySource('..\Resources\BASS_Setting.ini'),
-      'BASS', 'Volume'));
-    BASS_ChannelSetAttribute(Form1.BassMusicPlayer, BASS_ATTRIB_VOL,
-      Round(BassVolume) / 100);
+    BASS_ChannelSetSync(BassMusicPlayer, BASS_SYNC_META, 0, nil, nil);
+    BASS_ChannelSetSync(BassMusicPlayer, BASS_SYNC_OGG_CHANGE, 0, nil, nil);
+    BASS_ChannelSetSync(BassMusicPlayer, $10300, 0, nil, nil);
+    BASS_ChannelSetSync(BassMusicPlayer, BASS_SYNC_STALL, 0, nil, nil);
+    BASS_ChannelSetSync(BassMusicPlayer, BASS_SYNC_END, 0, nil, nil);
 
-    BASS_Start();
-		BASS_ChannelPlay(BassMusicPlayer, False);
-  end
-  else
-  if not FileExists(GetAnySource('..\Resources\Music.mp3')) then
+    BASS_ChannelPlay(Form1.BassMusicPlayer, False);
+  end else
+  if BASS_UrlRadio = '' then
   begin
-    sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
-      +'"Resources\Music.mp3"', 'Error',
-      MB_ICONERROR or MB_OK);
+    if FileExists(GetAnySource('..\Resources\Music.mp3')) then
+    begin
+      BassMusicFile := PChar(GetAnySource('..\Resources\Music.mp3'));
+      BassMusicPlayer := BASS_StreamCreateFile(False, BassMusicFile, 0, 0,
+        BASS_SAMPLE_LOOP {$IFDEF UNICODE} or BASS_UNICODE {$ENDIF});
+      BassVolume := StrToFloat(IniRead(GetAnySource('..\Resources\BASS_Setting.ini'),
+        'BASS', 'Volume'));
+      BASS_ChannelSetAttribute(Form1.BassMusicPlayer, BASS_ATTRIB_VOL,
+        Round(BassVolume) / 100);
+      BASS_ChannelPlay(BassMusicPlayer, False);
+    end else
+    if not FileExists(GetAnySource('..\Resources\Music.mp3')) then
+    begin
+      sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
+      MessageBox(0,'Missing file' +#13 +#13
+        +'"Resources\Music.mp3"', 'Error',
+        MB_ICONERROR or MB_OK);
+    end;
   end;
 end;
 
@@ -3078,22 +3205,6 @@ end;
 procedure TForm1.MenuItem12Click(Sender: TObject);
 begin
   ExecAndNoWait(GetAnySource('..\Tools\GraphicStudio.exe'), '');
-end;
-
-procedure TForm1.MenuItem14Click(Sender: TObject);
-begin
-  sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  ExecAndWait(TWinWindowHandle(Form1).Wnd,
-    GetAnySource('..\Resources\MC_SFX.exe'), '',
-    GetAnySource('..\Resources'));
-end;
-
-procedure TForm1.MenuItem15Click(Sender: TObject);
-begin
-  sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  ExecAndWait(TWinWindowHandle(Form1).Wnd,
-    GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
-    GetAnySource('..\Resources'));
 end;
 
 procedure TForm1.MenuItem19Click(Sender: TObject);

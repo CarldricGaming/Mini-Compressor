@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Edit, FMX.Objects, FMX.Ani,
-  FMX.Layouts;
+  FMX.Layouts, FMX.ExtCtrls;
 
 type
   TForm6 = class(TForm)
@@ -24,11 +24,19 @@ type
     ProgressBar1: TProgressBar;
     CheckBox1: TCheckBox;
     Panel1: TPanel;
+    GroupBox4: TGroupBox;
+    Edit1: TEdit;
+    SearchEditButton1: TSearchEditButton;
+    ClearEditButton1: TClearEditButton;
+    PopupBox1: TPopupBox;
     procedure TrackBar1Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure CheckBox1Change(Sender: TObject);
+    procedure SearchEditButton1Click(Sender: TObject);
+    procedure ClearEditButton1Click(Sender: TObject);
+    procedure PopupBox1Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -100,6 +108,7 @@ begin
   else
   if ChangeMusicFile <> '' then
   begin
+    Edit1.Text := '';
     BASS_ChannelStop(Form1.BassMusicPlayer);
     BASS_StreamFree(Form1.BassMusicPlayer);
     Form1.BassMusicFile := PChar(ChangeMusicFile);
@@ -129,12 +138,63 @@ begin
   end;
 end;
 
+procedure TForm6.ClearEditButton1Click(Sender: TObject);
+begin
+  BASS_ChannelStop(Form1.BassMusicPlayer);
+  BASS_StreamFree(Form1.BassMusicPlayer);
+  Form1.BassMusicFile := PChar(GetAnySource('..\Resources\Music.mp3'));
+  Form1.BassMusicPlayer := BASS_StreamCreateFile(False, Form1.BassMusicFile, 0, 0,
+    BASS_SAMPLE_LOOP {$IFDEF UNICODE} or BASS_UNICODE {$ENDIF});
+  BASS_ChannelPlay(Form1.BassMusicPlayer, True);
+  IniCreate(GetAnySource('..\Resources\BASS_Setting.ini'),'BASS','Radio','');
+end;
+
 procedure TForm6.FormCreate(Sender: TObject);
 begin
+  PopupBox1.Items.LoadFromFile(GetAnySource('..\Resources\BASS_Radio.db'));
+  PopupBox1.Items.Add('[Custom Url]');
+  PopupBox1.ItemIndex:= 0;
+  Edit1.Text := PopupBox1.Text;
   Form1.BassVolume := StrToFloat(IniRead(GetAnySource('..\Resources\BASS_Setting.ini'),
     'BASS', 'Volume'));
   TrackBar1.Value := Form1.BassVolume;
   Rectangle1.Fill.Bitmap.Bitmap.LoadFromFile(GetAnySource('..\Resources\Wallpaper.jpg'));
+end;
+
+procedure TForm6.PopupBox1Change(Sender: TObject);
+begin
+  Edit1.Text := PopupBox1.Text;
+  if PopupBox1.Text = '[Custom Url]' then
+    Edit1.Text := '';
+end;
+
+procedure TForm6.SearchEditButton1Click(Sender: TObject);
+var
+  BASS_UrlRadio: string;
+begin
+  if Edit1.Text <> '' then
+  begin
+    BASS_ChannelStop(Form1.BassMusicPlayer);
+    BASS_StreamFree(Form1.BassMusicPlayer);
+    BASS_UrlRadio := Edit1.Text;
+    Form1.BassMusicPlayer := BASS_StreamCreateURL(PChar(BASS_UrlRadio),0,
+      BASS_STREAM_BLOCK or BASS_STREAM_STATUS or BASS_STREAM_AUTOFREE {$IFDEF UNICODE} or BASS_UNICODE {$ENDIF},nil,0);
+
+    BASS_ChannelSetSync(Form1.BassMusicPlayer, BASS_SYNC_META, 0, nil, nil);
+    BASS_ChannelSetSync(Form1.BassMusicPlayer, BASS_SYNC_OGG_CHANGE, 0, nil, nil);
+    BASS_ChannelSetSync(Form1.BassMusicPlayer, $10300, 0, nil, nil);
+    BASS_ChannelSetSync(Form1.BassMusicPlayer, BASS_SYNC_STALL, 0, nil, nil);
+    BASS_ChannelSetSync(Form1.BassMusicPlayer, BASS_SYNC_END, 0, nil, nil);
+
+    BASS_ChannelPlay(Form1.BassMusicPlayer, False);
+    IniCreate(GetAnySource('..\Resources\BASS_Setting.ini'),'BASS','Radio',
+      BASS_UrlRadio);
+  end else
+  begin
+    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+    MessageBox(0,'Failed to change music.', 'Error',
+      MB_ICONEXCLAMATION or MB_OK);
+  end;
 end;
 
 procedure TForm6.Timer1Timer(Sender: TObject);

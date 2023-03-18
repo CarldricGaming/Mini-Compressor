@@ -1,0 +1,112 @@
+object Form7: TForm7
+  Left = 0
+  Top = 0
+  Caption = 'Thank you for using this demo'
+  ClientHeight = 178
+  ClientWidth = 369
+  Position = MainFormCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Label1: TLabel
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 353.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'This sofware is EXPIRED. Please BUY to purchase this software.'
+    TabOrder = 2
+  end
+  object Label2: TLabel
+    Position.X = 8.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 353.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'You can run it as a trial mode for 60 minutes.'
+    TabOrder = 1
+  end
+  object Label3: TLabel
+    Position.X = 8.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 353.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'If you cancel, then perhaps this software would be closed.'
+    TabOrder = 0
+  end
+  object GroupBox1: TGroupBox
+    Position.X = 8.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 353.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Registration'
+    TabOrder = 3
+    object Label4: TLabel
+      Position.X = 16.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 41.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Name:'
+      TabOrder = 39
+    end
+    object Label5: TLabel
+      Position.X = 16.000000000000000000
+      Position.Y = 40.000000000000000000
+      Size.Width = 41.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Code:'
+      TabOrder = 38
+    end
+    object Edit1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 41
+      Position.X = 64.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Edit2: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 40
+      Position.X = 64.000000000000000000
+      Position.Y = 40.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object Button1: TButton
+    Position.X = 8.000000000000000000
+    Position.Y = 144.000000000000000000
+    TabOrder = 7
+    Text = 'BUT NOW!'
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Position.X = 280.000000000000000000
+    Position.Y = 144.000000000000000000
+    TabOrder = 4
+    Text = 'CANCEL'
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Position.X = 96.000000000000000000
+    Position.Y = 144.000000000000000000
+    TabOrder = 6
+    Text = 'DEMO'
+    OnClick = Button3Click
+  end
+  object Button4: TButton
+    Position.X = 192.000000000000000000
+    Position.Y = 144.000000000000000000
+    TabOrder = 5
+    Text = 'REGISTER'
+    OnClick = Button4Click
+  end
+end

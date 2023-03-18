@@ -4,7 +4,7 @@ object Form6: TForm6
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = Single
   Caption = 'BASS Setting'
-  ClientHeight = 193
+  ClientHeight = 263
   ClientWidth = 273
   Position = MainFormCenter
   StyleBook = Form1.StyleBook1
@@ -16,7 +16,7 @@ object Form6: TForm6
   object Layout1: TLayout
     Align = Client
     Size.Width = 273.000000000000000000
-    Size.Height = 193.000000000000000000
+    Size.Height = 263.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object Rectangle1: TRectangle
@@ -24,13 +24,13 @@ object Form6: TForm6
       Fill.Bitmap.WrapMode = TileStretch
       Fill.Kind = Bitmap
       Size.Width = 273.000000000000000000
-      Size.Height = 193.000000000000000000
+      Size.Height = 263.000000000000000000
       Size.PlatformDefault = False
       Stroke.Kind = None
       object Panel1: TPanel
         Align = Client
         Size.Width = 273.000000000000000000
-        Size.Height = 193.000000000000000000
+        Size.Height = 263.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
         object GroupBox1: TGroupBox
@@ -103,6 +103,51 @@ object Form6: TForm6
             TabOrder = 40
             Text = '||'
             OnChange = CheckBox1Change
+          end
+        end
+        object GroupBox4: TGroupBox
+          Position.Y = 192.000000000000000000
+          Size.Width = 273.000000000000000000
+          Size.Height = 73.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Radio'
+          TabOrder = 3
+          object Edit1: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 38
+            Position.X = 16.000000000000000000
+            Position.Y = 40.000000000000000000
+            Size.Width = 241.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            object SearchEditButton1: TSearchEditButton
+              CanFocus = False
+              Cursor = crArrow
+              Size.Width = 28.000000000000000000
+              Size.Height = 18.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 0
+              OnClick = SearchEditButton1Click
+            end
+            object ClearEditButton1: TClearEditButton
+              CanFocus = False
+              Cursor = crArrow
+              Position.X = 28.000000000000000000
+              Size.Width = 28.000000000000000000
+              Size.Height = 18.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 1
+              OnClick = ClearEditButton1Click
+            end
+          end
+          object PopupBox1: TPopupBox
+            Position.X = 16.000000000000000000
+            Position.Y = 16.000000000000000000
+            Size.Width = 241.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 39
+            OnChange = PopupBox1Change
           end
         end
       end
