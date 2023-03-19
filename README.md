@@ -33,12 +33,11 @@ So you can get any you want to compress.
 * A: Well, I don't know why you see about that. It because of that software was so easy to use. And not so hard.
 
 # Based Plugin Used
-* Aio_FP.dll - v1.0
-* Bass.dll - v2.481
-* MC_Freearc.dll - v1.0
-* MC_Ini.dll - v1.0
-* MC_ConvertBytes.dll - v1.0
+* Bass.dll - v2.4.17
+* basshls.dll - v2.4.3
+* bassopus.dll - v2.4.2
 * cmdout.dll - v1.0
+* MiniCompressor_Library.dll - v1.0
 * XHashNext.dll - v1.0
 
 # Special thanks to 
