@@ -9,6 +9,9 @@
         <Projects Include="MiniCompressor_Library.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="DB_Maker.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="MiniCompressor_Library:Make">
         <MSBuild Projects="MiniCompressor_Library.dproj" Targets="Make"/>
     </Target>
+    <Target Name="DB_Maker">
+        <MSBuild Projects="DB_Maker.dproj"/>
+    </Target>
+    <Target Name="DB_Maker:Clean">
+        <MSBuild Projects="DB_Maker.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DB_Maker:Make">
+        <MSBuild Projects="DB_Maker.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="MiniCompressor;MiniCompressor_Library"/>
+        <CallTarget Targets="MiniCompressor;MiniCompressor_Library;DB_Maker"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="MiniCompressor:Clean;MiniCompressor_Library:Clean"/>
+        <CallTarget Targets="MiniCompressor:Clean;MiniCompressor_Library:Clean;DB_Maker:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="MiniCompressor:Make;MiniCompressor_Library:Make"/>
+        <CallTarget Targets="MiniCompressor:Make;MiniCompressor_Library:Make;DB_Maker:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

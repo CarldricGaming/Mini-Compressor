@@ -1,6 +1,8 @@
 object Form7: TForm7
   Left = 0
   Top = 0
+  BorderIcons = []
+  BorderStyle = Single
   Caption = 'Thank you for using this demo'
   ClientHeight = 178
   ClientWidth = 369
@@ -85,7 +87,7 @@ object Form7: TForm7
     Position.X = 8.000000000000000000
     Position.Y = 144.000000000000000000
     TabOrder = 7
-    Text = 'BUT NOW!'
+    Text = 'BUY NOW!'
     OnClick = Button1Click
   end
   object Button2: TButton

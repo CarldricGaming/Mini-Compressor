@@ -34,12 +34,24 @@ type
     FloatAnimation4: TFloatAnimation;
     FA_SplitTime: TTimer;
     SevenZip_Time: TTimer;
+    FA_SingleTime2: TTimer;
+    FA_SplitTime2: TTimer;
+    SevenZip_Time2: TTimer;
+    FloatAnimation5: TFloatAnimation;
+    XHash_ProcessingTime: TTimer;
+    Rectangle3: TRectangle;
+    FloatAnimation6: TFloatAnimation;
     procedure FormCreate(Sender: TObject);
     procedure Memo1ChangeTracking(Sender: TObject);
     procedure FA_SingleTimeTimer(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FA_SplitTimeTimer(Sender: TObject);
     procedure SevenZip_TimeTimer(Sender: TObject);
+    procedure FA_SingleTime2Timer(Sender: TObject);
+    procedure FA_SplitTime2Timer(Sender: TObject);
+    procedure SevenZip_Time2Timer(Sender: TObject);
+    procedure FloatAnimation5Finish(Sender: TObject);
+    procedure XHash_ProcessingTimeTimer(Sender: TObject);
   private
     { Private declarations }
   public
@@ -107,12 +119,9 @@ begin
   Result := CancelAll;
 end;
 
-procedure TForm5.FA_SplitTimeTimer(Sender: TObject);
+procedure TForm5.FA_SplitTime2Timer(Sender: TObject);
 begin
-  FloatAnimation4.Enabled := True;
-  FloatAnimation1.Enabled := True;
-  FA_SplitTime.Enabled := False;
-
+  FA_SplitTime2.Enabled := False;
   Memo1.Lines.Clear;
 
   CancelAll := False;
@@ -127,13 +136,20 @@ begin
       MB_OK or MB_ICONEXCLAMATION);
   end;
 
-  Application.ProcessMessages;
-  Sleep(3000);
+  XHash_ProcessingTime.Enabled := True;
+  FloatAnimation6.Enabled := True;
+end;
 
-  if MessageBox(0,'Do you want to save your result?','Creating MD5',
-    MB_YESNO or MB_ICONQUESTION) = ID_YES then
-    Memo1.Lines.SaveToFile(Form1.Edit33.Text + '\MD5Result.txt');
+procedure TForm5.FA_SplitTimeTimer(Sender: TObject);
+begin
+  FloatAnimation4.Enabled := True;
+  FloatAnimation1.Enabled := True;
+  FA_SplitTime.Enabled := False;
+  FA_SplitTime2.Enabled := True;
+end;
 
+procedure TForm5.FloatAnimation5Finish(Sender: TObject);
+begin
   Close;
 end;
 
@@ -173,11 +189,9 @@ begin
   Memo1.GoToTextEnd;
 end;
 
-procedure TForm5.SevenZip_TimeTimer(Sender: TObject);
+procedure TForm5.SevenZip_Time2Timer(Sender: TObject);
 begin
-  FloatAnimation4.Enabled := True;
-  FloatAnimation1.Enabled := True;
-  SevenZip_Time.Enabled := False;
+  SevenZip_Time2.Enabled := False;
 
   Memo1.Lines.Clear;
 
@@ -193,21 +207,34 @@ begin
       MB_OK or MB_ICONEXCLAMATION);
   end;
 
-  Application.ProcessMessages;
-  Sleep(3000);
-
-  if MessageBox(0,'Do you want to save your result?','Creating MD5',
-    MB_YESNO or MB_ICONQUESTION) = ID_YES then
-    Memo1.Lines.SaveToFile(Form1.Edit9.Text + '\MD5Result.txt');
-
-  Close;
+  XHash_ProcessingTime.Enabled := True;
+  FloatAnimation6.Enabled := True;
 end;
 
-procedure TForm5.FA_SingleTimeTimer(Sender: TObject);
+procedure TForm5.SevenZip_TimeTimer(Sender: TObject);
 begin
   FloatAnimation4.Enabled := True;
   FloatAnimation1.Enabled := True;
-  FA_SingleTime.Enabled := False;
+  SevenZip_Time.Enabled := False;
+  SevenZip_Time2.Enabled := True;
+end;
+
+procedure TForm5.XHash_ProcessingTimeTimer(Sender: TObject);
+begin
+  XHash_ProcessingTime.Enabled := False;
+  FloatAnimation6.Enabled := False;
+  Rectangle3.Opacity:= 0;
+
+  if MessageBox(0,'Do you want to save your result?','Creating MD5',
+    MB_YESNO or MB_ICONQUESTION) = ID_YES then
+    Memo1.Lines.SaveToFile(Form1.Edit2.Text + '\MD5Result.txt');
+
+  FloatAnimation5.Enabled := True;
+end;
+
+procedure TForm5.FA_SingleTime2Timer(Sender: TObject);
+begin
+  FA_SingleTime2.Enabled:= False;
 
   Memo1.Lines.Clear;
 
@@ -223,14 +250,17 @@ begin
       MB_OK or MB_ICONEXCLAMATION);
   end;
 
-  Application.ProcessMessages;
-  Sleep(3000);
+  XHash_ProcessingTime.Enabled := True;
+  FloatAnimation6.Enabled := True;
+end;
 
-  if MessageBox(0,'Do you want to save your result?','Creating MD5',
-    MB_YESNO or MB_ICONQUESTION) = ID_YES then
-    Memo1.Lines.SaveToFile(Form1.Edit2.Text + '\MD5Result.txt');
+procedure TForm5.FA_SingleTimeTimer(Sender: TObject);
+begin
+  FloatAnimation4.Enabled := True;
+  FloatAnimation1.Enabled := True;
 
-  Close;
+  FA_SingleTime.Enabled := False;
+  FA_SingleTime2.Enabled:= True;
 end;
 
 end.

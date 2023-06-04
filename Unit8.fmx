@@ -1,0 +1,120 @@
+object Form8: TForm8
+  Left = 0
+  Top = 0
+  Caption = 'Break Out'
+  ClientHeight = 480
+  ClientWidth = 640
+  Position = MainFormCenter
+  StyleBook = Form1.StyleBook1
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object Viewport3D1: TViewport3D
+    Align = Client
+    Color = claDodgerblue
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    object Light1: TLight
+      Color = claWhite
+      LightType = Directional
+      SpotCutOff = 180.000000000000000000
+      Position.X = 4.614208221435547000
+      Position.Y = -1.398325920104980000
+      RotationAngle.X = 328.015075683593800000
+      RotationAngle.Y = 29.824996948242190000
+      Width = 1.000000000000000000
+      Height = 1.000000000000000000
+      Depth = 1.000000000000000000
+      Quanternion = 
+        '(0.266231685876846,-0.247383743524551,-0.0709009170532227,-0.928' +
+        '92187833786)'
+      object FloatAnimation1: TFloatAnimation
+        Enabled = True
+        Duration = 0.200000002980232200
+        Loop = True
+        OnProcess = FloatAnimation1Process
+        OnFinish = FloatAnimation1Finish
+        PropertyName = 'RotationCenter.Y'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+    end
+    object Dummy1: TDummy
+      Width = 20.000000000000000000
+      Height = 14.000000000000000000
+      Depth = 1.000000000000000000
+      object StrokeCube1: TStrokeCube
+        Color = claWhite
+        Width = 20.000000000000000000
+        Height = 14.000000000000000000
+        Depth = 0.001000000047497451
+      end
+      object RoundCube1: TRoundCube
+        Tag = 1
+        Position.X = -0.002413034439086914
+        Position.Y = 4.730693340301514000
+        Width = 2.000000000000000000
+        Height = 0.500000000000000000
+        Depth = 1.000000000000000000
+        OnMouseDown = RoundCube1MouseDown
+        OnMouseMove = RoundCube1MouseMove
+        OnRender = RoundCube2Render
+        MaterialSource = LightMaterialSource1
+      end
+      object Sphere1: TSphere
+        Position.X = 7.289718151092529000
+        Position.Y = 2.276752471923828000
+        Width = 1.000000000000000000
+        Height = 1.000000000000000000
+        Depth = 1.000000000000000000
+        OnRender = Sphere1Render
+        MaterialSource = LightMaterialSource1
+      end
+    end
+    object ColorKeyAnimation1: TColorKeyAnimation
+      Duration = 0.200000002980232200
+      Keys = <
+        item
+          Value = claYellow
+        end
+        item
+          Key = 1.000000000000000000
+          Value = claDodgerblue
+        end>
+      PropertyName = 'Color'
+      StartFromCurrent = False
+    end
+    object Text1: TText
+      Align = Top
+      Size.Width = 640.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Break Out'
+      TextSettings.Font.Size = 24.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000200000004000000}
+      TextSettings.FontColor = claChartreuse
+    end
+  end
+  object LightMaterialSource1: TLightMaterialSource
+    Diffuse = claWhite
+    Ambient = xFF202020
+    Emissive = claNull
+    Specular = xFF606060
+    Shininess = 30
+    Left = 48
+    Top = 424
+  end
+  object LightMaterialSource2: TLightMaterialSource
+    Diffuse = claTomato
+    Ambient = xFF202020
+    Emissive = claNull
+    Specular = xFF606060
+    Shininess = 30
+    Left = 304
+    Top = 424
+  end
+end

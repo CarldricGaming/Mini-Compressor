@@ -1,4 +1,4 @@
-unit Unit1;
+﻿unit Unit1;
 
 interface
 
@@ -359,6 +359,14 @@ type
     MenuItem21: TMenuItem;
     MenuItem31: TMenuItem;
     Button41: TButton;
+    MenuItem13: TMenuItem;
+    CheckBox12: TCheckBox;
+    Button42: TButton;
+    CheckBox13: TCheckBox;
+    Button43: TButton;
+    CheckBox14: TCheckBox;
+    Button44: TButton;
+    Image5: TImage;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -454,6 +462,13 @@ type
     procedure Button40Click(Sender: TObject);
     procedure MenuItem30Click(Sender: TObject);
     procedure Button41Click(Sender: TObject);
+    procedure MenuItem13Click(Sender: TObject);
+    procedure CheckBox12Change(Sender: TObject);
+    procedure Button42Click(Sender: TObject);
+    procedure CheckBox13Change(Sender: TObject);
+    procedure Button43Click(Sender: TObject);
+    procedure CheckBox14Change(Sender: TObject);
+    procedure Button44Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -482,7 +497,7 @@ uses
   CmdOut,
   XHashNet,
   bass,
-  Unit2, Unit3, Unit4, Unit5, Unit6, Unit7;
+  Unit2, Unit3, Unit4, Unit5, Unit6, Unit7, Unit8;
 
 {$R *.fmx}
 
@@ -873,6 +888,8 @@ begin
   ArcTime1.Enabled := True;
   Edit38.Text := '';
   Edit39.Text := '';
+  CheckBox12.Visible:= True;
+  Button42.Visible:= True;
 
   if CheckBox9.IsChecked = True then
     with TForm5.Create(nil) do
@@ -1126,6 +1143,9 @@ begin
   Edit6.Visible := False;
   Edit38.Visible := False;
   Edit39.Visible := False;
+  CheckBox12.Visible := False;
+  CheckBox12.IsChecked := False;
+  Button42.Visible:= False;
 end;
 
 procedure TForm1.Button20Click(Sender: TObject);
@@ -1560,6 +1580,8 @@ begin
   Edit40.Visible := True;
   Edit41.Visible := True;
   ArcTime1.Enabled := True;
+  CheckBox13.Visible := True;
+  Button43.Visible := True;
 
   if CheckBox10.IsChecked = True then
     with TForm5.Create(nil) do
@@ -1729,6 +1751,9 @@ begin
   Edit36.Visible := False;
   Edit40.Visible := False;
   Edit41.Visible := False;
+  CheckBox13.Visible := False;
+  CheckBox13.IsChecked := False;
+  Button43.Visible := False;
 end;
 
 procedure TForm1.Button32Click(Sender: TObject);
@@ -2471,6 +2496,36 @@ begin
   ExecAndNoWait(GetAnySource('..\Compression\FreeArc'), '');
 end;
 
+procedure TForm1.Button42Click(Sender: TObject);
+begin
+  sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+  if MessageBox(0,'Are you sure you want to stop any progress?', 'Really?',
+    MB_ICONEXCLAMATION or MB_OKCANCEL) = IDOK then
+  begin
+    ISCmdStop;
+  end;
+end;
+
+procedure TForm1.Button43Click(Sender: TObject);
+begin
+  sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+  if MessageBox(0,'Are you sure you want to stop any progress?', 'Really?',
+    MB_ICONEXCLAMATION or MB_OKCANCEL) = IDOK then
+  begin
+    ISCmdStop;
+  end;
+end;
+
+procedure TForm1.Button44Click(Sender: TObject);
+begin
+  sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+  if MessageBox(0,'Are you sure you want to stop any progress?', 'Really?',
+    MB_ICONEXCLAMATION or MB_OKCANCEL) = IDOK then
+  begin
+    ISCmdStop;
+  end;
+end;
+
 procedure TForm1.Button4Click(Sender: TObject);
 var
   Command7z, Thread7z, Method7z, Password7z, Archive7z, Source7z,
@@ -2492,6 +2547,8 @@ begin
   ArcTime1.Enabled := True;
   Edit42.Text := '';
   Edit43.Text := '';
+  CheckBox14.Visible := True;
+  Button44.Visible := True;
 
   if CheckBox11.IsChecked = True then
     with TForm5.Create(nil) do
@@ -2672,6 +2729,9 @@ begin
   Edit12.Visible := False;
   Edit42.Visible := False;
   Edit43.Visible := False;
+  CheckBox14.Visible := False;
+  CheckBox14.IsChecked := False;
+  Button44.Visible := False;
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
@@ -2729,6 +2789,42 @@ end;
 procedure TForm1.Button9Click(Sender: TObject);
 begin
   TabControl4.TabIndex := 1;
+end;
+
+procedure TForm1.CheckBox12Change(Sender: TObject);
+begin
+  if Checkbox12.IsChecked then
+  begin
+    ISCmdSuspend;
+    CheckBox12.Text := '►';
+  end else begin
+    ISCmdResume;
+    CheckBox12.Text := '||';
+  end;
+end;
+
+procedure TForm1.CheckBox13Change(Sender: TObject);
+begin
+  if Checkbox13.IsChecked then
+  begin
+    ISCmdSuspend;
+    CheckBox13.Text := '►';
+  end else begin
+    ISCmdResume;
+    CheckBox13.Text := '||';
+  end;
+end;
+
+procedure TForm1.CheckBox14Change(Sender: TObject);
+begin
+  if Checkbox14.IsChecked then
+  begin
+    ISCmdSuspend;
+    CheckBox14.Text := '►';
+  end else begin
+    ISCmdResume;
+    CheckBox14.Text := '||';
+  end;
 end;
 
 procedure TForm1.CheckBox1Change(Sender: TObject);
@@ -2846,6 +2942,16 @@ var
   AFD1, AFD2, AFD3: int64;
   BASS_UrlRadio: string;
 begin
+  BassHandle := TWinWindowHandle(Handle).Wnd;
+  BASS_Init(-1, 44100, 0, BassHandle, 0);
+  BASS_Start();
+
+  BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1);
+  BASS_PluginLoad('bassopus.dll', BASS_Unicode);
+  BASS_PluginLoad('basshls.dll', BASS_Unicode);
+
+  Image5.Bitmap.LoadFromFile(GetAnySource('..\Resources\Transparent.png'));
+
   AFDate:= Now;
   AFD1 := StrToInt64(IniRead(GetAnySource('..\Resources\AFD.db'),'April_Fools_Date','Day'));
   AFD2 := StrToInt64(IniRead(GetAnySource('..\Resources\AFD.db'),'April_Fools_Date','Month'));
@@ -3207,6 +3313,15 @@ begin
   ExecAndNoWait(GetAnySource('..\Tools\GraphicStudio.exe'), '');
 end;
 
+procedure TForm1.MenuItem13Click(Sender: TObject);
+begin
+  with TForm8.Create(nil) do
+  begin
+    ShowModal;
+    Free;
+  end;
+end;
+
 procedure TForm1.MenuItem19Click(Sender: TObject);
 var
   ChangeJPGFile: string;
@@ -3415,49 +3530,9 @@ begin
 end;
 
 procedure TForm1.MenuItem26Click(Sender: TObject);
-var
-  OutDB: string;
-  Dir: string;
 begin
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
-    OutDB:= Dir;
-
-  if OutDB <> '' then
-  begin
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
-      GetAnySource('..\Resources\ISDone_List_Manual_SFX.exe'),'',
-      GetAnySource('..\Resources'));
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
-      'C:\Windows\notepad.exe',
-      GetAnySource('..\Resources\ISD_List_Manual_SFX.txt'), 'C:\Windows');
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
-      GetAnySource('..\Resources\uha.exe'),
-      'a -r+ -ed- -p- -m1 -mm+ -md+ -md32768 -b32768 "' + OutDB + '\Setup.db"' + '"ISDone_resource\*" @ISD_List_Manual_SFX.txt', GetAnySource('..\Resources'));
-    Application.ProcessMessages;
-    Sleep(150);
-
-    if FileExists(GetAnySource('..\Resources\ISD_List_Manual_SFX.txt')) then
-      DeleteFile(GetAnySource('..\Resources\ISD_List_Manual_SFX.txt'));
-
-    if FileExists(OutDB +'\Setup.db') then
-    begin
-      sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0, 'Your DB was created.', 'Successful',
-        MB_ICONINFORMATION or MB_OK);
-    end
-    else if not FileExists(OutDB +'\Setup.db') then
-    begin
-      sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0, 'Your DB was not to created.', 'Unsuccessful',
-        MB_ICONINFORMATION or MB_OK);
-    end;
-  end
-  else if OutDB = '' then
-  begin
-    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'Failed to located directory.', 'Error',
-      MB_ICONEXCLAMATION or MB_OK);
-  end;
+  ExecAndWait(MC_Handle, GetAnySource('..\Resources\DB_Maker.exe'), '',
+    GetAnySource('..\Resources'));
 end;
 
 procedure TForm1.MenuItem28Click(Sender: TObject);
