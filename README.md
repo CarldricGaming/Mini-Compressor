@@ -2,11 +2,11 @@
   <img src="https://user-images.githubusercontent.com/46277745/214106133-1d304a0c-b909-42c3-a20b-93bdcaedb9ae.png" />
 </p>
 
-Mini Compressor is the Toolset for most repacking games.
-It has included with Masked Compression v3.0 now.
-Which mean you can compress any games what you want.
-By the way, there's have a newly updated program.
-So you can get any you want to compress.
+Mini Compressor is a Tool Set for most repacking games.
+It has been bundled with Masked Compression v3.0 now.
+This means you can compress any game what you want.
+By the way, there is a program that has been recently updated.
+So you can get whatever you want to compress.
 
 # Download Mini Compressor
 - [x] **Latest version** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v22)
@@ -14,23 +14,23 @@ So you can get any you want to compress.
 - [x] **Other version** - [Check here](https://github.com/CarldricGaming/Mini-Compressor/releases)
 
 # Q & A
-* Q: Is there any updates for Mini Compressor?
-* A: Yes. If the "Mini Compressor" has been an update... Just click button Help > Check Updates.
+* Q: Is there any update for Mini Compressor?
+* A: Yes. But I moved to GitHub as what I can do there.
 
 * Q: Can I change Music and Wallpaper?
-* A: Yes. Now you can change Music and Wallpaper from Option at Mini Compressor.
+* A: Yes. Now you can change the Music and Wallpaper from Options in Mini Compressor.
 
-* Q: Is there any available self-extracting on Mini Compressor?
-* A: Yes. But you need to update first. because the self-extracting was outdated.
+* Q: Is there any self-extraction on Mini Compressor?
+* A: Yes. It's automatic when you Checkbox to create SFX.
 
-* Q: Some Compressor failed, What do I do?
-* A: like panker1992 said "I am not responsible for the compressors themselves, I didn't write their codes. Therefore I am not to be blamed for their Malfunction. I am not responsible for your Data loss. Though I will check if you send me a Pic of the problem."
+* Q: Some Compressors fail, What should I do?
+* A: as panker1992 said "I'm not responsible for the compressors themselves, I didn't write their code. So I can't be blamed for their Defects. I'm not responsible for your Data loss. Although I'll check if you send me a Picture that problem."
 
-* Q: Why I can't compress with DisksPan combine with Masked Compression?
-* A: You can't do compress like that it because many files on your game or some bytes would be lost after compress.
+* Q: Why can't I compress with DisksPan combined with Masked Compression?
+* A: You can't do compression like that because many files on your game or some bytes will be lost after compression.
 
-* Q: Why the Mini Compressor looks useful and helpful?
-* A: Well, I don't know why you see about that. It because of that software was so easy to use. And not so hard.
+* Q: Why does Mini Compressor seem useful and helpful?
+* A: Well, I don't know why you're looking at that. It's because the software is so easy to use. And not too hard.
 
 # Based Plugin Used
 * Bass.dll - v2.4.17
