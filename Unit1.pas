@@ -42,7 +42,6 @@ type
     MenuItem23: TMenuItem;
     MenuItem25: TMenuItem;
     MenuItem29: TMenuItem;
-    MenuItem26: TMenuItem;
     MenuItem27: TMenuItem;
     MenuItem28: TMenuItem;
     CheckBox1: TCheckBox;
@@ -325,7 +324,6 @@ type
     Button34: TButton;
     Button35: TButton;
     Layout1: TLayout;
-    Rectangle1: TRectangle;
     FloatAnimation1: TFloatAnimation;
     FloatAnimation2: TFloatAnimation;
     FloatAnimation3: TFloatAnimation;
@@ -367,6 +365,7 @@ type
     CheckBox14: TCheckBox;
     Button44: TButton;
     Image5: TImage;
+    Image6: TImage;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -440,7 +439,6 @@ type
     procedure SearchEditButton11Click(Sender: TObject);
     procedure MenuItem24Click(Sender: TObject);
     procedure MenuItem25Click(Sender: TObject);
-    procedure MenuItem26Click(Sender: TObject);
     procedure CheckBox7Change(Sender: TObject);
     procedure MenuItem28Click(Sender: TObject);
     procedure Button34Click(Sender: TObject);
@@ -1040,9 +1038,6 @@ begin
           Free;
         end;
 
-        CopyFile(GetAnySource('..\Setup.db'),
-          PChar(SFXOutput +'\Setup.db'),false);
-
         Application.ProcessMessages;
         Sleep(150);
 
@@ -1072,9 +1067,6 @@ begin
 
         if FileExists(GetAnySource('SFX_Make.bat')) then
           DeleteFile(GetAnySource('SFX_Make.bat'));
-
-        if FileExists(GetAnySource('..\Setup.db')) then
-          DeleteFile(GetAnySource('..\Setup.db'));
 
         if FileExists(GetAnySource('..\MC.sfx')) then
           DeleteFile(GetAnySource('..\MC.sfx'));
@@ -1564,7 +1556,7 @@ var
   SFX_Confirm: Boolean;
 begin
   if CheckBox7.IsChecked = True then
-    if MessageBox(MC_Handle,
+    if MessageBox(0,
       'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
       'Mini Compressor SFX',
       MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
@@ -1671,7 +1663,7 @@ begin
             GetAnySource('..\Resources'));
         end else
         begin
-          MessageBox(MC_Handle,
+          MessageBox(0,
             'Please make sure that you following your method you used for tools.'
             +#13 +'For incase that you don''t know how to make it,'
             +#13 +'Just use Auto if you need.',
@@ -1689,9 +1681,6 @@ begin
         Application.ProcessMessages;
         Sleep(150);
 
-        CopyFile(GetAnySource('..\Compression\Setup.db'),
-          PChar(SFXOutput +'\Setup.db'),false);
-
         Application.ProcessMessages;
         Sleep(150);
 
@@ -1699,8 +1688,6 @@ begin
 
         Application.ProcessMessages;
         Sleep(150);
-
-        DeleteFile(GetAnySource('..\Compression\Setup.db'));
       end;
 
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
@@ -2893,7 +2880,7 @@ end;
 
 procedure TForm1.FloatAnimation2Finish(Sender: TObject);
 begin
-  Rectangle1.Visible := False;
+  Image6.Visible := False;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -3529,12 +3516,6 @@ begin
   end;
 end;
 
-procedure TForm1.MenuItem26Click(Sender: TObject);
-begin
-  ExecAndWait(MC_Handle, GetAnySource('..\Resources\DB_Maker.exe'), '',
-    GetAnySource('..\Resources'));
-end;
-
 procedure TForm1.MenuItem28Click(Sender: TObject);
 begin
   with TForm2.Create(nil) do
@@ -3547,7 +3528,7 @@ end;
 
 procedure TForm1.MenuItem29Click(Sender: TObject);
 begin
-  Rectangle1.Visible := True;
+  Image6.Visible := True;
   FloatAnimation1.Enabled:= False;
   FloatAnimation1.Enabled:= True;
 end;
