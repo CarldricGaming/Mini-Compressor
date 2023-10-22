@@ -871,6 +871,7 @@ var
   FA_Handle: HWND;
   FA_Error: boolean;
   FA_Exec: PChar;
+  FA_Solo: TMemo;
   DateAndTimeZ: TDateTime;
   SFXOutput, SFXCommand: string;
 begin

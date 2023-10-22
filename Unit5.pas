@@ -155,6 +155,17 @@ end;
 
 procedure TForm5.FormCreate(Sender: TObject);
 begin
+  if FileExists(GetAnySource('..\Resources\MD5Check.png')) then
+    Image1.Bitmap.LoadFromFile(GetAnySource('..\Resources\MD5Check.png'))
+  else
+  if not FileExists(GetAnySource('..\Resources\MD5Check.png')) then
+  begin
+    sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
+    MessageBox(0,'Missing file' +#13 +#13
+      +'"Resources\MD5Check.png"', 'Error',
+      MB_ICONERROR or MB_OK);
+  end;
+
   if FileExists(GetAnySource('..\Resources\Wallpaper.jpg')) then
     Rectangle2.Fill.Bitmap.Bitmap.LoadFromFile(GetAnySource('..\Resources\Wallpaper.jpg'))
   else

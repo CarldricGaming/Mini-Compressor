@@ -68,6 +68,17 @@ end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
+  if FileExists(GetAnySource('MiniCompressor_Icon.ico')) then
+    Image1.Bitmap.LoadFromFile(GetAnySource('MiniCompressor_Icon.ico'))
+  else
+  if not FileExists(GetAnySource('MiniCompressor_Icon.ico')) then
+  begin
+    sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
+    MessageBox(0,'Missing file' +#13 +#13
+      +'"MiniCompressor_Icon.ico"', 'Error',
+      MB_ICONERROR or MB_OK);
+  end;
+
   if FileExists(GetAnySource('..\Version.ini')) then
     Label1.Text := 'Mini Compressor AIO - v' +IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current')
   else

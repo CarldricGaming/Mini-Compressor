@@ -18,9 +18,9 @@ type
     Label3: TLabel;
     StyleNote: TStyleBook;
     Image2: TImage;
-    Rectangle1: TRectangle;
-    FloatAnimation1: TFloatAnimation;
     FloatAnimation2: TFloatAnimation;
+    Arc1: TArc;
+    FloatAnimation1: TFloatAnimation;
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -49,6 +49,17 @@ end;
 
 procedure TForm4.FormCreate(Sender: TObject);
 begin
+  if FileExists(GetAnySource('MiniCompressor_Icon.ico')) then
+    Image1.Bitmap.LoadFromFile(GetAnySource('MiniCompressor_Icon.ico'))
+  else
+  if not FileExists(GetAnySource('MiniCompressor_Icon.ico')) then
+  begin
+    sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
+    MessageBox(0,'Missing file' +#13 +#13
+      +'"MiniCompressor_Icon.ico"', 'Error',
+      MB_ICONERROR or MB_OK);
+  end;
+
   if FileExists(GetAnySource('..\Version.ini')) then
     Label1.Text := 'Mini Compressor AIO - v' +IniRead(GetAnySource('..\Version.ini'), 'Version', 'Current');
   if FileExists(GetAnySource('..\Version.ini')) then
