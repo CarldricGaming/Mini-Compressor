@@ -1880,17 +1880,18 @@ begin
   with TMemo.Create(nil) do
   begin
     Lines.Add('@echo off');
-    Lines.Add('"' +FA_Exec +'" ' +FA_Result +'');
+    Lines.Add('"' + FA_Exec + '" ' +FA_Result +'');
     Lines.SaveToFile('Run_FA.bat');
     Free;
   end;
+
 
   Application.ProcessMessages;
   Sleep(150);
 
   FA_Error := False;
   ExecAndWait(TWinWindowHandle(Form1).Wnd,
-    GetAnySource('Run_FA.bat'),'',GetAnySource(''));
+    GetAnySource('Run_FA.bat'), '', GetAnySource(''));
 
   Application.ProcessMessages;
   Sleep(150);
