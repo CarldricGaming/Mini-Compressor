@@ -9,8 +9,8 @@ By the way, there is a program that has been recently updated.
 So you can get whatever you want to compress.
 
 # Download Mini Compressor
-- [x] **Latest version** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2023.10.22)
-- [x] **Previous version** - [Previous](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v22.1)
+- [x] **Latest version** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2023.11.6)
+- [x] **Previous version** - [Previous](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2023.10.22)
 - [x] **Other version** - [Check here](https://github.com/CarldricGaming/Mini-Compressor/releases)
 
 # Q & A
