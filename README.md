@@ -88,7 +88,8 @@ Recommended Spec:
 * OS: Windows 7, 8, 8.1, 10 (x64 only)
 
 # Screenshot
-![SS1](https://archive.org/download/capture_20210726/Screenshot%202021-07-30%20015434.jpg)
+![image](https://github.com/CarldricGaming/Mini-Compressor/assets/46277745/9e00a924-e618-4c88-910c-6c402c624685)
+
 
 # Installer Plugins for Mini Compressor
 Grab and use it whatever you like. Thanks to **pratikpatel8982**
