@@ -49,14 +49,14 @@ end;
 
 procedure TForm3.FormCreate(Sender: TObject);
 begin
-  if FileExists(GetAnySource('MiniCompressor_Icon.ico')) then
-    Image1.Bitmap.LoadFromFile(GetAnySource('MiniCompressor_Icon.ico'))
+  if FileExists(GetAnySource('..\Resources\MC_Logo.png')) then
+    Image1.Bitmap.LoadFromFile(GetAnySource('..\Resources\MC_Logo.png'))
   else
-  if not FileExists(GetAnySource('MiniCompressor_Icon.ico')) then
+  if not FileExists(GetAnySource('..\Resources\MC_Logo.png')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
     MessageBox(0,'Missing file' +#13 +#13
-      +'"MiniCompressor_Icon.ico"', 'Error',
+      +'"Resources\MC_Logo.png"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
 

@@ -366,6 +366,17 @@ type
     Button44: TButton;
     Image5: TImage;
     Image6: TImage;
+    GroupBox34: TGroupBox;
+    CheckBox15: TCheckBox;
+    PopupBox8: TPopupBox;
+    Edit47: TEdit;
+    ClearEditButton35: TClearEditButton;
+    GroupBox35: TGroupBox;
+    CheckBox16: TCheckBox;
+    PopupBox9: TPopupBox;
+    Edit48: TEdit;
+    TrackBar1: TTrackBar;
+    TrackBar2: TTrackBar;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -403,7 +414,6 @@ type
     procedure CheckBox4Change(Sender: TObject);
     procedure Memo4ChangeTracking(Sender: TObject);
     procedure Memo8ChangeTracking(Sender: TObject);
-    procedure Memo1ChangeTracking(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure CheckBox3Change(Sender: TObject);
     procedure Button8Click(Sender: TObject);
@@ -467,6 +477,13 @@ type
     procedure Button43Click(Sender: TObject);
     procedure CheckBox14Change(Sender: TObject);
     procedure Button44Click(Sender: TObject);
+    procedure CheckBox15Change(Sender: TObject);
+    procedure PopupBox8Change(Sender: TObject);
+    procedure CheckBox16Change(Sender: TObject);
+    procedure PopupBox9Change(Sender: TObject);
+    procedure TrackBar1Change(Sender: TObject);
+    procedure TrackBar2Change(Sender: TObject);
+    procedure Memo1ChangeTracking(Sender: TObject);
   private
     { Private declarations }
   public
@@ -504,11 +521,9 @@ var
   PauseAll: Boolean     = False;
   Ok, Bad, Missing: Integer;
   HashErrCode: Integer  = H_ERROR_GENERAL;
-
-function MC_Handle: HWND;
-begin
-  Result := TWinWindowHandle(Form1).Wnd;
-end;
+var
+  FA_IgnoreProtectRecover: Boolean;
+  FA_IgnoreProtectRecover2: Boolean;
 
 function ProcessMemory: longint;
 var
@@ -528,33 +543,29 @@ end;
 procedure UpdateLine(const ACaption, AText: WideString);
 begin
   Form1.Memo1.Lines.Clear;
-  Form1.Memo1.Lines.Add(AText);
-  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo1.Lines.Count);
   Form1.Edit6.Text := ACaption;
+  Form1.Memo1.Lines.Add(AText);
 end;
 
 procedure UpdateLine2(const ACaption, AText: WideString);
 begin
   Form1.Memo4.Lines.Clear;
-  Form1.Memo4.Lines.Add(AText);
-  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo4.Lines.Count);
   Form1.Edit12.Text := ACaption;
+  Form1.Memo4.Lines.Add(AText);
 end;
 
 procedure UpdateLine3(const ACaption, AText: WideString);
 begin
   Form1.Memo8.Lines.Clear;
-  Form1.Memo8.Lines.Add(AText);
-  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo8.Lines.Count);
   Form1.Edit25.Text := ACaption;
+  Form1.Memo8.Lines.Add(AText);
 end;
 
 procedure UpdateLine4(const ACaption, AText: WideString);
 begin
   Form1.Memo12.Lines.Clear;
-  Form1.Memo12.Lines.Add(AText);
-  SendMessage(0, EM_LINESCROLL, 0, Form1.Memo12.Lines.Count);
   Form1.Edit36.Text := ACaption;
+  Form1.Memo12.Lines.Add(AText);
 end;
 
 function GetAnySource(FileSource: string): PChar;
@@ -908,7 +919,7 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  FA_Command := Edit7.Text +' ';
+  FA_Command := Edit7.Text +' ' +Edit47.Text +' ';
   FA_Memory := '-lc' +NumberBox1.Text +' -ld' +NumberBox1.Text +' ';
   FA_Password := '-hp -p"' +Edit3.Text +'" ';
 
@@ -949,7 +960,6 @@ begin
   Memo2.Lines.Add('    Output: ' +Edit2.Text +'\' +Edit5.Text);
   Memo2.Lines.Add('    Method: ' +FA_Method);
   Memo2.GoToTextEnd;
-
 
   FA_Handle := TWinWindowHandle(Form1).Wnd;
   FA_Error := False;
@@ -997,7 +1007,7 @@ begin
       Memo2.Lines.Add('    Original Size:   ' +
         ConvertBytes(GetDirSize(Edit1.Text + '\', true)));
       Memo2.Lines.Add('    Compressed Size: ' +
-        ConvertBytes(GetFileSize(FA_Out2)));
+        ConvertBytes(GetDirSize(GetAnySource('\arc\'), true)));
       Memo2.Lines.Add('');
       Memo2.Lines.Add('Thank you for using Mini Compressor AIO');
       Memo2.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
@@ -1269,8 +1279,6 @@ begin
 
   if FileExists(IM_Output) then
   begin
-    CopyFile(GetAnySource('..\Resources\Setup.db'), PChar(Edit30.Text +'\Setup.db'), false);
-
     Application.ProcessMessages;
     Sleep(2000);
 
@@ -1301,18 +1309,18 @@ end;
 
 procedure TForm1.Button28Click(Sender: TObject);
 begin
-  if FileExists(GetAnySource('..\Resources\ISD_List_Manual.txt')) then
+  if FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0, 'Looks like the file still exist. Would create another one.', 'Resource Exist',
       MB_ICONINFORMATION or MB_OK);
-    DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.txt'));
+    DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.ini'));
     ExecAndWait(TWinWindowHandle(Form1).Wnd,
       GetAnySource('..\Resources\MC_Update.exe'),'',
       GetAnySource('..\Resources'));
   end
   else
-  if not FileExists(GetAnySource('..\Resources\ISD_List_Manual.txt')) then
+  if not FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
     ExecAndWait(TWinWindowHandle(Form1).Wnd,
       GetAnySource('..\Resources\MC_Update.exe'),'',
       GetAnySource('..\Resources'))
@@ -1375,9 +1383,9 @@ begin
       CopyFile(GetAnySource('..\Installer\Game.ico'),
         GetAnySource('..\Resources\Project\Game.ico'),false);
 
-    if FileExists(GetAnySource('..\Resources\ISD_List_Manual.txt')) then
-      CopyFile(GetAnySource('..\Resources\ISD_List_Manual.txt'),
-        GetAnySource('..\Resources\Project\ISD_List_Manual.txt'),false);
+    if FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
+      CopyFile(GetAnySource('..\Resources\ISD_List_Manual.ini'),
+        GetAnySource('..\Resources\Project\ISD_List_Manual.ini'),false);
 
     Application.ProcessMessages;
     Sleep(150);
@@ -1407,8 +1415,8 @@ begin
     if FileExists(GetAnySource('..\Resources\Project\Info.txt')) then
       DeleteFile(GetAnySource('..\Resources\Project\Info.txt'));
 
-    if FileExists(GetAnySource('..\Resources\Project\ISD_List_Manual.txt')) then
-      DeleteFile(GetAnySource('..\Resources\Project\ISD_List_Manual.txt'));
+    if FileExists(GetAnySource('..\Resources\Project\ISD_List_Manual.ini')) then
+      DeleteFile(GetAnySource('..\Resources\Project\ISD_List_Manual.ini'));
 
     Application.ProcessMessages;
     Sleep(150);
@@ -1500,9 +1508,9 @@ begin
       CopyFile(GetAnySource('..\Resources\Project\Game.ico'),
         GetAnySource('..\Installer\Game.ico'), false);
 
-    if FileExists(GetAnySource('..\Resources\Project\ISD_List_Manual.txt')) then
-      CopyFile(GetAnySource('..\Resources\Project\ISD_List_Manual.txt'),
-        GetAnySource('..\Resources\ISD_List_Manual.txt'),false);
+    if FileExists(GetAnySource('..\Resources\Project\ISD_List_Manual.ini')) then
+      CopyFile(GetAnySource('..\Resources\Project\ISD_List_Manual.ini'),
+        GetAnySource('..\Resources\ISD_List_Manual.ini'),false);
 
     Application.ProcessMessages;
     Sleep(150);
@@ -1524,8 +1532,8 @@ begin
     if FileExists(GetAnySource('..\Resources\Project\Info.txt')) then
       DeleteFile(GetAnySource('..\Resources\Project\Info.txt'));
 
-    if FileExists(GetAnySource('..\Resources\Project\ISD_List_Manual.txt')) then
-      DeleteFile(GetAnySource('..\Resources\Project\ISD_List_Manual.txt'));
+    if FileExists(GetAnySource('..\Resources\Project\ISD_List_Manual.ini')) then
+      DeleteFile(GetAnySource('..\Resources\Project\ISD_List_Manual.ini'));
 
     Application.ProcessMessages;
     Sleep(150);
@@ -1585,7 +1593,7 @@ begin
       Free;
     end;
 
-  FA_Command:= 'a -ma9 -ds -di -i1 -ep1 -ed -r -s; -w_Temp\ ';
+  FA_Command:= 'a -ma9 -ds -di -i1 -ep1 -ed -r -s; -w_Temp\ ' +Edit48.Text +' ';
   FA_Memory:= '-lc'+SpinBox6.Text +' -ld' +SpinBox6.Text +' ';
   FA_Method:= '-m'+ Edit35.Text
     +'+diskspan:' +SpinBox7.Text +'m:' +SpinBox7.Text +'m ';
@@ -1835,7 +1843,7 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  FA_Command := Edit7.Text +' ';
+  FA_Command := Edit7.Text +' ' +Edit47.Text +' ';
   FA_Memory := '-lc' +NumberBox1.Text +' -ld' +NumberBox1.Text +' ';
   FA_Password := '-hp -p"' +Edit3.Text +'" ';
 
@@ -1880,7 +1888,19 @@ begin
   with TMemo.Create(nil) do
   begin
     Lines.Add('@echo off');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
     Lines.Add('"' + FA_Exec + '" ' +FA_Result +'');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('');
+    Lines.Add('');
+    Lines.Add('');
+    Lines.Add('@echo CHECK BEFORE YOUR COMPRESSING IS OK OR NOT!!');
+    Lines.Add('@echo Press ENTER key to furture continue.');
+    Lines.Add('@echo Or take a screenshot if the case were problem.');
+    Lines.Add('@echo Thank you for your time.');
+    Lines.Add('');
+    Lines.Add('@echo "temp.arc" should be on "Bin\arc" folder there.');
+    Lines.Add('pause > nul');
     Lines.SaveToFile('Run_FA.bat');
     Free;
   end;
@@ -2061,7 +2081,7 @@ var
   SFX_Confirm: Boolean;
 begin
   if CheckBox7.IsChecked = True then
-    if MessageBox(MC_Handle,
+    if MessageBox(0,
       'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
       'Mini Compressor SFX',
       MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
@@ -2069,7 +2089,7 @@ begin
     else
       SFX_Confirm := False;
 
-  FA_Command:= 'a -ma9 -ds -di -i1 -ep1 -ed -r -s; -w_Temp\ ';
+  FA_Command:= 'a -ma9 -ds -di -i1 -ep1 -ed -r -s; -w_Temp\ ' +Edit48.Text +' ';
   FA_Memory:= '-lc'+SpinBox6.Text +' -ld' +SpinBox6.Text +' ';
   FA_Method:= '-m'+ Edit35.Text
     +'+diskspan:' +SpinBox7.Text +'m:' +SpinBox7.Text +'m ';
@@ -2102,7 +2122,19 @@ begin
   with TMemo.Create(nil) do
   begin
     Lines.Add('@echo off');
-    Lines.Add('"' +FA_Exec +'" ' +FA_Result +'');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('"' + FA_Exec + '" ' +FA_Result +'');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('');
+    Lines.Add('');
+    Lines.Add('');
+    Lines.Add('@echo CHECK BEFORE YOUR COMPRESSING IS OK OR NOT!!');
+    Lines.Add('@echo Press ENTER key to furture continue.');
+    Lines.Add('@echo Or take a screenshot if the case were problem.');
+    Lines.Add('@echo Thank you for your time.');
+    Lines.Add('');
+    Lines.Add('@echo "temp.arc" should be on "Bin\arc" folder there.');
+    Lines.Add('pause > nul');
     Lines.SaveToFile('Run_FA.bat');
     Free;
   end;
@@ -2159,7 +2191,7 @@ begin
             GetAnySource('..\Resources'));
         end else
         begin
-          MessageBox(MC_Handle,
+          MessageBox(0,
             'Please make sure that you following your method you used for tools.'
             +#13 +'For incase that you don''t know how to make it,'
             +#13 +'Just use Auto if you need.',
@@ -2285,7 +2317,19 @@ begin
   with TMemo.Create(nil) do
   begin
     Lines.Add('@echo off');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
     Lines.Add('"..\Compression\7-Zip\7z.exe" ' +Result7z +'');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('');
+    Lines.Add('');
+    Lines.Add('');
+    Lines.Add('@echo CHECK BEFORE YOUR COMPRESSING IS OK OR NOT!!');
+    Lines.Add('@echo Press ENTER key to furture continue.');
+    Lines.Add('@echo Or take a screenshot if the case were problem.');
+    Lines.Add('@echo Thank you for your time.');
+    Lines.Add('');
+    Lines.Add('@echo "temp.7z" should be on "Bin" folder there.');
+    Lines.Add('pause > nul');
     Lines.SaveToFile('Run_7Z.bat');
     Free;
   end;
@@ -2816,6 +2860,40 @@ begin
   end;
 end;
 
+procedure TForm1.CheckBox15Change(Sender: TObject);
+begin
+  if CheckBox15.IsChecked = True then
+  begin
+    CheckBox15.Text:= 'Enable';
+    PopupBox8.Enabled:= CheckBox15.IsChecked;
+    Edit47.Enabled:= False;
+    PopupBox8.OnChange(nil);
+  end else
+  begin
+    CheckBox15.Text:= 'Disable';
+    PopupBox8.Enabled:= CheckBox15.IsChecked;
+    Edit47.Enabled:= False;
+    Edit47.Text:= '';
+  end;
+end;
+
+procedure TForm1.CheckBox16Change(Sender: TObject);
+begin
+  if CheckBox16.IsChecked = True then
+  begin
+    CheckBox16.Text:= 'Enable';
+    PopupBox9.Enabled:= CheckBox16.IsChecked;
+    Edit48.Enabled:= False;
+    PopupBox9.OnChange(nil);
+  end else
+  begin
+    CheckBox16.Text:= 'Disable';
+    PopupBox9.Enabled:= CheckBox16.IsChecked;
+    Edit48.Enabled:= False;
+    Edit48.Text:= '';
+  end;
+end;
+
 procedure TForm1.CheckBox1Change(Sender: TObject);
 begin
   if CheckBox1.IsChecked then
@@ -2907,8 +2985,8 @@ begin
     DeleteFile(GetAnySource('..\Installer\Graphics\Music.mp3'));
   if FileExists(GetAnySource('..\Installer\Game.ico')) then
     DeleteFile(GetAnySource('..\Installer\Game.ico'));
-  if FileExists(GetAnySource('..\Resources\ISD_List_Manual.txt')) then
-    DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.txt'));
+  if FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
+    DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.ini'));
 
   Application.ProcessMessages;
   Sleep(150);
@@ -2931,6 +3009,9 @@ var
   AFD1, AFD2, AFD3: int64;
   BASS_UrlRadio: string;
 begin
+  ClientWidth:= 1280;
+  ClientHeight := 720;
+
   BassHandle := TWinWindowHandle(Handle).Wnd;
   BASS_Init(-1, 44100, 0, BassHandle, 0);
   BASS_Start();
@@ -3018,6 +3099,11 @@ begin
   Arc1.EndAngle := 0;
   Arc2.EndAngle := 0;
   Arc3.EndAngle := 0;
+
+  CheckBox15.IsChecked := False;
+  CheckBox16.IsChecked := False;
+  FA_IgnoreProtectRecover := False;
+  FA_IgnoreProtectRecover2 := False;
 
   j:= 1;
   if FileExists(GetAnySource('..\Resources\Skin\_Skin.ini')) then
@@ -3648,6 +3734,126 @@ begin
     Edit45.Text := SaveDialog1.FileName + Popupbox7.Text;
 end;
 
+procedure TForm1.PopupBox8Change(Sender: TObject);
+var
+  WritePBFA: string;
+begin
+  if PopupBox8.Text = 'Add: 5%' then
+  begin
+    TrackBar1.Enabled:= False;
+    TrackBar1.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox8.ItemIndex + 1));
+    Edit47.Text := WritePBFA;
+    Edit47.Enabled := False;
+  end;
+  if PopupBox8.Text = 'Add: 10%' then
+  begin
+    TrackBar1.Enabled:= False;
+    TrackBar1.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox8.ItemIndex + 1));
+    Edit47.Text := WritePBFA;
+    Edit47.Enabled := False;
+  end;
+  if PopupBox8.Text = 'Add: 20%' then
+  begin
+    TrackBar1.Enabled:= False;
+    TrackBar1.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox8.ItemIndex + 1));
+    Edit47.Text := WritePBFA;
+    Edit47.Enabled := False;
+  end;
+  if PopupBox8.Text = 'Add: 20%' then
+  begin
+    TrackBar1.Enabled:= False;
+    TrackBar1.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox8.ItemIndex + 1));
+    Edit47.Text := WritePBFA;
+    Edit47.Enabled := False;
+  end;
+  if PopupBox8.Text = 'Add: 10mb' then
+  begin
+    TrackBar1.Enabled:= False;
+    TrackBar1.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox8.ItemIndex + 1));
+    Edit47.Text := WritePBFA;
+    Edit47.Enabled := False;
+  end;
+  if PopupBox8.Text = 'Add for recovery via Internet: 0.01%' then
+  begin
+    TrackBar1.Enabled:= False;
+    TrackBar1.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox8.ItemIndex + 1));
+    Edit47.Text := WritePBFA;
+    Edit47.Enabled := False;
+  end;
+  if PopupBox8.Text = 'CUSTOM' then
+  begin
+    TrackBar1.Enabled:= True;
+    Edit47.Text := '-rr1';
+    Edit47.Enabled := False;
+  end;
+end;
+
+procedure TForm1.PopupBox9Change(Sender: TObject);
+var
+  WritePBFA: string;
+begin
+  if PopupBox9.Text = 'Add: 5%' then
+  begin
+    TrackBar2.Enabled:= False;
+    TrackBar2.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox9.ItemIndex + 1));
+    Edit48.Text := WritePBFA;
+    Edit48.Enabled := False;
+  end;
+  if PopupBox9.Text = 'Add: 10%' then
+  begin
+    TrackBar2.Enabled:= False;
+    TrackBar2.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox9.ItemIndex + 1));
+    Edit48.Text := WritePBFA;
+    Edit48.Enabled := False;
+  end;
+  if PopupBox9.Text = 'Add: 20%' then
+  begin
+    TrackBar2.Enabled:= False;
+    TrackBar2.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox9.ItemIndex + 1));
+    Edit48.Text := WritePBFA;
+    Edit48.Enabled := False;
+  end;
+  if PopupBox9.Text = 'Add: 20%' then
+  begin
+    TrackBar2.Enabled:= False;
+    TrackBar2.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox9.ItemIndex + 1));
+    Edit48.Text := WritePBFA;
+    Edit48.Enabled := False;
+  end;
+  if PopupBox9.Text = 'Add: 10mb' then
+  begin
+    TrackBar2.Enabled:= False;
+    TrackBar2.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox9.ItemIndex + 1));
+    Edit48.Text := WritePBFA;
+    Edit48.Enabled := False;
+  end;
+  if PopupBox9.Text = 'Add for recovery via Internet: 0.01%' then
+  begin
+    TrackBar2.Enabled:= False;
+    TrackBar2.Value := 1;
+    WritePBFA:= IniRead(GetAnySource('..\Compression\FreeArc.ini'), 'Protection', IntToStr(PopupBox9.ItemIndex + 1));
+    Edit48.Text := WritePBFA;
+    Edit48.Enabled := False;
+  end;
+  if PopupBox9.Text = 'CUSTOM' then
+  begin
+    TrackBar2.Enabled:= True;
+    Edit48.Text := '-rr1';
+    Edit48.Enabled := False;
+  end;
+end;
+
 procedure TForm1.SearchEditButton10Click(Sender: TObject);
 var
   Dir: string;
@@ -3795,6 +4001,54 @@ begin
   TimeAndDateYo:= Now;
   MenuItem3.Text:= DateToStr(TimeAndDateYo) +' | ' +TimeToStr(TimeAndDateYo);
   MenuItem31.Text := 'BASS_CPU: ' + FloatToStrF(BASS_GetCPU, ffFixed, 4, 2);
+end;
+
+procedure TForm1.TrackBar1Change(Sender: TObject);
+begin
+  if TrackBar1.Enabled = True then
+  begin
+    Edit47.Text:= '-rr' + IntToStr(Round(TrackBar1.Value));
+
+    if FA_IgnoreProtectRecover = False then
+      if TrackBar1.Value > 80 then
+      begin
+        sndPlaySound(GetAnySource('..\Resources\MC_INFO.wav'),SND_ASYNC);
+        if MessageBox(0,'Above 80% or higher would be getting increasing size.'
+          +#13+ 'Are you sure about this?', 'Confused Recovery?', MB_ICONINFORMATION or MB_YESNO) = ID_YES then
+          begin
+            FA_IgnoreProtectRecover := True;
+          end else
+            TrackBar1.Value := 79;
+      end;
+
+    if FA_IgnoreProtectRecover = True then
+      if TrackBar1.Value < 80 then
+        FA_IgnoreProtectRecover := False;
+  end;
+end;
+
+procedure TForm1.TrackBar2Change(Sender: TObject);
+begin
+  if TrackBar2.Enabled = True then
+  begin
+    Edit48.Text:= '-rr' + IntToStr(Round(TrackBar2.Value));
+
+    if FA_IgnoreProtectRecover2 = False then
+      if TrackBar2.Value > 80 then
+      begin
+        sndPlaySound(GetAnySource('..\Resources\MC_INFO.wav'),SND_ASYNC);
+        if MessageBox(0,'Above 80% or higher would be getting increasing size.'
+          +#13+ 'Are you sure about this?', 'Confused Recovery?', MB_ICONINFORMATION or MB_YESNO) = ID_YES then
+          begin
+            FA_IgnoreProtectRecover2 := True;
+          end else
+            TrackBar2.Value := 79;
+      end;
+
+    if FA_IgnoreProtectRecover2 = True then
+      if TrackBar2.Value < 80 then
+        FA_IgnoreProtectRecover2 := False;
+  end;
 end;
 
 end.

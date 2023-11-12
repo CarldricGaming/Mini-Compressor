@@ -108,7 +108,9 @@ object Form2: TForm2
           object Image1: TImage
             MultiResBitmap.Height = 128
             MultiResBitmap.Width = 128
-            MultiResBitmap = <>
+            MultiResBitmap = <
+              item
+              end>
             Size.Width = 41.000000000000000000
             Size.Height = 41.000000000000000000
             Size.PlatformDefault = False
