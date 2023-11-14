@@ -24,6 +24,8 @@
 ;#define OSVersion 7
 ;#define OSBuild   7600
 
+#define i 1
+
 #define Ini "Setup.ini"
 #ifnexist Ini
   #error "Setup.ini does not exists in the root script directory"
@@ -146,6 +148,7 @@ OutputBaseFilename={#OutputExec}
   DiskSpanning=True
   DiskSliceSize=736000000
 #endif
+MinVersion=0,5.01
 
 [Languages]
 #ifexist "compiler:Languages\english.isl"
@@ -155,12 +158,30 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 #endif
 
 [Files]
+Source: "..\Resources\XHashNext.dll"; DestDir: {tmp}; Flags: dontcopy;
 #ifdef UnArc_Protect
   Source: "..\{#UnArc_File2}"; DestDir: "{tmp}"; Flags: dontcopy
 #endif
 #ifdef UnArc_None
   Source: "..\{#UnArc_File1}"; DestDir: "{tmp}"; Flags: dontcopy
 #endif
+
+#sub ISDoneFile1
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "..\Resources\ISD_List.ini", "ISDone_Files", Str(i), "")
+  Source: "..\Resources\ISDone_resource\{#ISDInf1}"; DestDir: "{tmp}"; Flags: "dontcopy";
+#endsub
+#if ReadIni(AddBackSlash(SourcePath) + "..\Resources\ISD_List.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "..\Resources\ISD_List.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile1
+#endif
+
+#sub ISDoneFile4
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "..\Resources\ISD_List_Manual.ini", "ISDone_Files", Str(i), "")
+  Source: "..\Resources\ISDone_resource\{#ISDInf1}"; DestDir: "{tmp}"; Flags: "dontcopy";
+#endsub
+#if ReadIni(AddBackSlash(SourcePath) + "..\Resources\ISD_List_Manual.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "..\Resources\ISD_List_Manual.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile4
+#endif
+
 Source: "..\Resources\ISDone\*.*"; DestDir: {tmp}; Flags: dontcopy;
 Source: "Resources\Dll\*"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "Resources\Graphics\*"; DestDir: "{tmp}"; Flags: dontcopy
@@ -277,6 +298,7 @@ Name: "{group}\Uninstall"; Filename: "{uninstallexe}"; WorkingDir: "{app}"; Comm
 Type: filesandordirs; Name: {app}
 
 [Code]
+#include "..\Resources\XHashNext.iss"
 #include "Resources\Include\Windows.iss"
 #include "Resources\Include\botva2\Botva2.iss"
 #include "Resources\Include\Commonfunctions.iss"
@@ -2093,12 +2115,7 @@ begin
   // Return Type
   #ifdef MC
     ExtractTemporaryFile('Archive.ini');
-    if FileExists(ExpandConstant('{src}\Setup.db')) then
-      Result := True
-    else
-    begin
-      MsgBox('Missing file "Setup.db"', mbCriticalError, MB_OK);
-    end;
+    Result := True
   #else
     Result := True;
   #endif

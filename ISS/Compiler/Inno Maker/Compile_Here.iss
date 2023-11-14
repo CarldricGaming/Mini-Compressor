@@ -24,7 +24,6 @@ OutputDir=.
 Uninstallable=no
 SetupIconFile=Ico.ico
 DirExistsWarning=no
-MinVersion= 0,6.1
 DisableProgramGroupPage=yes
 DisableWelcomePage=yes
 DisableReadyPage=yes
@@ -33,8 +32,8 @@ DisableReadyPage=yes
 Source: "Script.iss"; DestDir: "{tmp}"; Flags: dontcopy
 
 [Code]
-type
-  TMsg = record hWnd: HWND; message: LongWord; wParam: Longint; lParam: Longint; Time: LongWord; pt: TPoint; end;
+//type
+//  TMsg = record hWnd: HWND; message: LongWord; wParam: Longint; lParam: Longint; Time: LongWord; pt: TPoint; end;
 
 function PeekMessage(var lpMsg: TMsg; hWnd: HWND; wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; external 'PeekMessageA@user32.dll stdcall';
 function TranslateMessage(const lpMsg: TMsg): BOOL; external 'TranslateMessage@user32.dll stdcall';
@@ -60,7 +59,7 @@ begin
   if GetIniString('Installer','MC','0',ExpandConstant('{src}\Setup.ini')) = '1' then
     Exec(ExpandConstant('{src}\..\Resources\MC_Protect2.exe'),'','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   if FileExists(ExpandConstant('{tmp}\Script.iss')) then
@@ -69,13 +68,13 @@ begin
   if FileExists(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe')) then
     Exec(ExpandConstant('{src}\..\Tools\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\Compiler.engine') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ERRCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(2000);
 
   DeleteFile(ExpandConstant('{src}\Compiler.engine'));
 
-  if FileExists(ExpandConstant('{src}\..\Resources\ISD_List.txt')) then
-    DeleteFile(ExpandConstant('{src}\..\Resources\ISD_List.txt'));
+  if FileExists(ExpandConstant('{src}\..\Resources\ISD_List.ini')) then
+    DeleteFile(ExpandConstant('{src}\..\Resources\ISD_List.ini'));
 
   Result:=False;
 end;
