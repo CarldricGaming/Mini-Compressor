@@ -1,6 +1,6 @@
 @echo off
 
-if exist "ISD_List_Manual.txt" (
+if exist "ISD_List_Manual.ini" (
  goto :ISDManual
 )
 
@@ -11,12 +11,10 @@ timeout 2 > nul
 
 title Packing ISDone Protect...
 
-7za.exe a -bb3 -mmt2 -mx9 -i@ISD_List.txt -p"DontTouch" Setup.db
+ISD_List.exe
 
 exit
 
 :ISDManual
-
-7za.exe a -bb3 -mmt2 -mx9 -i@ISD_List_Manual.txt -p"DontTouch" Setup.db
 
 exit
