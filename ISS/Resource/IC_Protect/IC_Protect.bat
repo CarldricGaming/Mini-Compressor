@@ -7,6 +7,6 @@ timeout 2 > nul
 
 title Packing IC Protect...
 
-uha.exe a -r+ -ed- -p- -m1 -mm+ -md+ -md32768 -b32768 Setup.db "ISDone_resource\*" 
+ISD_List.exe
 
 exit
