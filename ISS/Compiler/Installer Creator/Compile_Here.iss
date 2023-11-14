@@ -33,24 +33,6 @@ DisableReadyPage=yes
 Source: "Script.iss"; DestDir: "{tmp}"; Flags: dontcopy
 
 [Code]
-type
-  TMsg = record hWnd: HWND; message: LongWord; wParam: Longint; lParam: Longint; Time: LongWord; pt: TPoint; end;
-
-function PeekMessage(var lpMsg: TMsg; hWnd: HWND; wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; external 'PeekMessageA@user32.dll stdcall';
-function TranslateMessage(const lpMsg: TMsg): BOOL; external 'TranslateMessage@user32.dll stdcall';
-function DispatchMessage(const lpMsg: TMsg): Longint; external 'DispatchMessageA@user32.dll stdcall';
-
-procedure AppProcessMessages;
-var
-  Msg: TMsg;
-begin
-  while PeekMessage(Msg, 0, 0, 0, 1) do
-  begin
-    TranslateMessage(Msg);
-    DispatchMessage(Msg);
-  end;
-end;
-
 function InitializeSetup: Boolean;
 var
   ErrorCode: integer;
@@ -63,26 +45,15 @@ begin
 
   IC_Output := GetIniString('Files', 'OutputDir', '', ExpandConstant('{src}\Temp\Setup.ini'));
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   Exec(ExpandConstant('{src}\..\..\Resources\IC_Protect.exe'),'', '',SW_SHOWNORMAL,ewWaitUntilTerminated,ErrorCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
-  if FileExists(ExpandConstant('{src}\..\..\Resources\ISD_List.txt')) then
-    DeleteFile(ExpandConstant('{src}\..\..\Resources\ISD_List.txt'));
-  if FileExists(ExpandConstant('{src}\..\..\Resources\Setup.db')) then
-    FileCopy(ExpandConstant('{src}\..\..\Resources\Setup.db'),IC_Output +'\Setup.db',false);
-
-  AppProcessMessages;
-  Sleep(150);
-
-  if FileExists(ExpandConstant('{src}\..\..\Resources\Setup.db')) then
-    DeleteFile(ExpandConstant('{src}\..\..\Resources\Setup.db'));
-
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(150);
 
   if FileExists(ExpandConstant('{tmp}\Script.iss')) then
@@ -91,10 +62,13 @@ begin
   if FileExists(ExpandConstant('{src}\..\IS5\Compil32.exe')) then
     Exec(ExpandConstant('{src}\..\IS5\Compil32.exe'),'/cc "' + ExpandConstant('{src}\Compiler.engine') +'"','',SW_SHOWNORMAL,ewWaitUntilTerminated,ErrorCode);
 
-  AppProcessMessages;
+  Application.ProcessMessages;
   Sleep(2000);
 
   DeleteFile(ExpandConstant('{src}\Compiler.engine'));
+
+  if FileExists(ExpandConstant('{src}\..\..\Resources\ISD_List.ini')) then
+    DeleteFile(ExpandConstant('{src}\..\..\Resources\ISD_List.ini'));
 
   Result:=False;
 end;

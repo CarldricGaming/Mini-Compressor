@@ -1142,7 +1142,7 @@ Name: vit; MessagesFile: Include\Languages\Vietnamese.isl; LicenseFile: Temp\Lic
 #ifdef UnArc_None
   Source: "..\..\{#UnArc_File1}"; DestDir: "{tmp}"; Flags: dontcopy
 #endif
-Source: "..\..\Resources\uha.exe"; DestDir: "{tmp}"; Flags: dontcopy
+
 Source: Include\english.ini; DestDir: "{tmp}"; Flags: dontcopy
 Source: Include\bass.dll; DestDir: {tmp}; Flags: dontcopy
 Source: Include\botva2.dll; DestDir: {tmp}; Flags: dontcopy
@@ -1971,6 +1971,15 @@ Source: {#SFSourceFile}\*; DestDir: {#SFOutputFile}; Flags: ignoreversion recurs
 
 #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Files", "Source1", "") != ""
 #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Files", StringChange("SourceInt","Int", Str(i)), "") !=""; i++} SetupFiles
+#endif
+
+#sub ISDoneFile1
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "..\..\Resources\ISD_List.ini", "ISDone_Files", Str(i), "")
+  Source: "..\..\Resources\ISDone_resource\{#ISDInf1}"; DestDir: "{tmp}"; Flags: "dontcopy";
+#endsub
+
+#if ReadIni(AddBackSlash(SourcePath) + "..\..\Resources\ISD_List.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "..\..\Resources\ISD_List.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile1
 #endif
 
 [UninstallDelete]
@@ -12107,1024 +12116,1019 @@ end;
 
 function InitializeSetup: Boolean;
 var
-VideoDiff: Extended;
+  VideoDiff: Extended;
 begin
-#ifdef UnArc_Protect
-ExtractTemporaryFile('unarc.dll');
-#endif
-#ifdef UnArc_None
-ExtractTemporaryFile('unarc.dll');
-#endif
-InfoAfter:=False;
-SplitPct:=0;
-#ifdef SerialCode
-#sub SerialCodes1
-SetArrayLength(SerialCodes,{#i});
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", "Serial1", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", StringChange("SerialInt","Int", Str(i)), "") !=""; i++} SerialCodes1
-#endif
-#sub SerialCodes2
-#define SerialCodeValue ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", "Serial" + Str(i), "")
-SerialCodes[{#i} - 1]:=DecodeSerialStr('{#SerialCodeValue}');
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", "Serial1", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", StringChange("SerialInt","Int", Str(i)), "") !=""; i++} SerialCodes2
-#endif
-#endif
+  #ifdef UnArc_Protect
+  ExtractTemporaryFile('unarc.dll');
+  ExtractTemporaryFile('english.ini');
+  #endif
+  #ifdef UnArc_None
+  ExtractTemporaryFile('unarc.dll');
+  ExtractTemporaryFile('english.ini');
+  #endif
+  InfoAfter:=False;
+  SplitPct:=0;
+  #ifdef SerialCode
+  #sub SerialCodes1
+  SetArrayLength(SerialCodes,{#i});
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", "Serial1", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", StringChange("SerialInt","Int", Str(i)), "") !=""; i++} SerialCodes1
+  #endif
+  #sub SerialCodes2
+  #define SerialCodeValue ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", "Serial" + Str(i), "")
+  SerialCodes[{#i} - 1]:=DecodeSerialStr('{#SerialCodeValue}');
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", "Serial1", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "Protection", StringChange("SerialInt","Int", Str(i)), "") !=""; i++} SerialCodes2
+  #endif
+  #endif
 
-#ifdef Task
-#sub Tasks1
-SetArrayLength(Task,{#i});
-SetArrayLength(SelectTaskLabel,{#i});
-SetArrayLength(SelectTaskCheck1,{#i});
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task1Name", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", StringChange("TaskIntName","Int", Str(i)), "") !=""; i++} Tasks1
-#endif
-#sub Tasks2
-#define TaskName ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Name", "")
-#define TaskExec ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Command", "")
-#define TaskComd ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Parameter", "")
-#define TaskExec64 ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Command64", "")
-#define TaskComd64 ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Parameter64", "")
-#define TaskDpce ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Dependence", "")
-Task[{#i} - 1].Name:='{#TaskName}';
-Task[{#i} - 1].Execute:='{#TaskExec}';
-Task[{#i} - 1].Command:='{#TaskComd}';
-Task[{#i} - 1].Execute64:='{#TaskExec64}';
-Task[{#i} - 1].Command64:='{#TaskComd64}';
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Dependence", "") != ""
-Task[{#i} - 1].Dependence:={#TaskDpce};
-#endif
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task1Name", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", StringChange("TaskIntName","Int", Str(i)), "") !=""; i++} Tasks2
-#endif
-#endif
+  #ifdef Task
+  #sub Tasks1
+  SetArrayLength(Task,{#i});
+  SetArrayLength(SelectTaskLabel,{#i});
+  SetArrayLength(SelectTaskCheck1,{#i});
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task1Name", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", StringChange("TaskIntName","Int", Str(i)), "") !=""; i++} Tasks1
+  #endif
+  #sub Tasks2
+  #define TaskName ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Name", "")
+  #define TaskExec ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Command", "")
+  #define TaskComd ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Parameter", "")
+  #define TaskExec64 ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Command64", "")
+  #define TaskComd64 ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Parameter64", "")
+  #define TaskDpce ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Dependence", "")
+  Task[{#i} - 1].Name:='{#TaskName}';
+  Task[{#i} - 1].Execute:='{#TaskExec}';
+  Task[{#i} - 1].Command:='{#TaskComd}';
+  Task[{#i} - 1].Execute64:='{#TaskExec64}';
+  Task[{#i} - 1].Command64:='{#TaskComd64}';
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task" + Str(i) + "Dependence", "") != ""
+  Task[{#i} - 1].Dependence:={#TaskDpce};
+  #endif
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", "Task1Name", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "TaskSettings", StringChange("TaskIntName","Int", Str(i)), "") !=""; i++} Tasks2
+  #endif
+  #endif
 
-#ifdef Component
-#sub Components1
-SetArrayLength(Component,{#i});
-SetArrayLength(SelectComponentLabel,{#i});
-SetArrayLength(SelectComponentCheck1,{#i});
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component1Name", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", StringChange("ComponentIntName","Int", Str(i)), "") !=""; i++} Components1
-#endif
-#sub Components2
-#define ComponentName ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Name", "")
-#define ComponentSize ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Size", "0")
-#define ComponentDpce ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Dependence", "")
-Component[{#i} - 1].Name:='{#ComponentName}';
-Component[{#i} - 1].Size:={#ComponentSize};
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Dependence", "") != ""
-Component[{#i} - 1].Dependence:={#ComponentDpce};
-#endif
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component1Name", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", StringChange("ComponentIntName","Int", Str(i)), "") !=""; i++} Components2
-#endif
-#endif
+  #ifdef Component
+  #sub Components1
+  SetArrayLength(Component,{#i});
+  SetArrayLength(SelectComponentLabel,{#i});
+  SetArrayLength(SelectComponentCheck1,{#i});
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component1Name", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", StringChange("ComponentIntName","Int", Str(i)), "") !=""; i++} Components1
+  #endif
+  #sub Components2
+  #define ComponentName ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Name", "")
+  #define ComponentSize ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Size", "0")
+  #define ComponentDpce ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Dependence", "")
+  Component[{#i} - 1].Name:='{#ComponentName}';
+  Component[{#i} - 1].Size:={#ComponentSize};
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component" + Str(i) + "Dependence", "") != ""
+  Component[{#i} - 1].Dependence:={#ComponentDpce};
+  #endif
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", "Component1Name", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "ComponentSettings", StringChange("ComponentIntName","Int", Str(i)), "") !=""; i++} Components2
+  #endif
+  #endif
 
 
-#sub LaunchNames1
-SetArrayLength(LaunchNames,{#i});
-SetArrayLength(LaunchTypes,{#i});
-SetArrayLength(LaunchBinaries,{#i});
-SetArrayLength(GUID,{#i});
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher1Name", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", StringChange("LauncherIntName","Int", Str(i)), "") !=""; i++} LaunchNames1
-#endif
-#sub LaunchNames2
-#define LaunchNames ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher" + Str(i) + "Name", "")
-#define LaunchTypes ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher" + Str(i) + "Type", "CUSTOM")
-#define LaunchBinaries ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher" + Str(i) + "Binary", "")
-LaunchNames[{#i} - 1]:='{#LaunchNames}';
-LaunchTypes[{#i} - 1]:='{#LaunchTypes}';
-LaunchBinaries[{#i} - 1]:='{#LaunchBinaries}';
-#endsub
-#if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher1Name", "") != ""
-#for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", StringChange("LauncherIntName","Int", Str(i)), "") !=""; i++} LaunchNames2
-#endif
+  #sub LaunchNames1
+  SetArrayLength(LaunchNames,{#i});
+  SetArrayLength(LaunchTypes,{#i});
+  SetArrayLength(LaunchBinaries,{#i});
+  SetArrayLength(GUID,{#i});
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher1Name", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", StringChange("LauncherIntName","Int", Str(i)), "") !=""; i++} LaunchNames1
+  #endif
+  #sub LaunchNames2
+  #define LaunchNames ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher" + Str(i) + "Name", "")
+  #define LaunchTypes ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher" + Str(i) + "Type", "CUSTOM")
+  #define LaunchBinaries ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher" + Str(i) + "Binary", "")
+  LaunchNames[{#i} - 1]:='{#LaunchNames}';
+  LaunchTypes[{#i} - 1]:='{#LaunchTypes}';
+  LaunchBinaries[{#i} - 1]:='{#LaunchBinaries}';
+  #endsub
+  #if ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", "Launcher1Name", "") != ""
+  #for {i = 1; ReadIni(AddBackslash(SourcePath) + "Temp\Setup.ini", "LauncherSettings", StringChange("LauncherIntName","Int", Str(i)), "") !=""; i++} LaunchNames2
+  #endif
 
-ExtractTemporaryFile('Blank.png');
-#ifexist "Temp\Licenses\License.rtf"
-ExtractTemporaryFile('License.rtf');
-#endif
-#ifexist "Temp\Licenses\InfoBefore.rtf"
-ExtractTemporaryFile('InfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\InfoAfter.rtf"
-ExtractTemporaryFile('InfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\Readme.rtf"
-ExtractTemporaryFile('Readme.rtf');
-#endif
-#ifexist "Temp\Licenses\Manual.pdf"
-ExtractTemporaryFile('Manual.pdf');
-#endif
-#ifexist "Temp\Licenses\EnglishLicense.rtf"
-ExtractTemporaryFile('EnglishLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\EnglishInfoBefore.rtf"
-ExtractTemporaryFile('EnglishInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\EnglishInfoAfter.rtf"
-ExtractTemporaryFile('EnglishInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\EnglishReadme.rtf"
-ExtractTemporaryFile('EnglishReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\EnglishManual.pdf"
-ExtractTemporaryFile('EnglishManual.pdf');
-#endif
-#ifexist "Temp\Licenses\AlbanianLicense.rtf"
-ExtractTemporaryFile('AlbanianLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\AlbanianInfoBefore.rtf"
-ExtractTemporaryFile('AlbanianInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\AlbanianInfoAfter.rtf"
-ExtractTemporaryFile('AlbanianInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\AlbanianReadme.rtf"
-ExtractTemporaryFile('AlbanianReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\AlbanianManual.pdf"
-ExtractTemporaryFile('AlbanianManual.pdf');
-#endif
-#ifexist "Temp\Licenses\BosnianLicense.rtf"
-ExtractTemporaryFile('BosnianLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\BosnianInfoBefore.rtf"
-ExtractTemporaryFile('BosnianInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\BosnianInfoAfter.rtf"
-ExtractTemporaryFile('BosnianInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\BosnianReadme.rtf"
-ExtractTemporaryFile('BosnianReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\BosnianManual.pdf"
-ExtractTemporaryFile('BosnianManual.pdf');
-#endif
-#ifexist "Temp\Licenses\CzechLicense.rtf"
-ExtractTemporaryFile('CzechLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\CzechInfoBefore.rtf"
-ExtractTemporaryFile('CzechInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\CzechInfoAfter.rtf"
-ExtractTemporaryFile('CzechInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\CzechReadme.rtf"
-ExtractTemporaryFile('CzechReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\CzechManual.pdf"
-ExtractTemporaryFile('CzechManual.pdf');
-#endif
-#ifexist "Temp\Licenses\FrenchLicense.rtf"
-ExtractTemporaryFile('FrenchLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\FrenchInfoBefore.rtf"
-ExtractTemporaryFile('FrenchInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\FrenchInfoAfter.rtf"
-ExtractTemporaryFile('FrenchInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\FrenchReadme.rtf"
-ExtractTemporaryFile('FrenchReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\FrenchManual.pdf"
-ExtractTemporaryFile('FrenchManual.pdf');
-#endif
-#ifexist "Temp\Licenses\GermanLicense.rtf"
-ExtractTemporaryFile('GermanLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\GermanInfoBefore.rtf"
-ExtractTemporaryFile('GermanInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\GermanInfoAfter.rtf"
-ExtractTemporaryFile('GermanInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\GermanReadme.rtf"
-ExtractTemporaryFile('GermanReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\GermanManual.pdf"
-ExtractTemporaryFile('GermanManual.pdf');
-#endif
-#ifexist "Temp\Licenses\HungarianLicense.rtf"
-ExtractTemporaryFile('HungarianLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\HungarianInfoBefore.rtf"
-ExtractTemporaryFile('HungarianInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\HungarianInfoAfter.rtf"
-ExtractTemporaryFile('HungarianInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\HungarianReadme.rtf"
-ExtractTemporaryFile('HungarianReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\HungarianManual.pdf"
-ExtractTemporaryFile('HungarianManual.pdf');
-#endif
-#ifexist "Temp\Licenses\ItalianLicense.rtf"
-ExtractTemporaryFile('ItalianLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\ItalianInfoBefore.rtf"
-ExtractTemporaryFile('ItalianInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\ItalianInfoAfter.rtf"
-ExtractTemporaryFile('ItalianInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\ItalianReadme.rtf"
-ExtractTemporaryFile('ItalianReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\ItalianManual.pdf"
-ExtractTemporaryFile('ItalianManual.pdf');
-#endif
-#ifexist "Temp\Licenses\MalaysianLicense.rtf"
-ExtractTemporaryFile('MalaysianLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\MalaysianInfoBefore.rtf"
-ExtractTemporaryFile('MalaysianInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\MalaysianInfoAfter.rtf"
-ExtractTemporaryFile('MalaysianInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\MalaysianReadme.rtf"
-ExtractTemporaryFile('MalaysianReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\MalaysianManual.pdf"
-ExtractTemporaryFile('MalaysianManual.pdf');
-#endif
-#ifexist "Temp\Licenses\PolishLicense.rtf"
-ExtractTemporaryFile('PolishLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\PolishInfoBefore.rtf"
-ExtractTemporaryFile('PolishInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\PolishInfoAfter.rtf"
-ExtractTemporaryFile('PolishInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\PolishReadme.rtf"
-ExtractTemporaryFile('PolishReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\PolishManual.pdf"
-ExtractTemporaryFile('PolishManual.pdf');
-#endif
-#ifexist "Temp\Licenses\PortugueseLicense.rtf"
-ExtractTemporaryFile('PortugueseLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\PortugueseInfoBefore.rtf"
-ExtractTemporaryFile('PortugueseInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\PortugueseInfoAfter.rtf"
-ExtractTemporaryFile('PortugueseInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\PortugueseReadme.rtf"
-ExtractTemporaryFile('PortugueseReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\PortugueseManual.pdf"
-ExtractTemporaryFile('PortugueseManual.pdf');
-#endif
-#ifexist "Temp\Licenses\RussianLicense.rtf"
-ExtractTemporaryFile('RussianLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\RussianInfoBefore.rtf"
-ExtractTemporaryFile('RussianInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\RussianInfoAfter.rtf"
-ExtractTemporaryFile('RussianInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\RussianReadme.rtf"
-ExtractTemporaryFile('RussianReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\RussianManual.pdf"
-ExtractTemporaryFile('RussianManual.pdf');
-#endif
-#ifexist "Temp\Licenses\SpanishLicense.rtf"
-ExtractTemporaryFile('SpanishLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\SpanishInfoBefore.rtf"
-ExtractTemporaryFile('SpanishInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\SpanishInfoAfter.rtf"
-ExtractTemporaryFile('SpanishInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\SpanishReadme.rtf"
-ExtractTemporaryFile('SpanishReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\SpanishManual.pdf"
-ExtractTemporaryFile('SpanishManual.pdf');
-#endif
-#ifexist "Temp\Licenses\TurkishLicense.rtf"
-ExtractTemporaryFile('TurkishLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\TurkishInfoBefore.rtf"
-ExtractTemporaryFile('TurkishInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\TurkishInfoAfter.rtf"
-ExtractTemporaryFile('TurkishInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\TurkishReadme.rtf"
-ExtractTemporaryFile('TurkishReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\TurkishManual.pdf"
-ExtractTemporaryFile('TurkishManual.pdf');
-#endif
-#ifexist "Temp\Licenses\UkrainianLicense.rtf"
-ExtractTemporaryFile('UkrainianLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\UkrainianInfoBefore.rtf"
-ExtractTemporaryFile('UkrainianInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\UkrainianInfoAfter.rtf"
-ExtractTemporaryFile('UkrainianInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\UkrainianReadme.rtf"
-ExtractTemporaryFile('UkrainianReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\UkrainianManual.pdf"
-ExtractTemporaryFile('UkrainianManual.pdf');
-#endif
-#ifexist "Temp\Licenses\VietnameseLicense.rtf"
-ExtractTemporaryFile('VietnameseLicense.rtf');
-#endif
-#ifexist "Temp\Licenses\VietnameseInfoBefore.rtf"
-ExtractTemporaryFile('VietnameseInfoBefore.rtf');
-#endif
-#ifexist "Temp\Licenses\VietnameseInfoAfter.rtf"
-ExtractTemporaryFile('VietnameseInfoAfter.rtf');
-#endif
-#ifexist "Temp\Licenses\VietnameseReadme.rtf"
-ExtractTemporaryFile('VietnameseReadme.rtf');
-#endif
-#ifexist "Temp\Licenses\VietnameseManual.pdf"
-ExtractTemporaryFile('VietnameseManual.pdf');
-#endif
+  ExtractTemporaryFile('Blank.png');
+  #ifexist "Temp\Licenses\License.rtf"
+  ExtractTemporaryFile('License.rtf');
+  #endif
+  #ifexist "Temp\Licenses\InfoBefore.rtf"
+  ExtractTemporaryFile('InfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\InfoAfter.rtf"
+  ExtractTemporaryFile('InfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\Readme.rtf"
+  ExtractTemporaryFile('Readme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\Manual.pdf"
+  ExtractTemporaryFile('Manual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\EnglishLicense.rtf"
+  ExtractTemporaryFile('EnglishLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\EnglishInfoBefore.rtf"
+  ExtractTemporaryFile('EnglishInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\EnglishInfoAfter.rtf"
+  ExtractTemporaryFile('EnglishInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\EnglishReadme.rtf"
+  ExtractTemporaryFile('EnglishReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\EnglishManual.pdf"
+  ExtractTemporaryFile('EnglishManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\AlbanianLicense.rtf"
+  ExtractTemporaryFile('AlbanianLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\AlbanianInfoBefore.rtf"
+  ExtractTemporaryFile('AlbanianInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\AlbanianInfoAfter.rtf"
+  ExtractTemporaryFile('AlbanianInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\AlbanianReadme.rtf"
+  ExtractTemporaryFile('AlbanianReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\AlbanianManual.pdf"
+  ExtractTemporaryFile('AlbanianManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\BosnianLicense.rtf"
+  ExtractTemporaryFile('BosnianLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\BosnianInfoBefore.rtf"
+  ExtractTemporaryFile('BosnianInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\BosnianInfoAfter.rtf"
+  ExtractTemporaryFile('BosnianInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\BosnianReadme.rtf"
+  ExtractTemporaryFile('BosnianReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\BosnianManual.pdf"
+  ExtractTemporaryFile('BosnianManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\CzechLicense.rtf"
+  ExtractTemporaryFile('CzechLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\CzechInfoBefore.rtf"
+  ExtractTemporaryFile('CzechInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\CzechInfoAfter.rtf"
+  ExtractTemporaryFile('CzechInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\CzechReadme.rtf"
+  ExtractTemporaryFile('CzechReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\CzechManual.pdf"
+  ExtractTemporaryFile('CzechManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\FrenchLicense.rtf"
+  ExtractTemporaryFile('FrenchLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\FrenchInfoBefore.rtf"
+  ExtractTemporaryFile('FrenchInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\FrenchInfoAfter.rtf"
+  ExtractTemporaryFile('FrenchInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\FrenchReadme.rtf"
+  ExtractTemporaryFile('FrenchReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\FrenchManual.pdf"
+  ExtractTemporaryFile('FrenchManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\GermanLicense.rtf"
+  ExtractTemporaryFile('GermanLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\GermanInfoBefore.rtf"
+  ExtractTemporaryFile('GermanInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\GermanInfoAfter.rtf"
+  ExtractTemporaryFile('GermanInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\GermanReadme.rtf"
+  ExtractTemporaryFile('GermanReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\GermanManual.pdf"
+  ExtractTemporaryFile('GermanManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\HungarianLicense.rtf"
+  ExtractTemporaryFile('HungarianLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\HungarianInfoBefore.rtf"
+  ExtractTemporaryFile('HungarianInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\HungarianInfoAfter.rtf"
+  ExtractTemporaryFile('HungarianInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\HungarianReadme.rtf"
+  ExtractTemporaryFile('HungarianReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\HungarianManual.pdf"
+  ExtractTemporaryFile('HungarianManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\ItalianLicense.rtf"
+  ExtractTemporaryFile('ItalianLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\ItalianInfoBefore.rtf"
+  ExtractTemporaryFile('ItalianInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\ItalianInfoAfter.rtf"
+  ExtractTemporaryFile('ItalianInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\ItalianReadme.rtf"
+  ExtractTemporaryFile('ItalianReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\ItalianManual.pdf"
+  ExtractTemporaryFile('ItalianManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\MalaysianLicense.rtf"
+  ExtractTemporaryFile('MalaysianLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\MalaysianInfoBefore.rtf"
+  ExtractTemporaryFile('MalaysianInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\MalaysianInfoAfter.rtf"
+  ExtractTemporaryFile('MalaysianInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\MalaysianReadme.rtf"
+  ExtractTemporaryFile('MalaysianReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\MalaysianManual.pdf"
+  ExtractTemporaryFile('MalaysianManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\PolishLicense.rtf"
+  ExtractTemporaryFile('PolishLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PolishInfoBefore.rtf"
+  ExtractTemporaryFile('PolishInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PolishInfoAfter.rtf"
+  ExtractTemporaryFile('PolishInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PolishReadme.rtf"
+  ExtractTemporaryFile('PolishReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PolishManual.pdf"
+  ExtractTemporaryFile('PolishManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\PortugueseLicense.rtf"
+  ExtractTemporaryFile('PortugueseLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PortugueseInfoBefore.rtf"
+  ExtractTemporaryFile('PortugueseInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PortugueseInfoAfter.rtf"
+  ExtractTemporaryFile('PortugueseInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PortugueseReadme.rtf"
+  ExtractTemporaryFile('PortugueseReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\PortugueseManual.pdf"
+  ExtractTemporaryFile('PortugueseManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\RussianLicense.rtf"
+  ExtractTemporaryFile('RussianLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\RussianInfoBefore.rtf"
+  ExtractTemporaryFile('RussianInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\RussianInfoAfter.rtf"
+  ExtractTemporaryFile('RussianInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\RussianReadme.rtf"
+  ExtractTemporaryFile('RussianReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\RussianManual.pdf"
+  ExtractTemporaryFile('RussianManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\SpanishLicense.rtf"
+  ExtractTemporaryFile('SpanishLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\SpanishInfoBefore.rtf"
+  ExtractTemporaryFile('SpanishInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\SpanishInfoAfter.rtf"
+  ExtractTemporaryFile('SpanishInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\SpanishReadme.rtf"
+  ExtractTemporaryFile('SpanishReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\SpanishManual.pdf"
+  ExtractTemporaryFile('SpanishManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\TurkishLicense.rtf"
+  ExtractTemporaryFile('TurkishLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\TurkishInfoBefore.rtf"
+  ExtractTemporaryFile('TurkishInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\TurkishInfoAfter.rtf"
+  ExtractTemporaryFile('TurkishInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\TurkishReadme.rtf"
+  ExtractTemporaryFile('TurkishReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\TurkishManual.pdf"
+  ExtractTemporaryFile('TurkishManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\UkrainianLicense.rtf"
+  ExtractTemporaryFile('UkrainianLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\UkrainianInfoBefore.rtf"
+  ExtractTemporaryFile('UkrainianInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\UkrainianInfoAfter.rtf"
+  ExtractTemporaryFile('UkrainianInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\UkrainianReadme.rtf"
+  ExtractTemporaryFile('UkrainianReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\UkrainianManual.pdf"
+  ExtractTemporaryFile('UkrainianManual.pdf');
+  #endif
+  #ifexist "Temp\Licenses\VietnameseLicense.rtf"
+  ExtractTemporaryFile('VietnameseLicense.rtf');
+  #endif
+  #ifexist "Temp\Licenses\VietnameseInfoBefore.rtf"
+  ExtractTemporaryFile('VietnameseInfoBefore.rtf');
+  #endif
+  #ifexist "Temp\Licenses\VietnameseInfoAfter.rtf"
+  ExtractTemporaryFile('VietnameseInfoAfter.rtf');
+  #endif
+  #ifexist "Temp\Licenses\VietnameseReadme.rtf"
+  ExtractTemporaryFile('VietnameseReadme.rtf');
+  #endif
+  #ifexist "Temp\Licenses\VietnameseManual.pdf"
+  ExtractTemporaryFile('VietnameseManual.pdf');
+  #endif
 
-#ifexist "Temp\Setup.ini"
-if Pos('/masterunlock',GetCmdTail) <> 0 then
-ExtractTemporaryFileEx('Setup.ini',ExpandConstant('{src}'));
-#endif
-#ifexist "Temp\Resources\Dialog.jpg"
-ExtractTemporaryFile('Dialog.jpg');
-#endif
-#ifexist "Temp\Resources\DialogTextBackground.png"
-ExtractTemporaryFile('DialogTextBackground.png');
-#endif
-#ifexist "Temp\Resources\EditBackground.png"
-ExtractTemporaryFile('EditBackground.png');
-#endif
-#ifexist "Temp\Resources\Logo.png"
-ExtractTemporaryFile('Logo.png');
-#endif
-#ifexist "Temp\Resources\ProgressBackground.png"
-ExtractTemporaryFile('ProgressBackground.png');
-#endif
-#ifexist "Temp\Resources\ProgressImage.png"
-ExtractTemporaryFile('ProgressImage.png');
-#endif
-#ifexist "Temp\Resources\TextBackground.png"
-ExtractTemporaryFile('TextBackground.png');
-#endif
-#ifexist "Temp\Resources\SmallTextBackground.png"
-ExtractTemporaryFile('SmallTextBackground.png');
-#endif
-#ifexist "Temp\Resources\Preview1.jpg"
-ExtractTemporaryFile('Preview1.jpg');
-#endif
-#ifexist "Temp\Resources\Preview2.jpg"
-ExtractTemporaryFile('Preview2.jpg');
-#endif
-#ifexist "Temp\Resources\Preview3.jpg"
-ExtractTemporaryFile('Preview3.jpg');
-#endif
-#ifexist "Temp\Resources\Button.png"
-ExtractTemporaryFile('Button.png');
-#endif
-#ifexist "Temp\Resources\ButtonSelected.png"
-ExtractTemporaryFile('ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ButtonClicked.png"
-ExtractTemporaryFile('ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ButtonDisabled.png"
-ExtractTemporaryFile('ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\BackButton.png"
-ExtractTemporaryFile('BackButton.png');
-#endif
-#ifexist "Temp\Resources\BackButtonSelected.png"
-ExtractTemporaryFile('BackButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\BackButtonClicked.png"
-ExtractTemporaryFile('BackButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\BackButtonDisabled.png"
-ExtractTemporaryFile('BackButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\NextButton.png"
-ExtractTemporaryFile('NextButton.png');
-#endif
-#ifexist "Temp\Resources\NextButtonSelected.png"
-ExtractTemporaryFile('NextButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\NextButtonClicked.png"
-ExtractTemporaryFile('NextButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\NextButtonDisabled.png"
-ExtractTemporaryFile('NextButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\CancelButton.png"
-ExtractTemporaryFile('CancelButton.png');
-#endif
-#ifexist "Temp\Resources\CancelButtonSelected.png"
-ExtractTemporaryFile('CancelButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\CancelButtonClicked.png"
-ExtractTemporaryFile('CancelButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\CancelButtonDisabled.png"
-ExtractTemporaryFile('CancelButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\MusicButton.png"
-ExtractTemporaryFile('MusicButton.png');
-#endif
-#ifexist "Temp\Resources\MusicButtonSelected.png"
-ExtractTemporaryFile('MusicButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\MusicButtonClicked.png"
-ExtractTemporaryFile('MusicButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\MusicButtonDisabled.png"
-ExtractTemporaryFile('MusicButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\SmallButton.png"
-ExtractTemporaryFile('SmallButton.png');
-#endif
-#ifexist "Temp\Resources\SmallButtonSelected.png"
-ExtractTemporaryFile('SmallButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\SmallButtonClicked.png"
-ExtractTemporaryFile('SmallButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\SmallButtonDisabled.png"
-ExtractTemporaryFile('SmallButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\CloseButton.png"
-ExtractTemporaryFile('CloseButton.png');
-#endif
-#ifexist "Temp\Resources\CloseButtonSelected.png"
-ExtractTemporaryFile('CloseButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\CloseButtonClicked.png"
-ExtractTemporaryFile('CloseButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\CloseButtonDisabled.png"
-ExtractTemporaryFile('CloseButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\MinimizeButton.png"
-ExtractTemporaryFile('MinimizeButton.png');
-#endif
-#ifexist "Temp\Resources\MinimizeButtonSelected.png"
-ExtractTemporaryFile('MinimizeButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\MinimizeButtonClicked.png"
-ExtractTemporaryFile('MinimizeButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\MinimizeButtonDisabled.png"
-ExtractTemporaryFile('MinimizeButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\SmallMusicButton.png"
-ExtractTemporaryFile('SmallMusicButton.png');
-#endif
-#ifexist "Temp\Resources\SmallMusicButtonClicked.png"
-ExtractTemporaryFile('SmallMusicButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\SmallMusicButtonDisabled.png"
-ExtractTemporaryFile('SmallMusicButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\SmallMusicButtonSelected.png"
-ExtractTemporaryFile('SmallMusicButtonSelected.png');
-#endif
-ExtractTemporaryFile('CheckBox.png');
-#ifexist "Temp\Resources\Cursor.cur"
-ExtractTemporaryFile('Cursor.cur');
-#endif
-#ifexist "Temp\Resources\Cursor.ani"
-ExtractTemporaryFile('Cursor.ani');
-#endif
-#ifexist "Temp\Resources\Music.mp3"
-ExtractTemporaryFile('Music.mp3');
-#endif
-#ifexist "Temp\Resources\Video.wmv"
-ExtractTemporaryFile('Video.wmv');
-#endif
-#ifexist "Temp\Resources\ButtonClicked.wav"
-ExtractTemporaryFile('ButtonClicked.wav');
-#endif
-#ifexist "Temp\Resources\ButtonSelected.wav"
-ExtractTemporaryFile('ButtonSelected.wav');
-#endif
-#ifexist "Temp\Resources\Font1.ttf"
-#sub ExtractFile1
-ExtractTemporaryFile('Font{#i}.ttf');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\FontFileName.ttf", "FileName", Str(i))) != 0; i++} ExtractFile1
-#endif
-#ifexist "Temp\Resources\1.jpg"
-#sub ExtractFile2
-ExtractTemporaryFile('{#i}.jpg');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\FileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile2
-#endif
-#ifexist "Temp\Resources\Splash1.png"
-#sub ExtractFile3
-ExtractTemporaryFile('Splash{#i}.png');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\SplashFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile3
-#endif
-#ifexist "Temp\Resources\Installer1.jpg"
-#sub ExtractFile4
-ExtractTemporaryFile('Installer{#i}.jpg');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile4
-#endif
+  #ifexist "Temp\Setup.ini"
+  if Pos('/masterunlock',GetCmdTail) <> 0 then
+  ExtractTemporaryFileEx('Setup.ini',ExpandConstant('{src}'));
+  #endif
+  #ifexist "Temp\Resources\Dialog.jpg"
+  ExtractTemporaryFile('Dialog.jpg');
+  #endif
+  #ifexist "Temp\Resources\DialogTextBackground.png"
+  ExtractTemporaryFile('DialogTextBackground.png');
+  #endif
+  #ifexist "Temp\Resources\EditBackground.png"
+  ExtractTemporaryFile('EditBackground.png');
+  #endif
+  #ifexist "Temp\Resources\Logo.png"
+  ExtractTemporaryFile('Logo.png');
+  #endif
+  #ifexist "Temp\Resources\ProgressBackground.png"
+  ExtractTemporaryFile('ProgressBackground.png');
+  #endif
+  #ifexist "Temp\Resources\ProgressImage.png"
+  ExtractTemporaryFile('ProgressImage.png');
+  #endif
+  #ifexist "Temp\Resources\TextBackground.png"
+  ExtractTemporaryFile('TextBackground.png');
+  #endif
+  #ifexist "Temp\Resources\SmallTextBackground.png"
+  ExtractTemporaryFile('SmallTextBackground.png');
+  #endif
+  #ifexist "Temp\Resources\Preview1.jpg"
+  ExtractTemporaryFile('Preview1.jpg');
+  #endif
+  #ifexist "Temp\Resources\Preview2.jpg"
+  ExtractTemporaryFile('Preview2.jpg');
+  #endif
+  #ifexist "Temp\Resources\Preview3.jpg"
+  ExtractTemporaryFile('Preview3.jpg');
+  #endif
+  #ifexist "Temp\Resources\Button.png"
+  ExtractTemporaryFile('Button.png');
+  #endif
+  #ifexist "Temp\Resources\ButtonSelected.png"
+  ExtractTemporaryFile('ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ButtonClicked.png"
+  ExtractTemporaryFile('ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ButtonDisabled.png"
+  ExtractTemporaryFile('ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\BackButton.png"
+  ExtractTemporaryFile('BackButton.png');
+  #endif
+  #ifexist "Temp\Resources\BackButtonSelected.png"
+  ExtractTemporaryFile('BackButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\BackButtonClicked.png"
+  ExtractTemporaryFile('BackButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\BackButtonDisabled.png"
+  ExtractTemporaryFile('BackButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\NextButton.png"
+  ExtractTemporaryFile('NextButton.png');
+  #endif
+  #ifexist "Temp\Resources\NextButtonSelected.png"
+  ExtractTemporaryFile('NextButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\NextButtonClicked.png"
+  ExtractTemporaryFile('NextButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\NextButtonDisabled.png"
+  ExtractTemporaryFile('NextButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\CancelButton.png"
+  ExtractTemporaryFile('CancelButton.png');
+  #endif
+  #ifexist "Temp\Resources\CancelButtonSelected.png"
+  ExtractTemporaryFile('CancelButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\CancelButtonClicked.png"
+  ExtractTemporaryFile('CancelButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\CancelButtonDisabled.png"
+  ExtractTemporaryFile('CancelButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\MusicButton.png"
+  ExtractTemporaryFile('MusicButton.png');
+  #endif
+  #ifexist "Temp\Resources\MusicButtonSelected.png"
+  ExtractTemporaryFile('MusicButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\MusicButtonClicked.png"
+  ExtractTemporaryFile('MusicButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\MusicButtonDisabled.png"
+  ExtractTemporaryFile('MusicButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\SmallButton.png"
+  ExtractTemporaryFile('SmallButton.png');
+  #endif
+  #ifexist "Temp\Resources\SmallButtonSelected.png"
+  ExtractTemporaryFile('SmallButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\SmallButtonClicked.png"
+  ExtractTemporaryFile('SmallButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\SmallButtonDisabled.png"
+  ExtractTemporaryFile('SmallButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\CloseButton.png"
+  ExtractTemporaryFile('CloseButton.png');
+  #endif
+  #ifexist "Temp\Resources\CloseButtonSelected.png"
+  ExtractTemporaryFile('CloseButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\CloseButtonClicked.png"
+  ExtractTemporaryFile('CloseButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\CloseButtonDisabled.png"
+  ExtractTemporaryFile('CloseButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\MinimizeButton.png"
+  ExtractTemporaryFile('MinimizeButton.png');
+  #endif
+  #ifexist "Temp\Resources\MinimizeButtonSelected.png"
+  ExtractTemporaryFile('MinimizeButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\MinimizeButtonClicked.png"
+  ExtractTemporaryFile('MinimizeButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\MinimizeButtonDisabled.png"
+  ExtractTemporaryFile('MinimizeButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\SmallMusicButton.png"
+  ExtractTemporaryFile('SmallMusicButton.png');
+  #endif
+  #ifexist "Temp\Resources\SmallMusicButtonClicked.png"
+  ExtractTemporaryFile('SmallMusicButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\SmallMusicButtonDisabled.png"
+  ExtractTemporaryFile('SmallMusicButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\SmallMusicButtonSelected.png"
+  ExtractTemporaryFile('SmallMusicButtonSelected.png');
+  #endif
+  ExtractTemporaryFile('CheckBox.png');
+  #ifexist "Temp\Resources\Cursor.cur"
+  ExtractTemporaryFile('Cursor.cur');
+  #endif
+  #ifexist "Temp\Resources\Cursor.ani"
+  ExtractTemporaryFile('Cursor.ani');
+  #endif
+  #ifexist "Temp\Resources\Music.mp3"
+  ExtractTemporaryFile('Music.mp3');
+  #endif
+  #ifexist "Temp\Resources\Video.wmv"
+  ExtractTemporaryFile('Video.wmv');
+  #endif
+  #ifexist "Temp\Resources\ButtonClicked.wav"
+  ExtractTemporaryFile('ButtonClicked.wav');
+  #endif
+  #ifexist "Temp\Resources\ButtonSelected.wav"
+  ExtractTemporaryFile('ButtonSelected.wav');
+  #endif
+  #ifexist "Temp\Resources\Font1.ttf"
+  #sub ExtractFile1
+  ExtractTemporaryFile('Font{#i}.ttf');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\FontFileName.ttf", "FileName", Str(i))) != 0; i++} ExtractFile1
+  #endif
+  #ifexist "Temp\Resources\1.jpg"
+  #sub ExtractFile2
+  ExtractTemporaryFile('{#i}.jpg');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\FileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile2
+  #endif
+  #ifexist "Temp\Resources\Splash1.png"
+  #sub ExtractFile3
+  ExtractTemporaryFile('Splash{#i}.png');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\SplashFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile3
+  #endif
+  #ifexist "Temp\Resources\Installer1.jpg"
+  #sub ExtractFile4
+  ExtractTemporaryFile('Installer{#i}.jpg');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile4
+  #endif
 
-#ifexist "Temp\Resources\ADialog.jpg"
-ExtractTemporaryFile('ADialog.jpg');
-#endif
-#ifexist "Temp\Resources\ADialogTextBackground.png"
-ExtractTemporaryFile('ADialogTextBackground.png');
-#endif
-#ifexist "Temp\Resources\ALogo.png"
-ExtractTemporaryFile('ALogo.png');
-#endif
-#ifexist "Temp\Resources\AButton.png"
-ExtractTemporaryFile('AButton.png');
-#endif
-#ifexist "Temp\Resources\AButtonSelected.png"
-ExtractTemporaryFile('AButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AButtonClicked.png"
-ExtractTemporaryFile('AButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AButtonDisabled.png"
-ExtractTemporaryFile('AButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AInstallButton.png"
-ExtractTemporaryFile('AInstallButton.png');
-#endif
-#ifexist "Temp\Resources\AInstallButtonSelected.png"
-ExtractTemporaryFile('AInstallButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AInstallButtonClicked.png"
-ExtractTemporaryFile('AInstallButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AInstallButtonDisabled.png"
-ExtractTemporaryFile('AInstallButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AExitButton.png"
-ExtractTemporaryFile('AExitButton.png');
-#endif
-#ifexist "Temp\Resources\AExitButtonSelected.png"
-ExtractTemporaryFile('AExitButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AExitButtonClicked.png"
-ExtractTemporaryFile('AExitButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AExitButtonDisabled.png"
-ExtractTemporaryFile('AExitButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ACloseButton.png"
-ExtractTemporaryFile('ACloseButton.png');
-#endif
-#ifexist "Temp\Resources\ACloseButtonSelected.png"
-ExtractTemporaryFile('ACloseButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ACloseButtonClicked.png"
-ExtractTemporaryFile('ACloseButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ACloseButtonDisabled.png"
-ExtractTemporaryFile('ACloseButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AMinimizeButton.png"
-ExtractTemporaryFile('AMinimizeButton.png');
-#endif
-#ifexist "Temp\Resources\AMinimizeButtonSelected.png"
-ExtractTemporaryFile('AMinimizeButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AMinimizeButtonClicked.png"
-ExtractTemporaryFile('AMinimizeButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AMinimizeButtonDisabled.png"
-ExtractTemporaryFile('AMinimizeButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AMusicButton.png"
-ExtractTemporaryFile('AMusicButton.png');
-#endif
-#ifexist "Temp\Resources\AMusicButtonSelected.png"
-ExtractTemporaryFile('AMusicButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AMusicButtonClicked.png"
-ExtractTemporaryFile('AMusicButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AMusicButtonDisabled.png"
-ExtractTemporaryFile('AMusicButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AReadmeButton.png"
-ExtractTemporaryFile('AReadmeButton.png');
-#endif
-#ifexist "Temp\Resources\AReadmeButtonSelected.png"
-ExtractTemporaryFile('AReadmeButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AReadmeButtonClicked.png"
-ExtractTemporaryFile('AReadmeButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AReadmeButtonDisabled.png"
-ExtractTemporaryFile('AReadmeButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AManualButton.png"
-ExtractTemporaryFile('AManualButton.png');
-#endif
-#ifexist "Temp\Resources\AManualButtonSelected.png"
-ExtractTemporaryFile('AManualButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AManualButtonClicked.png"
-ExtractTemporaryFile('AManualButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AManualButtonDisabled.png"
-ExtractTemporaryFile('AManualButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AOpenDiskButton.png"
-ExtractTemporaryFile('AOpenDiskButton.png');
-#endif
-#ifexist "Temp\Resources\AOpenDiskButtonSelected.png"
-ExtractTemporaryFile('AOpenDiskButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AOpenDiskButtonClicked.png"
-ExtractTemporaryFile('AOpenDiskButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AOpenDiskButtonDisabled.png"
-ExtractTemporaryFile('AOpenDiskButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AWebButton.png"
-ExtractTemporaryFile('AWebButton.png');
-#endif
-#ifexist "Temp\Resources\AWebButtonSelected.png"
-ExtractTemporaryFile('AWebButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\AWebButtonClicked.png"
-ExtractTemporaryFile('AWebButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\AWebButtonDisabled.png"
-ExtractTemporaryFile('AWebButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ASmallMusicButton.png"
-ExtractTemporaryFile('ASmallMusicButton.png');
-#endif
-#ifexist "Temp\Resources\ASmallMusicButtonSelected.png"
-ExtractTemporaryFile('ASmallMusicButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ASmallMusicButtonClicked.png"
-ExtractTemporaryFile('ASmallMusicButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ASmallMusicButtonDisabled.png"
-ExtractTemporaryFile('ASmallMusicButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch1Button.png"
-ExtractTemporaryFile('ALaunch1Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch1ButtonSelected.png"
-ExtractTemporaryFile('ALaunch1ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch1ButtonClicked.png"
-ExtractTemporaryFile('ALaunch1ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch1ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch1ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch2Button.png"
-ExtractTemporaryFile('ALaunch2Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch2ButtonSelected.png"
-ExtractTemporaryFile('ALaunch2ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch2ButtonClicked.png"
-ExtractTemporaryFile('ALaunch2ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch2ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch2ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch3Button.png"
-ExtractTemporaryFile('ALaunch3Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch3ButtonSelected.png"
-ExtractTemporaryFile('ALaunch3ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch3ButtonClicked.png"
-ExtractTemporaryFile('ALaunch3ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch3ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch3ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch4Button.png"
-ExtractTemporaryFile('ALaunch4Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch4ButtonSelected.png"
-ExtractTemporaryFile('ALaunch4ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch4ButtonClicked.png"
-ExtractTemporaryFile('ALaunch4ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch4ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch4ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch5Button.png"
-ExtractTemporaryFile('ALaunch5Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch5ButtonSelected.png"
-ExtractTemporaryFile('ALaunch5ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch5ButtonClicked.png"
-ExtractTemporaryFile('ALaunch5ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch5ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch5ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch6Button.png"
-ExtractTemporaryFile('ALaunch6Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch6ButtonSelected.png"
-ExtractTemporaryFile('ALaunch6ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch6ButtonClicked.png"
-ExtractTemporaryFile('ALaunch6ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch6ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch6ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch7Button.png"
-ExtractTemporaryFile('ALaunch7Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch7ButtonSelected.png"
-ExtractTemporaryFile('ALaunch7ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch7ButtonClicked.png"
-ExtractTemporaryFile('ALaunch7ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch7ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch7ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch8Button.png"
-ExtractTemporaryFile('ALaunch8Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch8ButtonSelected.png"
-ExtractTemporaryFile('ALaunch8ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch8ButtonClicked.png"
-ExtractTemporaryFile('ALaunch8ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch8ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch8ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch9Button.png"
-ExtractTemporaryFile('ALaunch9Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch9ButtonSelected.png"
-ExtractTemporaryFile('ALaunch9ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch9ButtonClicked.png"
-ExtractTemporaryFile('ALaunch9ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch9ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch9ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\ALaunch10Button.png"
-ExtractTemporaryFile('ALaunch10Button.png');
-#endif
-#ifexist "Temp\Resources\ALaunch10ButtonSelected.png"
-ExtractTemporaryFile('ALaunch10ButtonSelected.png');
-#endif
-#ifexist "Temp\Resources\ALaunch10ButtonClicked.png"
-ExtractTemporaryFile('ALaunch10ButtonClicked.png');
-#endif
-#ifexist "Temp\Resources\ALaunch10ButtonDisabled.png"
-ExtractTemporaryFile('ALaunch10ButtonDisabled.png');
-#endif
-#ifexist "Temp\Resources\AButtonClicked.wav"
-ExtractTemporaryFile('AButtonClicked.wav');
-#endif
-#ifexist "Temp\Resources\AButtonSelected.wav"
-ExtractTemporaryFile('AButtonSelected.wav');
-#endif
-#ifexist "Temp\Resources\ACursor.cur"
-ExtractTemporaryFile('ACursor.cur');
-#endif
-#ifexist "Temp\Resources\ACursor.ani"
-ExtractTemporaryFile('ACursor.ani');
-#endif
-#ifexist "Temp\Resources\ASplash1.png"
-#sub ExtractFile5
-ExtractTemporaryFile('ASplash{#i}.png');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\ASplashFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile5
-#endif
-#ifexist "Temp\Resources\AFont1.ttf"
-#sub ExtractFile6
-ExtractTemporaryFile('AFont{#i}.ttf');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\AFontFileName.ttf", "FileName", Str(i))) != 0; i++} ExtractFile6
-#endif
-#ifexist "Temp\Resources\Autorun1.jpg"
-#sub ExtractFile7
-ExtractTemporaryFile('Autorun{#i}.jpg');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\AutorunFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile7
-#endif
-#ifexist "Temp\Resources\Autorun1.png"
-#sub ExtractFile8
-ExtractTemporaryFile('Autorun{#i}.png');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\AutorunFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile8
-#endif
-#ifexist "Temp\Resources\Autorun1.bmp"
-#sub ExtractFile9
-ExtractTemporaryFile('Autorun{#i}.bmp');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\AutorunFileName.bmp", "FileName", Str(i))) != 0; i++} ExtractFile9
-#endif
-#ifexist "Temp\Resources\Installer1.jpg"
-#sub ExtractFile10
-ExtractTemporaryFile('Installer{#i}.jpg');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile10
-#endif
-#ifexist "Temp\Resources\Installer1.png"
-#sub ExtractFile11
-ExtractTemporaryFile('Installer{#i}.png');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile11
-#endif
-#ifexist "Temp\Resources\Installer1.bmp"
-#sub ExtractFile12
-ExtractTemporaryFile('Installer{#i}.bmp');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.bmp", "FileName", Str(i))) != 0; i++} ExtractFile12
-#endif
-#ifexist "Temp\Resources\SmallInstaller1.jpg"
-#sub ExtractFile13
-ExtractTemporaryFile('SmallInstaller{#i}.jpg');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\SmallInstallerFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile13
-#endif
-#ifexist "Temp\Resources\SmallInstaller1.png"
-#sub ExtractFile14
-ExtractTemporaryFile('SmallInstaller{#i}.png');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\SmallInstallerFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile14
-#endif
-#ifexist "Temp\Resources\SmallInstaller1.bmp"
-#sub ExtractFile15
-ExtractTemporaryFile('SmallInstaller{#i}.bmp');
-#endsub
-#for {i = 1; FileExists(StringChange("Temp\Resources\SmallInstallerFileName.bmp", "FileName", Str(i))) != 0; i++} ExtractFile15
-#endif
-MusicPlaying:=False;
-VideoPlaying:=False;
-RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\' + ApplicationPublisher('') + '\' + ApplicationName(''), 'InstallString', AppDir);
-RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\' + ApplicationPublisher('') + '\' + ApplicationName(''), 'UninstallString', UninstExe);
-if RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\' + ApplicationPublisher('') + '\' + ApplicationName('')) and FileExists(UninstExe) then begin
-Installed := True
-end else
-Installed := False;
-SetupRunning2 := True;
-Protection;
+  #ifexist "Temp\Resources\ADialog.jpg"
+  ExtractTemporaryFile('ADialog.jpg');
+  #endif
+  #ifexist "Temp\Resources\ADialogTextBackground.png"
+  ExtractTemporaryFile('ADialogTextBackground.png');
+  #endif
+  #ifexist "Temp\Resources\ALogo.png"
+  ExtractTemporaryFile('ALogo.png');
+  #endif
+  #ifexist "Temp\Resources\AButton.png"
+  ExtractTemporaryFile('AButton.png');
+  #endif
+  #ifexist "Temp\Resources\AButtonSelected.png"
+  ExtractTemporaryFile('AButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AButtonClicked.png"
+  ExtractTemporaryFile('AButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AButtonDisabled.png"
+  ExtractTemporaryFile('AButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AInstallButton.png"
+  ExtractTemporaryFile('AInstallButton.png');
+  #endif
+  #ifexist "Temp\Resources\AInstallButtonSelected.png"
+  ExtractTemporaryFile('AInstallButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AInstallButtonClicked.png"
+  ExtractTemporaryFile('AInstallButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AInstallButtonDisabled.png"
+  ExtractTemporaryFile('AInstallButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AExitButton.png"
+  ExtractTemporaryFile('AExitButton.png');
+  #endif
+  #ifexist "Temp\Resources\AExitButtonSelected.png"
+  ExtractTemporaryFile('AExitButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AExitButtonClicked.png"
+  ExtractTemporaryFile('AExitButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AExitButtonDisabled.png"
+  ExtractTemporaryFile('AExitButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ACloseButton.png"
+  ExtractTemporaryFile('ACloseButton.png');
+  #endif
+  #ifexist "Temp\Resources\ACloseButtonSelected.png"
+  ExtractTemporaryFile('ACloseButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ACloseButtonClicked.png"
+  ExtractTemporaryFile('ACloseButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ACloseButtonDisabled.png"
+  ExtractTemporaryFile('ACloseButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AMinimizeButton.png"
+  ExtractTemporaryFile('AMinimizeButton.png');
+  #endif
+  #ifexist "Temp\Resources\AMinimizeButtonSelected.png"
+  ExtractTemporaryFile('AMinimizeButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AMinimizeButtonClicked.png"
+  ExtractTemporaryFile('AMinimizeButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AMinimizeButtonDisabled.png"
+  ExtractTemporaryFile('AMinimizeButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AMusicButton.png"
+  ExtractTemporaryFile('AMusicButton.png');
+  #endif
+  #ifexist "Temp\Resources\AMusicButtonSelected.png"
+  ExtractTemporaryFile('AMusicButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AMusicButtonClicked.png"
+  ExtractTemporaryFile('AMusicButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AMusicButtonDisabled.png"
+  ExtractTemporaryFile('AMusicButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AReadmeButton.png"
+  ExtractTemporaryFile('AReadmeButton.png');
+  #endif
+  #ifexist "Temp\Resources\AReadmeButtonSelected.png"
+  ExtractTemporaryFile('AReadmeButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AReadmeButtonClicked.png"
+  ExtractTemporaryFile('AReadmeButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AReadmeButtonDisabled.png"
+  ExtractTemporaryFile('AReadmeButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AManualButton.png"
+  ExtractTemporaryFile('AManualButton.png');
+  #endif
+  #ifexist "Temp\Resources\AManualButtonSelected.png"
+  ExtractTemporaryFile('AManualButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AManualButtonClicked.png"
+  ExtractTemporaryFile('AManualButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AManualButtonDisabled.png"
+  ExtractTemporaryFile('AManualButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AOpenDiskButton.png"
+  ExtractTemporaryFile('AOpenDiskButton.png');
+  #endif
+  #ifexist "Temp\Resources\AOpenDiskButtonSelected.png"
+  ExtractTemporaryFile('AOpenDiskButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AOpenDiskButtonClicked.png"
+  ExtractTemporaryFile('AOpenDiskButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AOpenDiskButtonDisabled.png"
+  ExtractTemporaryFile('AOpenDiskButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AWebButton.png"
+  ExtractTemporaryFile('AWebButton.png');
+  #endif
+  #ifexist "Temp\Resources\AWebButtonSelected.png"
+  ExtractTemporaryFile('AWebButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\AWebButtonClicked.png"
+  ExtractTemporaryFile('AWebButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\AWebButtonDisabled.png"
+  ExtractTemporaryFile('AWebButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ASmallMusicButton.png"
+  ExtractTemporaryFile('ASmallMusicButton.png');
+  #endif
+  #ifexist "Temp\Resources\ASmallMusicButtonSelected.png"
+  ExtractTemporaryFile('ASmallMusicButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ASmallMusicButtonClicked.png"
+  ExtractTemporaryFile('ASmallMusicButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ASmallMusicButtonDisabled.png"
+  ExtractTemporaryFile('ASmallMusicButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch1Button.png"
+  ExtractTemporaryFile('ALaunch1Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch1ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch1ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch1ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch1ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch1ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch1ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch2Button.png"
+  ExtractTemporaryFile('ALaunch2Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch2ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch2ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch2ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch2ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch2ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch2ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch3Button.png"
+  ExtractTemporaryFile('ALaunch3Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch3ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch3ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch3ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch3ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch3ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch3ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch4Button.png"
+  ExtractTemporaryFile('ALaunch4Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch4ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch4ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch4ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch4ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch4ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch4ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch5Button.png"
+  ExtractTemporaryFile('ALaunch5Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch5ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch5ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch5ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch5ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch5ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch5ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch6Button.png"
+  ExtractTemporaryFile('ALaunch6Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch6ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch6ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch6ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch6ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch6ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch6ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch7Button.png"
+  ExtractTemporaryFile('ALaunch7Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch7ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch7ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch7ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch7ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch7ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch7ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch8Button.png"
+  ExtractTemporaryFile('ALaunch8Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch8ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch8ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch8ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch8ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch8ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch8ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch9Button.png"
+  ExtractTemporaryFile('ALaunch9Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch9ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch9ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch9ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch9ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch9ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch9ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch10Button.png"
+  ExtractTemporaryFile('ALaunch10Button.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch10ButtonSelected.png"
+  ExtractTemporaryFile('ALaunch10ButtonSelected.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch10ButtonClicked.png"
+  ExtractTemporaryFile('ALaunch10ButtonClicked.png');
+  #endif
+  #ifexist "Temp\Resources\ALaunch10ButtonDisabled.png"
+  ExtractTemporaryFile('ALaunch10ButtonDisabled.png');
+  #endif
+  #ifexist "Temp\Resources\AButtonClicked.wav"
+  ExtractTemporaryFile('AButtonClicked.wav');
+  #endif
+  #ifexist "Temp\Resources\AButtonSelected.wav"
+  ExtractTemporaryFile('AButtonSelected.wav');
+  #endif
+  #ifexist "Temp\Resources\ACursor.cur"
+  ExtractTemporaryFile('ACursor.cur');
+  #endif
+  #ifexist "Temp\Resources\ACursor.ani"
+  ExtractTemporaryFile('ACursor.ani');
+  #endif
+  #ifexist "Temp\Resources\ASplash1.png"
+  #sub ExtractFile5
+  ExtractTemporaryFile('ASplash{#i}.png');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\ASplashFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile5
+  #endif
+  #ifexist "Temp\Resources\AFont1.ttf"
+  #sub ExtractFile6
+  ExtractTemporaryFile('AFont{#i}.ttf');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\AFontFileName.ttf", "FileName", Str(i))) != 0; i++} ExtractFile6
+  #endif
+  #ifexist "Temp\Resources\Autorun1.jpg"
+  #sub ExtractFile7
+  ExtractTemporaryFile('Autorun{#i}.jpg');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\AutorunFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile7
+  #endif
+  #ifexist "Temp\Resources\Autorun1.png"
+  #sub ExtractFile8
+  ExtractTemporaryFile('Autorun{#i}.png');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\AutorunFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile8
+  #endif
+  #ifexist "Temp\Resources\Autorun1.bmp"
+  #sub ExtractFile9
+  ExtractTemporaryFile('Autorun{#i}.bmp');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\AutorunFileName.bmp", "FileName", Str(i))) != 0; i++} ExtractFile9
+  #endif
+  #ifexist "Temp\Resources\Installer1.jpg"
+  #sub ExtractFile10
+  ExtractTemporaryFile('Installer{#i}.jpg');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile10
+  #endif
+  #ifexist "Temp\Resources\Installer1.png"
+  #sub ExtractFile11
+  ExtractTemporaryFile('Installer{#i}.png');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile11
+  #endif
+  #ifexist "Temp\Resources\Installer1.bmp"
+  #sub ExtractFile12
+  ExtractTemporaryFile('Installer{#i}.bmp');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\InstallerFileName.bmp", "FileName", Str(i))) != 0; i++} ExtractFile12
+  #endif
+  #ifexist "Temp\Resources\SmallInstaller1.jpg"
+  #sub ExtractFile13
+  ExtractTemporaryFile('SmallInstaller{#i}.jpg');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\SmallInstallerFileName.jpg", "FileName", Str(i))) != 0; i++} ExtractFile13
+  #endif
+  #ifexist "Temp\Resources\SmallInstaller1.png"
+  #sub ExtractFile14
+  ExtractTemporaryFile('SmallInstaller{#i}.png');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\SmallInstallerFileName.png", "FileName", Str(i))) != 0; i++} ExtractFile14
+  #endif
+  #ifexist "Temp\Resources\SmallInstaller1.bmp"
+  #sub ExtractFile15
+  ExtractTemporaryFile('SmallInstaller{#i}.bmp');
+  #endsub
+  #for {i = 1; FileExists(StringChange("Temp\Resources\SmallInstallerFileName.bmp", "FileName", Str(i))) != 0; i++} ExtractFile15
+  #endif
+  MusicPlaying:=False;
+  VideoPlaying:=False;
+  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\' + ApplicationPublisher('') + '\' + ApplicationName(''), 'InstallString', AppDir);
+  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\' + ApplicationPublisher('') + '\' + ApplicationName(''), 'UninstallString', UninstExe);
+  if RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\' + ApplicationPublisher('') + '\' + ApplicationName('')) and FileExists(UninstExe) then begin
+    Installed := True
+  end else
+    Installed := False;
+  SetupRunning2 := True;
+  Protection;
+  Result := True;
+  SetupRunning :=True;
+  if Result = True then
+  begin
+    ExtractTemporaryFile('botva2.dll');
+    ExtractTemporaryFile('isskin.dll');
+    ExtractTemporaryFile('CallbackCtrl.dll');
+    ExtractTemporaryFile('trayiconctrl.dll');
+    ExtractTemporaryFile('SysInfo.dll');
+    ExtractTemporaryFile('video.exe');
+    if VideoEnabled then
+    begin
+      Exec(ExpandConstant('{tmp}\video.exe'),ExpandConstant('"{tmp}\Video.wmv"'),'',SW_HIDE,ewWaitUntilTerminated,ResultCode);
+      VideoWidth:=GetIniInt('AVIVideo','Width',0,0,0,ExpandConstant('{tmp}\video.ini'));
+      VideoHeight:=GetIniInt('AVIVideo','Height',0,0,0,ExpandConstant('{tmp}\video.ini'));
+      if VideoWidth > VideoHeight then
+      begin
+        VideoDiff:=GetSystemMetrics(0) / VideoWidth;
+        VideoWidth:=GetSystemMetrics(0);
+        VideoHeight:=Round(VideoHeight * VideoDiff);
+      end;
+      if VideoWidth < VideoHeight then
+      begin
+        VideoDiff:=GetSystemMetrics(1) / VideoHeight;
+        VideoHeight:=GetSystemMetrics(1);
+        VideoWidth:=Round(VideoWidth * VideoDiff);
+      end;
+      if VideoWidth = VideoHeight then
+      begin
+        if GetSystemMetrics(0) > GetSystemMetrics(1) then
+        begin
+          VideoWidth:=GetSystemMetrics(1);
+          VideoHeight:=GetSystemMetrics(1);
+        end;
+        if GetSystemMetrics(0) < GetSystemMetrics(1) then
+        begin
+          VideoWidth:=GetSystemMetrics(0);
+          VideoHeight:=GetSystemMetrics(0);
+        end;
+      end;
+      VideoLeft:=Round((GetSystemMetrics(0) / 2) - (VideoWidth / 2));
+      VideoTop:=Round((GetSystemMetrics(1) / 2) - (VideoHeight / 2));
+    end;
+    ExtractTemporaryFile('ResultBG1.png');
+    ExtractTemporaryFile('ResultBG2.png');
+    ExtractTemporaryFile('ResultBG3.png');
+    ExtractTemporaryFile('ResultBG4.png');
+    ExtractTemporaryFile('ResultBG5.png');
+    ExpiryCheater:=True
+    #ifdef ExpiryDate
+    if ((RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''))) or (not TimeLimit)) then
+    begin
+      RegWriteStringValue(HKLM, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''), 'Expiry', 'Expired');
+      Taskbar1_4;
+      MsgBox(FmtMessage(SetupMessage(msgErrorInternal2),[ApplicationName('')]),mbError,MB_OK);
+      Result := False;
+    end;
+    #else
+    if (RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''))) then
+      RegDeleteKeyIncludingSubkeys(HKLM, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''));
+    #endif
 
-if FileExists(ExpandConstant('{src}\Setup.db')) then
-Result := True
-else
-begin
-MsgBox('Missing file "Setup.db"', mbCriticalError, MB_OK);
-end;
+    if WizardSilent and (Result = False) then
+    begin
+    MsgBox(SetupMessage(msgSourceIsCorrupted),mbError,MB_OK);
+    Result:=False;
+    end;
 
-SetupRunning :=True;
-if Result = True then
-begin
-ExtractTemporaryFile('botva2.dll');
-ExtractTemporaryFile('isskin.dll');
-ExtractTemporaryFile('CallbackCtrl.dll');
-ExtractTemporaryFile('trayiconctrl.dll');
-ExtractTemporaryFile('SysInfo.dll');
-ExtractTemporaryFile('video.exe');
-if VideoEnabled then
-begin
-Exec(ExpandConstant('{tmp}\video.exe'),ExpandConstant('"{tmp}\Video.wmv"'),'',SW_HIDE,ewWaitUntilTerminated,ResultCode);
-VideoWidth:=GetIniInt('AVIVideo','Width',0,0,0,ExpandConstant('{tmp}\video.ini'));
-VideoHeight:=GetIniInt('AVIVideo','Height',0,0,0,ExpandConstant('{tmp}\video.ini'));
-if VideoWidth > VideoHeight then
-begin
-VideoDiff:=GetSystemMetrics(0) / VideoWidth;
-VideoWidth:=GetSystemMetrics(0);
-VideoHeight:=Round(VideoHeight * VideoDiff);
-end;
-if VideoWidth < VideoHeight then
-begin
-VideoDiff:=GetSystemMetrics(1) / VideoHeight;
-VideoHeight:=GetSystemMetrics(1);
-VideoWidth:=Round(VideoWidth * VideoDiff);
-end;
-if VideoWidth = VideoHeight then
-begin
-if GetSystemMetrics(0) > GetSystemMetrics(1) then
-begin
-VideoWidth:=GetSystemMetrics(1);
-VideoHeight:=GetSystemMetrics(1);
-end;
-if GetSystemMetrics(0) < GetSystemMetrics(1) then
-begin
-VideoWidth:=GetSystemMetrics(0);
-VideoHeight:=GetSystemMetrics(0);
-end;
-end;
-VideoLeft:=Round((GetSystemMetrics(0) / 2) - (VideoWidth / 2));
-VideoTop:=Round((GetSystemMetrics(1) / 2) - (VideoHeight / 2));
-end;
-ExtractTemporaryFile('ResultBG1.png');
-ExtractTemporaryFile('ResultBG2.png');
-ExtractTemporaryFile('ResultBG3.png');
-ExtractTemporaryFile('ResultBG4.png');
-ExtractTemporaryFile('ResultBG5.png');
-ExpiryCheater:=True
-#ifdef ExpiryDate
-if ((RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''))) or (not TimeLimit)) then
-begin
-RegWriteStringValue(HKLM, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''), 'Expiry', 'Expired');
-Taskbar1_4;
-MsgBox(FmtMessage(SetupMessage(msgErrorInternal2),[ApplicationName('')]),mbError,MB_OK);
-Result := False;
-end;
-#else
-if (RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''))) then
-RegDeleteKeyIncludingSubkeys(HKLM, 'SOFTWARE\Microsoft\Installed Apps\'+ ApplicationPublisher('') + '\' + ApplicationName (''));
-#endif
+    if MusicEnabled then begin
+      MusicPlaying:=True;
+      VideoPlaying:=False;
+      mp3Name := ExpandConstant('{tmp}\Music.mp3');
+      BASS_Init(-1, 44100, 0, 0, 0);
+      mp3Handle := BASS_StreamCreateFile(FALSE, PAnsiChar(mp3Name), 0, 0, 0, 0, BASS_SAMPLE_LOOP);
+      BASS_Start();
+      BASS_ChannelPlay(mp3Handle, False);
+      DisplayMode:=MusicMode;
+    end;
 
-if WizardSilent and (Result = False) then
-begin
-MsgBox(SetupMessage(msgSourceIsCorrupted),mbError,MB_OK);
-Result:=False;
-end;
+    if SmallWizardImage_JPG then
+    begin
+      counter:=0;
+      repeat
+      counter:=counter +1
+      until FileExists(ExpandConstant('{tmp}\SmallInstaller'+ IntToStr(counter)+'.jpg')) = False;
+      WizardSmallImageQuantity := counter - 1;
+    end;
 
-if MusicEnabled then begin
-MusicPlaying:=True;
-VideoPlaying:=False;
-mp3Name := ExpandConstant('{tmp}\Music.mp3');
-BASS_Init(-1, 44100, 0, 0, 0);
-mp3Handle := BASS_StreamCreateFile(FALSE, PAnsiChar(mp3Name), 0, 0, 0, 0, BASS_SAMPLE_LOOP);
-BASS_Start();
-BASS_ChannelPlay(mp3Handle, False);
-DisplayMode:=MusicMode;
-end;
+    if SmallWizardImage_PNG then
+    begin
+      counter:=0;
+      repeat
+      counter:=counter +1
+      until FileExists(ExpandConstant('{tmp}\SmallInstaller'+ IntToStr(counter)+'.png')) = False;
+      WizardSmallImageQuantity := counter - 1;
+    end;
 
-if SmallWizardImage_JPG then
-begin
-counter:=0;
-repeat
-counter:=counter +1
-until FileExists(ExpandConstant('{tmp}\SmallInstaller'+ IntToStr(counter)+'.jpg')) = False;
-WizardSmallImageQuantity := counter - 1;
-end;
-
-if SmallWizardImage_PNG then
-begin
-counter:=0;
-repeat
-counter:=counter +1
-until FileExists(ExpandConstant('{tmp}\SmallInstaller'+ IntToStr(counter)+'.png')) = False;
-WizardSmallImageQuantity := counter - 1;
-end;
-
-if SlidesEnabled then
-begin
-counter:=0
-repeat
-counter:=counter +1
-until FileExists(ExpandConstant('{tmp}\'+ IntToStr(counter)+'.jpg')) = False;
-SlideImageQuantity := counter -1;
-end;
-end;
-LoadTotalCompSize;
-if Result = True then
-begin
-#if ReadIni(SourcePath	+ "\Temp\Setup.ini", "Setup", "Autorun", "1") == "1"
-Result:=InitializeAutorunForm = mrOk;
-#endif
-end;
-SetupRunning2:=Result;
+    if SlidesEnabled then
+    begin
+      counter:=0
+      repeat
+        counter:=counter +1
+      until FileExists(ExpandConstant('{tmp}\'+ IntToStr(counter)+'.jpg')) = False;
+      SlideImageQuantity := counter -1;
+      end;
+  end;
+  LoadTotalCompSize;
+  if Result = True then
+  begin
+    #if ReadIni(SourcePath	+ "\Temp\Setup.ini", "Setup", "Autorun", "1") == "1"
+    Result:=InitializeAutorunForm = mrOk;
+    #endif
+  end;
+  SetupRunning2:=Result;
 end;
 
 procedure UninstallFiles;
@@ -13608,19 +13612,14 @@ Result:=CreditsForm.ShowModal;
 end;
 
 procedure ISDoneFiles;
-var
-  SetupDB: string;
-  TempISDone: string;
-  SevenZipCommand: string;
-  ErrorCode: integer;
 begin
-  ExtractTemporaryFile('uha.exe');
-  ExtractTemporaryFile('english.ini');
-  SetupDB := ExpandConstant('{src}\Setup.db');
-  TempISDone := ExpandConstant('{tmp}');
-  SevenZipCommand := 'x -t"' + TempISDone + '" "' + SetupDB + '"';
-
-  Exec(ExpandConstant('{tmp}\uha.exe'), SevenZipCommand, TempISDone, SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+#sub ISDoneFile2
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "..\..\Resources\ISD_List.ini", "ISDone_Files", Str(i), "")
+  ExtractTemporaryFile('{#ISDInf1}');
+#endsub
+#if ReadIni(AddBackSlash(SourcePath) + "..\..\Resources\ISD_List.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "..\..\Resources\ISD_List.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile2
+#endif
 end;
 
 procedure MC_V2;
