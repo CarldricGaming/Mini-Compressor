@@ -2968,6 +2968,9 @@ begin
 	BASS_Free();
   Hide;
 
+  if DirectoryExists(GetAnySource('..\Tools\InstallerCreator\temp')) then
+    TDirectory.Delete(GetAnySource('..\Tools\InstallerCreator\temp'), True);
+
   sndPlaySound(GetAnySource('..\Resources\MC_Close.wav'),SND_ASYNC);
   with TForm4.Create(nil) do
   begin
