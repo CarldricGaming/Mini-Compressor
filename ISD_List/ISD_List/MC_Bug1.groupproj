@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{4525BD05-67A3-4AF6-8D95-E3D89230F3FA}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ISD_List.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="E:\Doc\MC_2\MiniCompressor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ISD_List">
+        <MSBuild Projects="ISD_List.dproj"/>
+    </Target>
+    <Target Name="ISD_List:Clean">
+        <MSBuild Projects="ISD_List.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ISD_List:Make">
+        <MSBuild Projects="ISD_List.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MiniCompressor">
+        <MSBuild Projects="E:\Doc\MC_2\MiniCompressor.dproj"/>
+    </Target>
+    <Target Name="MiniCompressor:Clean">
+        <MSBuild Projects="E:\Doc\MC_2\MiniCompressor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MiniCompressor:Make">
+        <MSBuild Projects="E:\Doc\MC_2\MiniCompressor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ISD_List;MiniCompressor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ISD_List:Clean;MiniCompressor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ISD_List:Make;MiniCompressor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

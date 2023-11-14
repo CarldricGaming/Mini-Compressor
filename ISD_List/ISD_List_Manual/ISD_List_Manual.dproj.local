@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2022/07/20 20:17:24.000.179,=C:\Users\Alvin\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/06/05 20:31:16.000.202,=C:\Users\carld\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/06/05 20:38:45.000.720,C:\Users\carld\Documents\Embarcadero\Studio\Projects\Unit1.fmx=C:\Users\carld\Desktop\OKOKOK\Unit1.fmx</Transaction>
+    <Transaction>2023/06/05 20:38:45.000.720,C:\Users\carld\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\carld\Desktop\OKOKOK\Unit1.pas</Transaction>
+    <Transaction>2023/06/05 20:38:57.000.575,C:\Users\carld\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\carld\Desktop\OKOKOK\ISD_AutoList.dproj</Transaction>
+    <Transaction>2023/06/05 20:55:15.000.508,C:\Users\carld\Desktop\OKOKOK\ISD_AutoList.dproj=C:\Users\carld\Desktop\OKOKOK\ISD_List.dproj</Transaction>
+    <Transaction>2023/06/05 20:58:16.000.057,C:\Users\carld\Desktop\OKOKOK\ISD_List_Manual\ISD_List.dproj=C:\Users\carld\Desktop\OKOKOK\ISD_List_Manual\ISD_List_Manual.dproj</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile Android="emulator-5562" Android64="emulator-5562"/>
+	</ActiveMobileDevice>
+</BorlandProject>
