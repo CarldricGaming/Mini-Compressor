@@ -1,4 +1,6 @@
-﻿#define GameName            "Mini Compressor Self-Extracting"
+﻿#define i 1
+
+#define GameName            "Mini Compressor Self-Extracting"
 #define Publisher           "Carldric Clement"
 #define Developer           "Carldric Clement"
 #define GameVersion         "1.0"
@@ -53,9 +55,24 @@ DisableReadyPage=yes
 #endif
 Source: "Resources\ISDone\english.ini"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\ISDone\ISDone.dll"; DestDir: "{tmp}"; Flags: "dontcopy";
-Source: "Resources\uha.exe"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\XHashNext.dll"; DestDir: "{tmp}"; Flags: "dontcopy";
 Source: "Resources\records.ini"; DestDir: "{tmp}"; Flags: "dontcopy";
+
+#sub ISDoneFile1
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List.ini", "ISDone_Files", Str(i), "")
+  Source: "Resources\ISDone_resource\{#ISDInf1}"; DestDir: "{tmp}"; Flags: "dontcopy";
+#endsub
+#if ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile1
+#endif
+
+#sub ISDoneFile3
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List_Manual_SFX.ini", "ISDone_Files", Str(i), "")
+  Source: "Resources\ISDone_resource\{#ISDInf1}"; DestDir: "{tmp}"; Flags: "dontcopy";
+#endsub
+#if ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List_Manual_SFX.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List_Manual_SFX.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile3
+#endif
 
 [Languages]
 Name: "eng"; MessagesFile: "compiler:Languages\english.isl";
@@ -119,18 +136,13 @@ function ResumeProc:boolean; external 'ResumeProc@files:ISDone.dll stdcall';
 function InitializeSetup:boolean;
 begin
   ExtractTemporaryFile('english.ini');
-  if FileExists(ExpandConstant('{src}\Setup.db')) then
-    Result := True
-  else
-  begin
-    MsgBox('Missing file "Setup.db"', mbCriticalError, MB_OK);
-  end;
   #ifdef UnArc_Protect
     ExtractTemporaryFile('unarc.dll');
   #endif
   #ifdef UnArc_None
     ExtractTemporaryFile('unarc.dll');
   #endif
+  Result := True;
 end;
 //=-==-==-==-==-==-=-
 function Floater(Float: Extended; Value: Integer): String;
@@ -413,18 +425,22 @@ begin
 end;
 
 procedure ISDoneFiles;
-var
-  SetupDB: string;
-  TempISDone: string;
-  SevenZipCommand: string;
-  ErrorCode: integer;
 begin
-  ExtractTemporaryFile('uha.exe');
-  SetupDB := ExpandConstant('{src}\Setup.db');
-  TempISDone := ExpandConstant('{tmp}');
-  SevenZipCommand := 'x -t"' + TempISDone + '" "' + SetupDB + '"';
+#sub ISDoneFile2
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List.ini", "ISDone_Files", Str(i), "")
+  ExtractTemporaryFile('{#ISDInf1}');
+#endsub
+#if ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile2
+#endif
 
-  Exec(ExpandConstant('{tmp}\uha.exe'), SevenZipCommand, TempISDone, SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+#sub ISDoneFile4
+#define ISDInf1 ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List_Manual_SFX.ini", "ISDone_Files", Str(i), "")
+  ExtractTemporaryFile('{#ISDInf1}');
+#endsub
+#if ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List_Manual_SFX.ini", "ISDone_Files", "1", "") != ""
+#for {i = 1; ReadIni(AddBackSlash(SourcePath) + "Resources\ISD_List_Manual_SFX.ini", "ISDone_Files", StringChange("Int","Int", Str(i)), "") !=""; i++} ISDoneFile4
+#endif
 end;
 //=-==-==-==-==-==-=-
 procedure CurStepChanged(CurStep: TSetupStep);

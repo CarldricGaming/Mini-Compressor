@@ -69,8 +69,6 @@ begin
 
   if FileExists(ExpandConstant('{src}\..\Compression\MC.sfx')) then
     DeleteFile(ExpandConstant('{src}\..\Compression\MC.sfx'));
-  if FileExists(ExpandConstant('{src}\..\Compression\Setup.db')) then
-    DeleteFile(ExpandConstant('{src}\..\Compression\Setup.db'));
 
   Application.ProcessMessages;
   Sleep(150);
@@ -81,9 +79,6 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  if FileExists(ExpandConstant('{src}\Setup.db')) then
-    FileCopy(ExpandConstant('{src}\Setup.db'),ExpandConstant('{src}\..\Compression\Setup.db'),false);
-
   Application.ProcessMessages;
   Sleep(2000);
 
@@ -91,13 +86,12 @@ begin
   DeleteFile(ExpandConstant('{src}\..\MC_SFX.ico'));
   DeleteFile(ExpandConstant('{src}\..\MC.exe'));
   DeleteFile(ExpandConstant('{src}\..\MC.sfx'));
-  DeleteFile(ExpandConstant('{src}\Setup.db'));
 
-  if FileExists(ExpandConstant('{src}\ISD_List_Manual_SFX.txt')) then
-    DeleteFile(ExpandConstant('{src}\ISD_List_Manual_SFX.txt'));
+  if FileExists(ExpandConstant('{src}\ISD_List_Manual_SFX.ini')) then
+    DeleteFile(ExpandConstant('{src}\ISD_List_Manual_SFX.ini'));
 
-  if FileExists(ExpandConstant('{src}\ISD_List.txt')) then
-    DeleteFile(ExpandConstant('{src}\ISD_List.txt'));
+  if FileExists(ExpandConstant('{src}\ISD_List.ini')) then
+    DeleteFile(ExpandConstant('{src}\ISD_List.ini'));
 
   Result:=False;
 end;
