@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/11/23 12:53:57.000.441,=C:\Users\carld\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/11/23 12:54:43.000.160,C:\Users\carld\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\carld\Desktop\MC_CMD\Unit1.dfm</Transaction>
+    <Transaction>2023/11/23 12:54:43.000.160,C:\Users\carld\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\carld\Desktop\MC_CMD\Unit1.pas</Transaction>
+    <Transaction>2023/11/23 12:54:52.000.571,C:\Users\carld\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\carld\Desktop\MC_CMD\Project1.dproj</Transaction>
+    <Transaction>2023/11/23 12:55:39.000.846,C:\Users\carld\Desktop\MC_CMD\Project1.dproj=C:\Users\carld\Desktop\MC_CMD\MC_CMD.dproj</Transaction>
+    <Transaction>2023/11/23 13:24:03.000.555,C:\Users\carld\Desktop\MC_CMD\MC_CMD.dproj=C:\Users\carld\Desktop\MC_CMD\Cmd_MiniCompressor.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

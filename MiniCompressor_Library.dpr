@@ -1,7 +1,10 @@
 library MiniCompressor_Library;
 
 uses
-  Windows, IniFiles, ShellAPI, VCL.Forms;
+  Windows,
+  IniFiles,
+  ShellAPI,
+  VCL.Forms;
 
 function IniRead(Filez, A, B: string): string; stdcall;
 var
@@ -60,6 +63,7 @@ procedure ExecAndNoWait(ACommand, AParams: string); stdcall;
 begin
   ShellExecute(Application.Handle, 'open', PChar(ACommand), PChar(AParams), nil, SW_SHOWNORMAL);
 end;
+
 
 exports
   IniRead, IniCreate, ExecAndWait, ExecAndNoWait;

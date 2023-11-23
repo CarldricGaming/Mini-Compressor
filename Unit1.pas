@@ -963,7 +963,6 @@ begin
 
   FA_Handle := TWinWindowHandle(Form1).Wnd;
   FA_Error := False;
-  ISCmdInit(FA_Handle);
 
   if CheckBox5.IsChecked = True then
     FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe')
@@ -971,11 +970,42 @@ begin
   if CheckBox5.IsChecked = False then
     FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc.exe');
 
-  if ISCmdRun(FA_Exec, FA_Result,
-    @UpdateLine) then
-    FA_Error:= False
-  else
-    FA_Error:= True;
+  with TMemo.Create(nil) do
+  begin
+    Lines.Add('@echo off');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('"' + FA_Exec + '" ' +FA_Result +'');
+    Lines.SaveToFile('Run_FA.bat');
+    Free;
+  end;
+
+  Application.ProcessMessages;
+  Sleep(150);
+
+  ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('Run_FA.bat'), '');
+  Memo1.Lines.LoadFromFile('MC_CMD_Log.txt');
+  DeleteFile('MC_CMD_Log.txt');
+  Edit6.Text:= 'Processing...';
+
+  Application.ProcessMessages;
+  Sleep(150);
+
+  if IniRead(GetAnySource('MC_CMD.ini'), 'MC_Code', 'Result') = '1' then
+    FA_Error := False else
+    FA_Error := True;
+
+  Application.ProcessMessages;
+  Sleep(150);
+
+  if FileExists(GetAnySource('Run_FA.bat')) then
+    DeleteFile(GetAnySource('Run_FA.bat'));
+
+  if FileExists(GetAnySource('MC_CMD.ini')) then
+    DeleteFile(GetAnySource('MC_CMD.ini'));
+
+  Application.ProcessMessages;
+  Sleep(150);
+
   Edit6.Text:= 'Processing...';
 
   ArcTime1.Enabled := False;
@@ -1607,7 +1637,6 @@ begin
 
   FA_Handle := TWinWindowHandle(Form1).Wnd;
   FA_Error := False;
-  ISCmdInit(FA_Handle);
 
   if CheckBox6.IsChecked = True then
     FA_Exec := GetAnySource('..\Compression\FreeArc\Arc_P.exe')
@@ -1615,12 +1644,38 @@ begin
   if CheckBox6.IsChecked = False then
     FA_Exec := GetAnySource('..\Compression\FreeArc\Arc.exe');
 
-  if ISCmdRun(FA_Exec, FA_Result,
-    @UpdateLine4) then
-    FA_Error:= False
-  else
-    FA_Error:= True;
+  with TMemo.Create(nil) do
+  begin
+    Lines.Add('@echo off');
+    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('"' + FA_Exec + '" ' +FA_Result +'');
+    Lines.SaveToFile('Run_FA.bat');
+    Free;
+  end;
+
+  Application.ProcessMessages;
+  Sleep(150);
+
+  ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('Run_FA.bat'), '');
+  Memo12.Lines.LoadFromFile('MC_CMD_Log.txt');
+  DeleteFile('MC_CMD_Log.txt');
   Edit36.Text:= 'Processing...';
+
+  Application.ProcessMessages;
+  Sleep(150);
+
+  if IniRead(GetAnySource('MC_CMD.ini'), 'MC_Code', 'Result') = '1' then
+    FA_Error := False else
+    FA_Error := True;
+
+  Application.ProcessMessages;
+  Sleep(150);
+
+  if FileExists(GetAnySource('Run_FA.bat')) then
+    DeleteFile(GetAnySource('Run_FA.bat'));
+
+  if FileExists(GetAnySource('MC_CMD.ini')) then
+    DeleteFile(GetAnySource('MC_CMD.ini'));
 
   ArcTime1.Enabled := False;
   Edit40.Text := 'Ending...';
@@ -2478,7 +2533,7 @@ begin
     if FA_Report <> '' then
     begin
       Memo2.Lines.SaveToFile(FA_Report +'\MC_Result1.txt');
-      Memo1.Lines.SaveToFile(FA_Report +'\MC_Result2.txt');
+      //Memo1.Lines.SaveToFile(FA_Report +'\MC_Result2.txt');
     end
     else
     if FA_Report = '' then
@@ -3629,40 +3684,6 @@ begin
   ExecAndWait(TWinWindowHandle(Form1).Wnd,
     GetAnySource('..\Resources\XTool\XTool_Plugin.exe'), '',
     GetAnySource('..\Resources\XTool'));
-
-  if FileExists(GetAnySource('..\Resources\XTool\xtool_inj.exe')) then
-    if MessageBox(0, '"xtool_inj.exe" detected.' +#13#13 +
-      'Do you wanna update your Freearc?',
-      'XTool Plugin', MB_YESNO or MB_ICONQUESTION) = IDYES then
-    begin
-      CopyFile(GetAnySource('..\Resources\XTool\xtool_inj.exe'),
-        GetAnySource('..\Compression\FreeArc\XTool\xtool.exe'), false);
-
-      Application.ProcessMessages;
-      Sleep(500);
-
-      CopyFile(GetAnySource('..\Resources\XTool\xtool_inj.exe'),
-        GetAnySource('..\Resources\ISDone_resource\xtool.exe'), false);
-
-      Application.ProcessMessages;
-      Sleep(500);
-
-      DeleteFile(GetAnySource('..\Resources\XTool\xtool_inj.exe'));
-
-      MessageBox(0, 'XTool has been updated.', 'XTool Plugin',
-        MB_OK or MB_ICONINFORMATION);
-    end
-    else
-    begin
-      MessageBox(0, 'XTool has canceled.' +#13
-        +'Looks like you want a manual update yourself huh?' +#13#13
-        +'Here''s how if you don''t want it automatically,' +#13
-        +'you can go through the "Resources\XTool"' +#13
-        +'folder to identify it.' +#13
-        +'Then you can finally copy & paste through'+#13
-        +'folder "Compression" and such.',
-        'XTool Plugin', MB_OK or MB_ICONINFORMATION);
-    end;
 end;
 
 procedure TForm1.MenuItem5Click(Sender: TObject);
