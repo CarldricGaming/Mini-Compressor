@@ -180,7 +180,7 @@ begin
     StringGrid1.Cells[1,28] := 'Gupta@FileForums & Razor12911@FileForums';
 
   StringGrid1.Cells[0,29] := 'CmdOut Library';
-    StringGrid1.Cells[1,29] := 'Ele@FileForums';
+    StringGrid1.Cells[1,29] := 'Ele@FileForums & BLACKFIRE69@FileForums';
 
   StringGrid1.Cells[0,30] := 'XHash Library';
     StringGrid1.Cells[1,30] := 'BLACKFIRE69@FileForums';

@@ -128,11 +128,11 @@
         <DCC_ExeOutput>.\$(Config)\Bin\</DCC_ExeOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_MajorVer>2023</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=FileForums.Com;FileDescription=$(MSBuildProjectName);FileVersion=2023.11.23.0;InternalName=;LegalCopyright=Created by Carldric Clement;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_MajorVer>2024</VerInfo_MajorVer>
+        <VerInfo_Keys>CompanyName=FileForums.Com;FileDescription=$(MSBuildProjectName);FileVersion=2024.3.16.0;InternalName=;LegalCopyright=Created by Carldric Clement;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <Icon_MainIcon>MiniCompressor_Icon1.ico</Icon_MainIcon>
-        <VerInfo_MinorVer>11</VerInfo_MinorVer>
-        <VerInfo_Release>23</VerInfo_Release>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
+        <VerInfo_Release>16</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -179,6 +179,10 @@
             <Form>Form8</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="Unit9.pas">
+            <Form>Form9</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -221,6 +225,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Release\Bin\MiniCompressor.exe" Configuration="Release" Class="ProjectOutput"/>
+                <DeployFile LocalName="Release\Bin\MiniCompressor.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>MiniCompressor.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win32\Debug\MiniCompressor.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">

@@ -3,19 +3,33 @@ unit CmdOut;
 interface
 
 type
-  TConsoleCallback = procedure(const ACaption, AText: WideString);
+  TCmdCallback = procedure(const ACaption, AText: WideString);
 
 function ISCmdInit(const WinHandle: LongInt): Boolean; stdcall;
-  external 'cmdout.dll';
-function ISCmdRun(const ExeFile, ExePara: widestring;
-  Callback: TConsoleCallback): Boolean; stdcall; external 'cmdout.dll';
-function ISCmdSuspend: Boolean; stdcall; external 'cmdout.dll';
-function ISCmdResume: Boolean; stdcall; external 'cmdout.dll';
-function ISCmdStop: Boolean; stdcall; external 'cmdout.dll';
-
-function ISCmdCusKill(const AppName: WideString): Boolean; stdcall; external 'cmdout.dll';
-function ISCmdCusSuspend(const AppName: WideString): Boolean; stdcall; external 'cmdout.dll';
-function ISCmdCusResume(const AppName: WideString): Boolean; stdcall; external 'cmdout.dll';
+  external 'CmdOut.dll';
+function ISCmdInterval(Const MSec: Cardinal): Boolean; stdcall; // Set Callback Interval: (MSec = 1 to 999 in milliseconds) (Default = 200)
+  external 'CmdOut.dll';
+procedure ISCmdAddCustomText(const Text: WideString); stdcall;
+  external 'CmdOut.dll';
+function ISCmdRun(const ExeFile, ExeParam, WorkingDir: WideString;
+  Const Callback: TCmdCallback): Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdPause: Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdResume: Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdStop: Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdCustomPause(const AppName: WideString): Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdCustomResume(const AppName: WideString): Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdCustomStop(const AppName: WideString): Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdUpdateMemo(const MemoHandle: LongInt; NewMemoText: WideString): Boolean; stdcall;
+  external 'CmdOut.dll';
+function ISCmdGetError: Integer; stdcall;
+  external 'CmdOut.dll';
 
 implementation
 

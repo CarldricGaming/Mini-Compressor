@@ -1,0 +1,58 @@
+object Form9: TForm9
+  Left = 0
+  Top = 0
+  Caption = 'Configuration Compression'
+  ClientHeight = 600
+  ClientWidth = 800
+  StyleBook = StyleBook1
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Expander1: TExpander
+    Align = Top
+    ShowCheck = False
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'arc.ini'
+    TabOrder = 0
+    ContentSize = '575'
+    object Panel1: TPanel
+      Align = Client
+      Size.Width = 800.000000000000000000
+      Size.Height = 553.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Memo1: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        Align = Client
+        Size.Width = 800.000000000000000000
+        Size.Height = 553.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Viewport.Width = 796.000000000000000000
+        Viewport.Height = 549.000000000000000000
+      end
+    end
+    object Button1: TButton
+      Align = Bottom
+      Position.Y = 553.000000000000000000
+      Size.Width = 800.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Save config'
+      OnClick = Button1Click
+    end
+  end
+  object StyleBook1: TStyleBook
+    Styles = <
+      item
+      end>
+    Left = 608
+    Top = 448
+  end
+end

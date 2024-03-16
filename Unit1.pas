@@ -9,7 +9,8 @@ uses
   FMX.Objects, FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.ExtCtrls,
   FMX.ScrollBox, FMX.Memo, Winapi.Messages, Winapi.Windows, FMX.Platform.Win,
   Math, System.IOUtils, MMSystem, FMX.SpinBox, System.Win.Registry,
-  FMX.Memo.Types, FMX.Layouts, psAPI, FMX.Ani;
+  FMX.Memo.Types, FMX.Layouts, psAPI, FMX.Ani, System.Rtti, FMX.Grid.Style,
+  FMX.Grid;
 
 type
   TForm1 = class(TForm)
@@ -512,7 +513,7 @@ uses
   CmdOut,
   XHashNet,
   bass,
-  Unit2, Unit3, Unit4, Unit5, Unit6, Unit7, Unit8;
+  Unit2, Unit3, Unit4, Unit5, Unit6, Unit7, Unit8, Unit9;
 
 {$R *.fmx}
 
@@ -828,15 +829,14 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  IMG_Handle := TWinWindowHandle(Form1).Wnd;
+  IMG_Handle := FmxHandleToHWND(TWindowHandle(Form1));
   IMG_Error := False;
   ISCmdInit(IMG_Handle);
 
   if ISCmdRun(GetAnySource('..\Compression\OSCDIMG\oscdimg.exe'), IMGResult,
-    @UpdateLine3) then
-    IMG_Error:= False
-  else
-    IMG_Error:= True;
+    '', @UpdateLine3) then
+    IMG_Error:= False else IMG_Error:= True;
+
   Edit25.Text := 'Processing...';
 
   Application.ProcessMessages;
@@ -851,8 +851,7 @@ begin
         MB_ICONINFORMATION or MB_OK);
       Edit25.Text := 'Finished.';
     end
-    else
-    if not FileExists(Edit22.Text +'\' +IMGSolidFile) then
+    else if not FileExists(Edit22.Text +'\' +IMGSolidFile) then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
       MessageBox(0,'The processing was done, But the file didnt exist.', 'Failed',
@@ -860,8 +859,7 @@ begin
       Edit25.Text := 'Process done. ISO file missing.';
     end;
   end
-  else
-  if IMG_Error = True then
+  else if IMG_Error = True then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0,'Failed to make ISO file.', 'Failed',
@@ -901,20 +899,25 @@ begin
   CheckBox12.Visible:= True;
   Button42.Visible:= True;
 
-  if CheckBox9.IsChecked = True then
-    with TForm5.Create(nil) do
-    try
-      FA_SingleTime.Enabled:= True;
-      ShowModal;
-    finally
-      Free;
+  case CheckBox9.IsChecked of
+    True:
+    begin
+      with TForm5.Create(nil) do
+      try
+        FA_SingleTime.Enabled:= True;
+        ShowModal;
+      finally
+        Free;
+      end;
     end;
+  end;
 
-  if CheckBox2.IsChecked = True then
-    SFXOutput := Edit2.Text
-  else
-  if CheckBox2.IsChecked = False then
-    SFXOutput := '';
+  case CheckBox2.IsChecked of
+    True:
+      SFXOutput := Edit2.Text;
+    False:
+      SFXOutput := '';
+  end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -928,8 +931,7 @@ begin
 
   if PopupBox1.Text = '[CUSTOM]' then
     FA_Method := '-m' +Edit4.Text +' '
-  else
-  if PopupBox1.Text <> '' then
+  else if PopupBox1.Text <> '' then
     FA_Method := '-m' +PopupBox1.Text +' ';
 
   FA_Archive := '' +Edit5.Text;
@@ -945,8 +947,7 @@ begin
   if Edit3.Text <> '' then
     FA_Result := '' +FA_Command +FA_Memory +FA_Password +FA_Method
     +FA_Temp2 +FA_Source
-  else
-  if Edit3.Text = '' then
+  else if Edit3.Text = '' then
     FA_Result := '' +FA_Command +FA_Memory +FA_Method +FA_Temp2 +FA_Source;
 
   Application.ProcessMessages;
@@ -964,11 +965,16 @@ begin
   FA_Handle := TWinWindowHandle(Form1).Wnd;
   FA_Error := False;
 
-  if CheckBox5.IsChecked = True then
-    FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe')
-  else
-  if CheckBox5.IsChecked = False then
-    FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc.exe');
+  case CheckBox5.IsChecked of
+    True:
+    begin
+      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe');
+    end;
+    False:
+    begin
+      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc.exe');
+    end;
+  end;
 
   with TMemo.Create(nil) do
   begin
@@ -991,8 +997,7 @@ begin
   Sleep(150);
 
   if IniRead(GetAnySource('MC_CMD.ini'), 'MC_Code', 'Result') = '1' then
-    FA_Error := False else
-    FA_Error := True;
+    FA_Error := False else FA_Error := True;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1022,110 +1027,133 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  if FA_Error = False then
-  begin
-    if FileExists(FA_Temp) then
+  case FA_Error of
+    False:
     begin
-      CopyFile(PChar(FA_Temp), PChar(FA_Out2), false);
-      Application.ProcessMessages;
-      Sleep(150);
-
-      DateAndTimeZ := Now;
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('RESULT:');
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('    Original Size:   ' +
-        ConvertBytes(GetDirSize(Edit1.Text + '\', true)));
-      Memo2.Lines.Add('    Compressed Size: ' +
-        ConvertBytes(GetDirSize(GetAnySource('\arc\'), true)));
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('Thank you for using Mini Compressor AIO');
-      Memo2.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
-        TimeToStr(DateAndTimeZ));
-      Memo2.GoToTextEnd;
-
-      Application.ProcessMessages;
-      Sleep(150);
-
-      DeleteFile(PChar(FA_Temp));
-
-      Application.ProcessMessages;
-      Sleep(150);
-
-      if SFXOutput <> '' then
+      if FileExists(FA_Temp) then
       begin
-        SFXCommand:= 'copy /b "' +GetAnySource('..\MC.sfx') +'" + "'
-          +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '.exe"';
+        CopyFile(PChar(FA_Temp), PChar(FA_Out2), false);
+        Application.ProcessMessages;
+        Sleep(150);
 
-        IniCreate('..\Resources\records.ini','Output','Folder',Edit14.Text);
-        IniCreate('..\Resources\records.ini','Record1','Type','Freearc');
-        IniCreate('..\Resources\records.ini','Record1','Source','{src}\' +Edit14.Text +'.exe');
-        IniCreate('..\Resources\records.ini','Record1','Output','{app}');
-        IniCreate('..\Resources\records.ini','Record1','Disk','1');
-        IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
-
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
-          GetAnySource('..\Resources\MC_SFX2.exe'), '',
-          GetAnySource('..\Resources'));
-
-        with TMemo.Create(nil) do
-        try
-          Lines.Add('@echo off');
-          Lines.Add('title SFX Processing...');
-          Lines.Add(SFXCommand +' > nul');
-          Lines.Add('timeout 2 > nul');
-          Lines.SaveToFile(GetAnySource('SFX_Make.bat'));
-        finally
-          Free;
-        end;
+        DateAndTimeZ := Now;
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('RESULT:');
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('    Original Size:   ' +
+          ConvertBytes(GetDirSize(Edit1.Text + '\', true)));
+        Memo2.Lines.Add('    Compressed Size: ' +
+          ConvertBytes(GetDirSize(GetAnySource('\arc\'), true)));
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('Thank you for using Mini Compressor AIO');
+        Memo2.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
+          TimeToStr(DateAndTimeZ));
+        Memo2.GoToTextEnd;
 
         Application.ProcessMessages;
         Sleep(150);
 
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
-          GetAnySource('SFX_Make.bat'), '', GetAnySource(''));
+        DeleteFile(PChar(FA_Temp));
 
-        with TMemo.Create(nil) do
+        Application.ProcessMessages;
+        Sleep(150);
+
+        if SFXOutput <> '' then
         begin
-          Lines.Add('[Output]');
-          Lines.Add('Folder=');
-          Lines.Add('');
-          Lines.Add('[Record1]');
-          Lines.Add('Type=');
-          Lines.Add('Source=');
-          Lines.Add('Output=');
-          Lines.Add('Disk=');
-          Lines.Add('Password=');
-          Lines.SaveToFile(GetAnySource('..\Resources\records.ini'));
-          Free;
+          SFXCommand:= 'copy /b "' +GetAnySource('..\MC.sfx') +'" + "'
+            +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '.exe"';
+
+          IniCreate('..\Resources\records.ini','Output','Folder',Edit14.Text);
+          IniCreate('..\Resources\records.ini','Record1','Type','Freearc');
+          IniCreate('..\Resources\records.ini','Record1','Source','{src}\' +Edit14.Text +'.exe');
+          IniCreate('..\Resources\records.ini','Record1','Output','{app}');
+          IniCreate('..\Resources\records.ini','Record1','Disk','1');
+          IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
+
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('..\Resources\MC_SFX2.exe'), '',
+            GetAnySource('..\Resources'));
+
+          with TMemo.Create(nil) do
+          try
+            Lines.Add('@echo off');
+            Lines.Add('title SFX Processing...');
+            Lines.Add(SFXCommand +' > nul');
+            Lines.Add('timeout 2 > nul');
+            Lines.SaveToFile(GetAnySource('SFX_Make.bat'));
+          finally
+            Free;
+          end;
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('SFX_Make.bat'), '', GetAnySource(''));
+
+          with TMemo.Create(nil) do
+          begin
+            Lines.Add('[Output]');
+            Lines.Add('Folder=');
+            Lines.Add('');
+            Lines.Add('[Record1]');
+            Lines.Add('Type=');
+            Lines.Add('Source=');
+            Lines.Add('Output=');
+            Lines.Add('Disk=');
+            Lines.Add('Password=');
+            Lines.SaveToFile(GetAnySource('..\Resources\records.ini'));
+            Free;
+          end;
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          if FileExists(Edit2.Text +'\' +Edit5.Text) then
+            DeleteFile(PChar(Edit2.Text +'\' +Edit5.Text));
+
+          if FileExists(GetAnySource('SFX_Make.bat')) then
+            DeleteFile(GetAnySource('SFX_Make.bat'));
+
+          if FileExists(GetAnySource('..\MC.sfx')) then
+            DeleteFile(GetAnySource('..\MC.sfx'));
+
+          Application.ProcessMessages;
+          Sleep(150);
         end;
 
-        Application.ProcessMessages;
-        Sleep(150);
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was done.', 'Finished',
+          MB_ICONINFORMATION or MB_OK);
+        Edit6.Text:= 'Finished.';
 
-        if FileExists(Edit2.Text +'\' +Edit5.Text) then
-          DeleteFile(PChar(Edit2.Text +'\' +Edit5.Text));
+        if FileExists(Edit1.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
+      end
+      else
+      if not FileExists(Edit2.Text +'\' +Edit5.Text) then
+      begin
+        DateAndTimeZ := Now;
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('LOOKS LIKE THERE IS A PROBLEM ABOUT FREEARC!');
+        Memo2.Lines.Add('PLEASE CONTACT ABOUT PROBLEM!');
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
+          TimeToStr(DateAndTimeZ));
+        Memo2.GoToTextEnd;
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was not done.', 'Failed',
+          MB_ICONEXCLAMATION or MB_OK);
+        Edit6.Text:= 'Failed.';
 
-        if FileExists(GetAnySource('SFX_Make.bat')) then
-          DeleteFile(GetAnySource('SFX_Make.bat'));
+        if FileExists(GetAnySource('\arc\freearc1.tmp')) then
+          DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
 
-        if FileExists(GetAnySource('..\MC.sfx')) then
-          DeleteFile(GetAnySource('..\MC.sfx'));
-
-        Application.ProcessMessages;
-        Sleep(150);
+        if FileExists(Edit1.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
       end;
-
-      sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was done.', 'Finished',
-        MB_ICONINFORMATION or MB_OK);
-      Edit6.Text:= 'Finished.';
-
-      if FileExists(Edit1.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
-    end
-    else
-    if not FileExists(Edit2.Text +'\' +Edit5.Text) then
+    end;
+    True:
     begin
       DateAndTimeZ := Now;
       Memo2.Lines.Add('');
@@ -1136,41 +1164,21 @@ begin
         TimeToStr(DateAndTimeZ));
       Memo2.GoToTextEnd;
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was not done.', 'Failed',
+      MessageBox(0,'Your compression was failed.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit6.Text:= 'Failed.';
 
       if FileExists(GetAnySource('\arc\freearc1.tmp')) then
         DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
 
-      if FileExists(Edit1.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
+        if FileExists(Edit1.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
     end;
-  end
-  else
-  if FA_Error = True then
-  begin
-    DateAndTimeZ := Now;
-    Memo2.Lines.Add('');
-    Memo2.Lines.Add('LOOKS LIKE THERE IS A PROBLEM ABOUT FREEARC!');
-    Memo2.Lines.Add('PLEASE CONTACT ABOUT PROBLEM!');
-    Memo2.Lines.Add('');
-    Memo2.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
-      TimeToStr(DateAndTimeZ));
-    Memo2.GoToTextEnd;
-    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was failed.', 'Failed',
-      MB_ICONEXCLAMATION or MB_OK);
-    Edit6.Text:= 'Failed.';
-
-    if FileExists(GetAnySource('\arc\freearc1.tmp')) then
-      DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
-
-      if FileExists(Edit1.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
   end;
+
   if DirectoryExists(GetAnySource('\arc')) then
     TDirectory.Delete(GetAnySource('\arc'));
+
   Button2.Visible := True;
   Button3.Visible := True;
   Edit6.Visible := False;
@@ -1237,8 +1245,7 @@ begin
     Image3.Bitmap.LoadFromFile(BGImageChange);
     CopyFile(PChar(BGImageChange), GetAnySource('..\Installer\Graphics\Background.jpg'), false);
   end
-  else
-  if not FileExists(BGImageChange) then
+  else if not FileExists(BGImageChange) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'), SND_ASYNC);
     MessageBox(0,'Failed to change bacground installer.', 'Error',
@@ -1316,8 +1323,7 @@ begin
     MessageBox(0, 'Installation was finish to make.', 'Finished',
       MB_ICONINFORMATION or MB_OK);
   end
-  else
-  if not FileExists(IM_Output) then
+  else if not FileExists(IM_Output) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0, 'Installation was failed to make.', 'Failed',
@@ -1349,8 +1355,7 @@ begin
       GetAnySource('..\Resources\MC_Update.exe'),'',
       GetAnySource('..\Resources'));
   end
-  else
-  if not FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
+  else if not FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
     ExecAndWait(TWinWindowHandle(Form1).Wnd,
       GetAnySource('..\Resources\MC_Update.exe'),'',
       GetAnySource('..\Resources'))
@@ -1455,8 +1460,7 @@ begin
 
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
   end
-  else
-  if FileNameProj = '' then
+  else if FileNameProj = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0, 'Failed to save project.', 'Failed',
@@ -1500,8 +1504,7 @@ begin
     MC_Check := IniRead(GetAnySource('..\Resources\Project\Setup.ini'), 'Installer', 'MC');
     if MC_Check = '1' then
       CheckBox3.IsChecked:= True
-    else
-    if MC_Check = '0' then
+    else if MC_Check = '0' then
     begin
       CheckBox3.IsChecked:= False;
       Edit20.Text := IniRead(GetAnySource('..\Resources\Project\Setup.ini'), 'Installer', 'Files');
@@ -1573,8 +1576,7 @@ begin
 
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
   end
-  else
-  if LoadProj = '' then
+  else if LoadProj = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0, 'Failed to load project.', 'Failed',
@@ -1594,14 +1596,20 @@ var
   SFXOutput, SFXCommand: string;
   SFX_Confirm: Boolean;
 begin
-  if CheckBox7.IsChecked = True then
-    if MessageBox(0,
-      'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
-      'Mini Compressor SFX',
-      MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
-      SFX_Confirm := True
-    else
+  case CheckBox7.IsChecked of
+    True:
+    begin
+      if MessageBox(0,
+        'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
+        'Mini Compressor SFX',
+        MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
+        SFX_Confirm := True
+    end;
+    False:
+    begin
       SFX_Confirm := False;
+    end;
+  end;
 
   TabControl7.TabIndex := 1;
   Button32.Visible:= False;
@@ -1638,11 +1646,16 @@ begin
   FA_Handle := TWinWindowHandle(Form1).Wnd;
   FA_Error := False;
 
-  if CheckBox6.IsChecked = True then
-    FA_Exec := GetAnySource('..\Compression\FreeArc\Arc_P.exe')
-  else
-  if CheckBox6.IsChecked = False then
-    FA_Exec := GetAnySource('..\Compression\FreeArc\Arc.exe');
+  case CheckBox6.IsChecked of
+    True:
+    begin
+      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc_P.exe');
+    end;
+    False:
+    begin
+      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc.exe');
+    end;
+  end;
 
   with TMemo.Create(nil) do
   begin
@@ -1707,68 +1720,94 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  if CheckBox7.IsChecked = True then
-    SFXOutput := Edit33.Text
-  else
-  if CheckBox7.IsChecked = False then
-    SFXOutput := '';
-
-  if FA_Error = False then
-  begin
-    if FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
+  case CheckBox7.IsChecked of
+    True:
     begin
-      if SFXOutput <> '' then
+      SFXOutput := Edit33.Text;
+    end;
+    False:
+    begin
+      SFXOutput := '';
+    end;
+  end;
+
+  case FA_Error of
+    False:
+    begin
+      if FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
       begin
-        if SFX_Confirm = True then
+        if SFXOutput <> '' then
         begin
-          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
-            GetAnySource('..\Resources\MC_SFX.exe'), '',
-            GetAnySource('..\Resources'));
-        end else
-        begin
-          MessageBox(0,
-            'Please make sure that you following your method you used for tools.'
-            +#13 +'For incase that you don''t know how to make it,'
-            +#13 +'Just use Auto if you need.',
-            'Mini Compressor SFX',
-            MB_OK or MB_ICONINFORMATION);
-          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
-            GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
-            GetAnySource('..\Resources'));
+          case SFX_Confirm of
+            True:
+            begin
+              sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+                GetAnySource('..\Resources\MC_SFX.exe'), '',
+                GetAnySource('..\Resources'));
+            end;
+            False:
+            begin
+              MessageBox(0,
+                'Please make sure that you following your method you used for tools.'
+                +#13 +'For incase that you don''t know how to make it,'
+                +#13 +'Just use Auto if you need.',
+                'Mini Compressor SFX',
+                MB_OK or MB_ICONINFORMATION);
+              sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+                GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
+                GetAnySource('..\Resources'));
+            end;
+          end;
+
+          CopyFile(GetAnySource('..\Compression\MC.sfx'),
+            PChar(SFXOutput +'\' +Edit34.Text),false);
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          DeleteFile(GetAnySource('..\Compression\MC.sfx'));
+
+          Application.ProcessMessages;
+          Sleep(150);
         end;
 
-        CopyFile(GetAnySource('..\Compression\MC.sfx'),
-          PChar(SFXOutput +'\' +Edit34.Text),false);
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was done.', 'Finished',
+          MB_ICONINFORMATION or MB_OK);
+        Edit36.Text:= 'Finished.';
 
-        Application.ProcessMessages;
-        Sleep(150);
+        if FileExists(Edit32.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
+      end
+      else
+      if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
+      begin
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was not done.', 'Failed',
+          MB_ICONEXCLAMATION or MB_OK);
+        Edit6.Text:= 'Failed.';
 
-        Application.ProcessMessages;
-        Sleep(150);
+        if FileExists(Edit33.Text +'\freearc1.tmp') then
+          DeleteFile(PChar(Edit33.Text +'\freearc1.tmp'));
 
-        DeleteFile(GetAnySource('..\Compression\MC.sfx'));
+        if FileExists(PChar(Edit33.Text +'\MC.ini')) then
+          DeleteFile(PChar(Edit33.Text +'\MC.ini'));
 
-        Application.ProcessMessages;
-        Sleep(150);
+        if FileExists(Edit32.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
       end;
-
-      sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was done.', 'Finished',
-        MB_ICONINFORMATION or MB_OK);
-      Edit36.Text:= 'Finished.';
-
-      if FileExists(Edit32.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
-    end
-    else
-    if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
+    end;
+    True:
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was not done.', 'Failed',
+      MessageBox(0,'Your compression was failed.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
-      Edit6.Text:= 'Failed.';
+      Edit36.Text:= 'Failed.';
 
       if FileExists(Edit33.Text +'\freearc1.tmp') then
         DeleteFile(PChar(Edit33.Text +'\freearc1.tmp'));
@@ -1776,27 +1815,11 @@ begin
       if FileExists(PChar(Edit33.Text +'\MC.ini')) then
         DeleteFile(PChar(Edit33.Text +'\MC.ini'));
 
-      if FileExists(Edit32.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
+        if FileExists(Edit32.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
     end;
-  end
-  else
-  if FA_Error = True then
-  begin
-    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was failed.', 'Failed',
-      MB_ICONEXCLAMATION or MB_OK);
-    Edit36.Text:= 'Failed.';
-
-    if FileExists(Edit33.Text +'\freearc1.tmp') then
-      DeleteFile(PChar(Edit33.Text +'\freearc1.tmp'));
-
-    if FileExists(PChar(Edit33.Text +'\MC.ini')) then
-      DeleteFile(PChar(Edit33.Text +'\MC.ini'));
-
-      if FileExists(Edit32.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
   end;
+
   Button32.Visible:= True;
   Button33.Visible:= True;
   Edit36.Visible := False;
@@ -1853,10 +1876,6 @@ begin
   begin
     Hide;
     Form1.StyleBook := StyleBook2;
-
-    Application.ProcessMessages;
-    Sleep(150);
-
     StyleBook1.LoadFromFile(GetAnySource(Apply_Skin) +Skin_Set2);
     Form1.StyleBook := StyleBook1;
     Show;
@@ -1889,11 +1908,16 @@ begin
       Free;
     end;
 
-  if CheckBox2.IsChecked = True then
-    SFXOutput := Edit2.Text
-  else
-  if CheckBox2.IsChecked = False then
-    SFXOutput := '';
+  case CheckBox2.IsChecked of
+    True:
+    begin
+      SFXOutput := Edit2.Text;
+    end;
+    False:
+    begin
+      SFXOutput := '';
+    end;
+  end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1907,8 +1931,7 @@ begin
 
   if PopupBox1.Text = '[CUSTOM]' then
     FA_Method := '-m' +Edit4.Text +' '
-  else
-  if PopupBox1.Text <> '' then
+  else if PopupBox1.Text <> '' then
     FA_Method := '-m' +PopupBox1.Text +' ';
 
   FA_Archive := '' +Edit5.Text;
@@ -1924,18 +1947,22 @@ begin
   if Edit3.Text <> '' then
     FA_Result := '' +FA_Command +FA_Memory +FA_Password +FA_Method
     +FA_Temp2 +FA_Source
-  else
-  if Edit3.Text = '' then
+  else if Edit3.Text = '' then
     FA_Result := '' +FA_Command +FA_Memory +FA_Method +FA_Temp2 +FA_Source;
 
   Application.ProcessMessages;
   Sleep(150);
 
-  if CheckBox5.IsChecked = True then
-    FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe')
-  else
-  if CheckBox5.IsChecked = False then
-    FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc.exe');
+  case CheckBox5.IsChecked of
+    True:
+    begin
+      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe')
+    end;
+    False:
+    begin
+      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc.exe');
+    end;
+  end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1983,115 +2010,130 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  if FA_Error = False then
-  begin
-    if FileExists(FA_Temp) then
+  case FA_Error of
+    False:
     begin
-      CopyFile(PChar(FA_Temp), PChar(FA_Out2), false);
-      Application.ProcessMessages;
-      Sleep(150);
-
-      DateAndTimeZ := Now;
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('RESULT:');
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('    Original Size:   ' +
-        ConvertBytes(GetDirSize(Edit1.Text + '\', true)));
-      Memo2.Lines.Add('    Compressed Size: ' +
-        ConvertBytes(GetFileSize(FA_Out2)));
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('Thank you for using Mini Compressor AIO');
-      Memo2.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
-        TimeToStr(DateAndTimeZ));
-      Memo2.GoToTextEnd;
-
-      Application.ProcessMessages;
-      Sleep(150);
-
-      DeleteFile(PChar(FA_Temp));
-
-      Application.ProcessMessages;
-      Sleep(150);
-
-      if SFXOutput <> '' then
+      if FileExists(FA_Temp) then
       begin
-        SFXCommand:= 'copy /b "' +GetAnySource('..\MC.sfx') +'" + "'
-          +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '.exe"';
+        CopyFile(PChar(FA_Temp), PChar(FA_Out2), false);
+        Application.ProcessMessages;
+        Sleep(150);
 
-        IniCreate('..\Resources\records.ini','Output','Folder',Edit14.Text);
-        IniCreate('..\Resources\records.ini','Record1','Type','Freearc');
-        IniCreate('..\Resources\records.ini','Record1','Source','{src}\' +Edit14.Text +'.exe');
-        IniCreate('..\Resources\records.ini','Record1','Output','{app}');
-        IniCreate('..\Resources\records.ini','Record1','Disk','1');
-        IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
-
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
-          GetAnySource('..\Resources\MC_SFX2.exe'),'',GetAnySource('..\Resources'));
-
-        with TMemo.Create(nil) do
-        try
-          Lines.Add('@echo off');
-          Lines.Add('title SFX Processing...');
-          Lines.Add(SFXCommand +' > nul');
-          Lines.Add('timeout 2 > nul');
-          Lines.SaveToFile(GetAnySource('SFX_Make.bat'));
-        finally
-          Free;
-        end;
-
-        CopyFile(GetAnySource('..\Setup.db'),
-          PChar(SFXOutput +'\Setup.db'),false);
+        DateAndTimeZ := Now;
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('RESULT:');
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('    Original Size:   ' +
+          ConvertBytes(GetDirSize(Edit1.Text + '\', true)));
+        Memo2.Lines.Add('    Compressed Size: ' +
+          ConvertBytes(GetFileSize(FA_Out2)));
+        Memo2.Lines.Add('');
+        Memo2.Lines.Add('Thank you for using Mini Compressor AIO');
+        Memo2.Lines.Add('Date & Time: ' + DateToStr(DateAndTimeZ) + ' | ' +
+          TimeToStr(DateAndTimeZ));
+        Memo2.GoToTextEnd;
 
         Application.ProcessMessages;
         Sleep(150);
 
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
-          GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
+        DeleteFile(PChar(FA_Temp));
 
-        with TMemo.Create(nil) do
+        Application.ProcessMessages;
+        Sleep(150);
+
+        if SFXOutput <> '' then
         begin
-          Lines.Add('[Output]');
-          Lines.Add('Folder=');
-          Lines.Add('');
-          Lines.Add('[Record1]');
-          Lines.Add('Type=');
-          Lines.Add('Source=');
-          Lines.Add('Output=');
-          Lines.Add('Disk=');
-          Lines.Add('Password=');
-          Lines.SaveToFile(GetAnySource('..\Resources\records.ini'));
-          Free;
+          SFXCommand:= 'copy /b "' +GetAnySource('..\MC.sfx') +'" + "'
+            +Edit2.Text +'\' +Edit5.Text + '" "' + SFXOutput + '\' + Edit14.Text + '.exe"';
+
+          IniCreate('..\Resources\records.ini','Output','Folder',Edit14.Text);
+          IniCreate('..\Resources\records.ini','Record1','Type','Freearc');
+          IniCreate('..\Resources\records.ini','Record1','Source','{src}\' +Edit14.Text +'.exe');
+          IniCreate('..\Resources\records.ini','Record1','Output','{app}');
+          IniCreate('..\Resources\records.ini','Record1','Disk','1');
+          IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
+
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('..\Resources\MC_SFX2.exe'),'',GetAnySource('..\Resources'));
+
+          with TMemo.Create(nil) do
+          try
+            Lines.Add('@echo off');
+            Lines.Add('title SFX Processing...');
+            Lines.Add(SFXCommand +' > nul');
+            Lines.Add('timeout 2 > nul');
+            Lines.SaveToFile(GetAnySource('SFX_Make.bat'));
+          finally
+            Free;
+          end;
+
+          CopyFile(GetAnySource('..\Setup.db'),
+            PChar(SFXOutput +'\Setup.db'),false);
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+            GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
+
+          with TMemo.Create(nil) do
+          begin
+            Lines.Add('[Output]');
+            Lines.Add('Folder=');
+            Lines.Add('');
+            Lines.Add('[Record1]');
+            Lines.Add('Type=');
+            Lines.Add('Source=');
+            Lines.Add('Output=');
+            Lines.Add('Disk=');
+            Lines.Add('Password=');
+            Lines.SaveToFile(GetAnySource('..\Resources\records.ini'));
+            Free;
+          end;
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          if FileExists(Edit2.Text +'\' +Edit5.Text) then
+            DeleteFile(PChar(Edit2.Text +'\' +Edit5.Text));
+
+          if FileExists(GetAnySource('SFX_Make.bat')) then
+            DeleteFile(GetAnySource('SFX_Make.bat'));
+
+          if FileExists(GetAnySource('..\Setup.db')) then
+            DeleteFile(GetAnySource('..\Setup.db'));
+
+          if FileExists(GetAnySource('..\MC.sfx')) then
+            DeleteFile(GetAnySource('..\MC.sfx'));
+
+          Application.ProcessMessages;
+          Sleep(150);
         end;
 
-        Application.ProcessMessages;
-        Sleep(150);
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was done.', 'Finished',
+          MB_ICONINFORMATION or MB_OK);
+        Edit6.Text:= 'Finished.';
 
-        if FileExists(Edit2.Text +'\' +Edit5.Text) then
-          DeleteFile(PChar(Edit2.Text +'\' +Edit5.Text));
+        if FileExists(Edit1.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
+      end
+      else
+      if not FileExists(Edit2.Text +'\' +Edit5.Text) then
+      begin
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was not done.', 'Failed',
+          MB_ICONEXCLAMATION or MB_OK);
+        Edit6.Text:= 'Failed.';
 
-        if FileExists(GetAnySource('SFX_Make.bat')) then
-          DeleteFile(GetAnySource('SFX_Make.bat'));
+        if FileExists(GetAnySource('\arc\freearc1.tmp')) then
+          DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
 
-        if FileExists(GetAnySource('..\Setup.db')) then
-          DeleteFile(GetAnySource('..\Setup.db'));
-
-        if FileExists(GetAnySource('..\MC.sfx')) then
-          DeleteFile(GetAnySource('..\MC.sfx'));
-
-        Application.ProcessMessages;
-        Sleep(150);
+        if FileExists(Edit1.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
       end;
-
-      sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was done.', 'Finished',
-        MB_ICONINFORMATION or MB_OK);
-      Edit6.Text:= 'Finished.';
-
-      if FileExists(Edit1.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
-    end
-    else
-    if not FileExists(Edit2.Text +'\' +Edit5.Text) then
+    end;
+    True:
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
       MessageBox(0,'Your compression was not done.', 'Failed',
@@ -2101,24 +2143,11 @@ begin
       if FileExists(GetAnySource('\arc\freearc1.tmp')) then
         DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
 
-      if FileExists(Edit1.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
+        if FileExists(Edit1.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
     end;
-  end
-  else
-  if FA_Error = True then
-  begin
-    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was not done.', 'Failed',
-      MB_ICONEXCLAMATION or MB_OK);
-    Edit6.Text:= 'Failed.';
-
-    if FileExists(GetAnySource('\arc\freearc1.tmp')) then
-      DeleteFile(PChar(GetAnySource('\arc\freearc1.tmp')));
-
-      if FileExists(Edit1.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit1.Text + '\Hash.md5'));
   end;
+
   if DirectoryExists(GetAnySource('\arc')) then
     TDirectory.Delete(GetAnySource('\arc'));
 end;
@@ -2135,14 +2164,20 @@ var
   SFXOutput, SFXCommand: string;
   SFX_Confirm: Boolean;
 begin
-  if CheckBox7.IsChecked = True then
-    if MessageBox(0,
-      'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
-      'Mini Compressor SFX',
-      MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
-      SFX_Confirm := True
-    else
+  case CheckBox7.IsChecked of
+    True:
+    begin
+      if MessageBox(0,
+        'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
+        'Mini Compressor SFX',
+        MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
+        SFX_Confirm := True;
+    end;
+    False:
+    begin
       SFX_Confirm := False;
+    end;
+  end;
 
   FA_Command:= 'a -ma9 -ds -di -i1 -ep1 -ed -r -s; -w_Temp\ ' +Edit48.Text +' ';
   FA_Memory:= '-lc'+SpinBox6.Text +' -ld' +SpinBox6.Text +' ';
@@ -2165,11 +2200,16 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  if CheckBox6.IsChecked = True then
-    FA_Exec := GetAnySource('..\Compression\FreeArc\Arc_P.exe')
-  else
-  if CheckBox6.IsChecked = False then
-    FA_Exec := GetAnySource('..\Compression\FreeArc\Arc.exe');
+  case CheckBox6.IsChecked of
+    True:
+    begin
+      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc_P.exe');
+    end;
+    False:
+    begin
+      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc.exe');
+    end;
+  end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -2226,73 +2266,98 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  if CheckBox7.IsChecked = True then
-    SFXOutput := Edit33.Text
-  else
-  if CheckBox7.IsChecked = False then
-    SFXOutput := '';
-
-  if FA_Error = False then
-  begin
-    if FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
+  case CheckBox7.IsChecked of
+    True:
     begin
-      if SFXOutput <> '' then
+      SFXOutput := Edit33.Text;
+    end;
+    False:
+    begin
+      SFXOutput := '';
+    end;
+  end;
+
+  case FA_Error of
+    False:
+    begin
+      if FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
       begin
-        if SFX_Confirm = True then
+        if SFXOutput <> '' then
         begin
-          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
-            GetAnySource('..\Resources\MC_SFX.exe'), '',
-            GetAnySource('..\Resources'));
-        end else
-        begin
-          MessageBox(0,
-            'Please make sure that you following your method you used for tools.'
-            +#13 +'For incase that you don''t know how to make it,'
-            +#13 +'Just use Auto if you need.',
-            'Mini Compressor SFX',
-            MB_OK or MB_ICONINFORMATION);
-          sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
-            GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
-            GetAnySource('..\Resources'));
+          case SFX_Confirm of
+            True:
+            begin
+              sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+                GetAnySource('..\Resources\MC_SFX.exe'), '',
+                GetAnySource('..\Resources'));
+            end;
+            False:
+            begin
+              MessageBox(0,
+                'Please make sure that you following your method you used for tools.'
+                +#13 +'For incase that you don''t know how to make it,'
+                +#13 +'Just use Auto if you need.',
+                'Mini Compressor SFX',
+                MB_OK or MB_ICONINFORMATION);
+              sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+                GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
+                GetAnySource('..\Resources'));
+            end;
+          end;
+
+          CopyFile(GetAnySource('..\Compression\MC.sfx'),
+            PChar(SFXOutput +'\' +Edit34.Text),false);
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          CopyFile(GetAnySource('..\Compression\Setup.db'),
+            PChar(SFXOutput +'\Setup.db'),false);
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          DeleteFile(GetAnySource('..\Compression\MC.sfx'));
+
+          Application.ProcessMessages;
+          Sleep(150);
+
+          DeleteFile(GetAnySource('..\Compression\Setup.db'));
         end;
 
-        CopyFile(GetAnySource('..\Compression\MC.sfx'),
-          PChar(SFXOutput +'\' +Edit34.Text),false);
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was done.', 'Finished',
+          MB_ICONINFORMATION or MB_OK);
+        Edit36.Text:= 'Finished.';
 
-        Application.ProcessMessages;
-        Sleep(150);
+        if FileExists(Edit32.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
+      end
+      else if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
+      begin
+        sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+        MessageBox(0,'Your compression was not done.', 'Failed',
+          MB_ICONEXCLAMATION or MB_OK);
+        Edit6.Text:= 'Failed.';
 
-        CopyFile(GetAnySource('..\Compression\Setup.db'),
-          PChar(SFXOutput +'\Setup.db'),false);
+        if FileExists(Edit33.Text +'\freearc1.tmp') then
+          DeleteFile(PChar(Edit33.Text +'\freearc1.tmp'));
 
-        Application.ProcessMessages;
-        Sleep(150);
+        if FileExists(PChar(Edit33.Text +'\MC.ini')) then
+          DeleteFile(PChar(Edit33.Text +'\MC.ini'));
 
-        DeleteFile(GetAnySource('..\Compression\MC.sfx'));
-
-        Application.ProcessMessages;
-        Sleep(150);
-
-        DeleteFile(GetAnySource('..\Compression\Setup.db'));
+        if FileExists(Edit32.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
       end;
-
-      sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was done.', 'Finished',
-        MB_ICONINFORMATION or MB_OK);
-      Edit36.Text:= 'Finished.';
-
-      if FileExists(Edit32.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
-    end
-    else
-    if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
+    end;
+    True:
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was not done.', 'Failed',
+      MessageBox(0,'Your compression was failed.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
-      Edit6.Text:= 'Failed.';
+      Edit36.Text:= 'Failed.';
 
       if FileExists(Edit33.Text +'\freearc1.tmp') then
         DeleteFile(PChar(Edit33.Text +'\freearc1.tmp'));
@@ -2300,26 +2365,9 @@ begin
       if FileExists(PChar(Edit33.Text +'\MC.ini')) then
         DeleteFile(PChar(Edit33.Text +'\MC.ini'));
 
-      if FileExists(Edit32.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
+        if FileExists(Edit32.Text + '\Hash.md5') then
+          DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
     end;
-  end
-  else
-  if FA_Error = True then
-  begin
-    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was failed.', 'Failed',
-      MB_ICONEXCLAMATION or MB_OK);
-    Edit36.Text:= 'Failed.';
-
-    if FileExists(Edit33.Text +'\freearc1.tmp') then
-      DeleteFile(PChar(Edit33.Text +'\freearc1.tmp'));
-
-    if FileExists(PChar(Edit33.Text +'\MC.ini')) then
-      DeleteFile(PChar(Edit33.Text +'\MC.ini'));
-
-      if FileExists(Edit32.Text + '\Hash.md5') then
-        DeleteFile(PChar(Edit32.Text + '\Hash.md5'));
   end;
 end;
 
@@ -2334,8 +2382,7 @@ var
 begin
   if CheckBox4.IsChecked = True then
     SFXOutput:= Edit9.Text
-  else
-  if CheckBox4.IsChecked = False then
+  else if CheckBox4.IsChecked = False then
     SFXOutput:= '';
 
   if CheckBox11.IsChecked = True then
@@ -2362,8 +2409,7 @@ begin
 
   if Edit10.Text <> '' then
     Result7z := Command7z +Thread7z +Method7z +Password7z +Archive7z +Source7z
-  else
-  if Edit10.Text = '' then
+  else if Edit10.Text = '' then
     Result7z := Command7z +Thread7z +Method7z +Archive7z +Source7z;
 
   Application.ProcessMessages;
@@ -2414,8 +2460,7 @@ begin
 
     DeleteFile(GetAnySource('temp.7z'));
   end
-  else
-  if not FileExists(GetAnySource('temp.7z')) then
+  else if not FileExists(GetAnySource('temp.7z')) then
     Error7z := True;
 
   if Error7z = False then
@@ -2465,8 +2510,7 @@ begin
       if FileExists(Edit8.Text + '\Hash.md5') then
         DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end
-    else
-    if not FileExists(Edit9.Text +'\' +Edit11.Text) then
+    else if not FileExists(Edit9.Text +'\' +Edit11.Text) then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
       MessageBox(0,'Your compression was not done.', 'Failed',
@@ -2477,8 +2521,7 @@ begin
         DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end;
   end
-  else
-  if Error7z = True then
+  else if Error7z = True then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0,'Your compression was failed.', 'Failed',
@@ -2649,8 +2692,7 @@ begin
 
   if CheckBox4.IsChecked = True then
     SFXOutput:= Edit9.Text
-  else
-  if CheckBox4.IsChecked = False then
+  else if CheckBox4.IsChecked = False then
     SFXOutput:= '';
 
   Application.ProcessMessages;
@@ -2668,8 +2710,7 @@ begin
 
   if Edit10.Text <> '' then
     Result7z := Command7z +Thread7z +Method7z +Password7z +Archive7z +Source7z
-  else
-  if Edit10.Text = '' then
+  else if Edit10.Text = '' then
     Result7z := Command7z +Thread7z +Method7z +Archive7z +Source7z;
 
   DateAndTimeZ := Now;
@@ -2686,10 +2727,9 @@ begin
   ISCmdInit(Handle7z);
 
   if ISCmdRun(GetAnySource('..\Compression\7-Zip\7z.exe'), Result7z,
-    @UpdateLine2) then
-    Error7z:= False
-  else
-    Error7z:= True;
+    '', @UpdateLine2) then
+    Error7z:= False else Error7z:= True;
+
   Edit12.Text:= 'Processing...';
   ArcTime1.Enabled := False;
   Edit42.Text := 'Ending...';
@@ -2708,8 +2748,7 @@ begin
 
     DeleteFile(GetAnySource('temp.7z'));
   end
-  else
-  if not FileExists(GetAnySource('temp.7z')) then
+  else if not FileExists(GetAnySource('temp.7z')) then
     Error7z := True;
 
   if Error7z = False then
@@ -2773,8 +2812,7 @@ begin
       if FileExists(Edit8.Text + '\Hash.md5') then
         DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end
-    else
-    if not FileExists(Edit9.Text +'\' +Edit11.Text) then
+    else if not FileExists(Edit9.Text +'\' +Edit11.Text) then
     begin
       DateAndTimeZ := Now;
       Memo3.Lines.Add('');
@@ -2793,8 +2831,7 @@ begin
         DeleteFile(PChar(Edit8.Text + '\Hash.md5'));
     end;
   end
-  else
-  if Error7z = True then
+  else if Error7z = True then
   begin
     DateAndTimeZ := Now;
     Memo3.Lines.Add('');
@@ -2865,8 +2902,7 @@ begin
     Image2.Bitmap.LoadFromFile(IconImageChange);
     CopyFile(PChar(IconImageChange),GetAnySource('..\Installer\Game.ico'),false);
   end
-  else
-  if not FileExists(IconImageChange) then
+  else if not FileExists(IconImageChange) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0,'Failed to change icon.', 'Error',
@@ -2883,7 +2919,7 @@ procedure TForm1.CheckBox12Change(Sender: TObject);
 begin
   if Checkbox12.IsChecked then
   begin
-    ISCmdSuspend;
+    ISCmdPause;
     CheckBox12.Text := '►';
   end else begin
     ISCmdResume;
@@ -2895,7 +2931,7 @@ procedure TForm1.CheckBox13Change(Sender: TObject);
 begin
   if Checkbox13.IsChecked then
   begin
-    ISCmdSuspend;
+    ISCmdPause;
     CheckBox13.Text := '►';
   end else begin
     ISCmdResume;
@@ -2907,7 +2943,7 @@ procedure TForm1.CheckBox14Change(Sender: TObject);
 begin
   if Checkbox14.IsChecked then
   begin
-    ISCmdSuspend;
+    ISCmdPause;
     CheckBox14.Text := '►';
   end else begin
     ISCmdResume;
@@ -2951,38 +2987,31 @@ end;
 
 procedure TForm1.CheckBox1Change(Sender: TObject);
 begin
-  if CheckBox1.IsChecked then
-    BASS_ChannelPause(BassMusicPlayer)
-  else
-  if not CheckBox1.IsChecked then
-    BASS_ChannelPlay(BassMusicPlayer, false);
+  case CheckBox1.IsChecked of
+    True:
+    begin
+      BASS_ChannelPause(BassMusicPlayer);
+    end;
+    False:
+    begin
+      BASS_ChannelPlay(BassMusicPlayer, false);
+    end;
+  end;
 end;
 
 procedure TForm1.CheckBox2Change(Sender: TObject);
 begin
-  if CheckBox2.IsChecked = True then
-    Edit14.Enabled := True
-  else
-  if CheckBox2.IsChecked = False then
-    Edit14.Enabled := False;
+  Edit14.Enabled := CheckBox2.IsChecked;
 end;
 
 procedure TForm1.CheckBox3Change(Sender: TObject);
 begin
-  if CheckBox3.IsChecked = False then
-    Edit20.Enabled := True
-  else
-  if CheckBox3.IsChecked = True then
-    Edit20.Enabled := False;
+  Edit20.Enabled := CheckBox3.IsChecked;
 end;
 
 procedure TForm1.CheckBox4Change(Sender: TObject);
 begin
-  if CheckBox4.IsChecked = True then
-    Edit26.Enabled := True
-  else
-  if CheckBox4.IsChecked = False then
-    Edit26.Enabled := False;
+  Edit26.Enabled := CheckBox4.IsChecked;
 end;
 
 procedure TForm1.CheckBox7Change(Sender: TObject);
@@ -2992,10 +3021,7 @@ end;
 
 procedure TForm1.CheckBox8Change(Sender: TObject);
 begin
-  if CheckBox8.IsChecked = True then
-    Form1.FullScreen := True
-  else
-    Form1.FullScreen := False;
+  Form1.FullScreen := CheckBox8.IsChecked;
 end;
 
 procedure TForm1.Edit13Change(Sender: TObject);
@@ -3052,7 +3078,7 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  i, j: int64;
+  i, j, paramno: int64;
   EnoughFA, Enough7za1, Enough7za2: boolean;
   WritePBFA, WritePB7za: string;
   TimeAndDateYo: TDateTime;
@@ -3067,6 +3093,21 @@ var
   AFD1, AFD2, AFD3: int64;
   BASS_UrlRadio: string;
 begin
+  paramno := 1;
+
+  for paramno := 1 to ParamCount do
+  begin
+    if ParamStr(paramno) = '/config' then
+    begin
+      with TForm9.Create(nil) do
+      begin
+        ShowModal;
+        Free;
+      end;
+      Halt(1);
+    end;
+  end;
+
   ClientWidth:= 1280;
   ClientHeight := 720;
 
@@ -3882,7 +3923,7 @@ procedure TForm1.SearchEditButton10Click(Sender: TObject);
 var
   Dir: string;
 begin
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select Folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit32.Text:= Dir;
 end;
 
@@ -3890,7 +3931,7 @@ procedure TForm1.SearchEditButton11Click(Sender: TObject);
 var
   Dir: string;
 begin
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select Folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit33.Text:= Dir;
 end;
 
@@ -3898,7 +3939,7 @@ procedure TForm1.SearchEditButton12Click(Sender: TObject);
 var
   Dir: string;
 begin
-  if SelectDirectory('Select source folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select source folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit44.Text := Dir;
 end;
 
@@ -3916,7 +3957,7 @@ procedure TForm1.SearchEditButton1Click(Sender: TObject);
 var
   Dir: string;
 begin
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select Folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit1.Text := Dir;
 end;
 
@@ -3926,7 +3967,7 @@ var
 begin
   //Edit2.Text := SelDir;
 
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select Folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit2.Text := Dir;
 end;
 
@@ -3934,7 +3975,7 @@ procedure TForm1.SearchEditButton3Click(Sender: TObject);
 var
   Dir: string;
 begin
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select Folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit8.Text := Dir;
 end;
 
@@ -3942,7 +3983,7 @@ procedure TForm1.SearchEditButton4Click(Sender: TObject);
 var
   Dir: string;
 begin
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select Folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit9.Text := Dir;
 end;
 
@@ -3950,7 +3991,7 @@ procedure TForm1.SearchEditButton5Click(Sender: TObject);
 var
   Dir: string;
 begin
-  if SelectDirectory('Select Folder', GetCurrentDir, Dir) then
+  if SelectDirectory('Select Folder', ExtractFilePath(GetCurrentDir), Dir) then
     Edit20.Text := Dir;
 end;
 
@@ -3969,8 +4010,7 @@ begin
   begin
     CopyFile(PChar(MusicInstaller), GetAnySource('..\Installer\Graphics\Music.mp3'), false);
   end
-  else
-  if not FileExists(MusicInstaller) then
+  else if not FileExists(MusicInstaller) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0,'Failed to loaded music installer.', 'Error',

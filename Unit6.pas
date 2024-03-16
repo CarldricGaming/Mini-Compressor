@@ -105,8 +105,7 @@ begin
     MessageBox(0,'Failed to change music.', 'Error',
       MB_ICONEXCLAMATION or MB_OK);
   end
-  else
-  if ChangeMusicFile <> '' then
+  else if ChangeMusicFile <> '' then
   begin
     Edit1.Text := '';
     BASS_ChannelStop(Form1.BassMusicPlayer);
@@ -125,16 +124,17 @@ end;
 
 procedure TForm6.CheckBox1Change(Sender: TObject);
 begin
-  if CheckBox1.IsChecked then
-  begin
-    CheckBox1.Text := '>';
-    BASS_ChannelPause(Form1.BassMusicPlayer);
-  end
-  else
-  if not CheckBox1.IsChecked then
-  begin
-    CheckBox1.Text := '||';
-    BASS_ChannelPlay(Form1.BassMusicPlayer, false);
+  case CheckBox1.IsChecked of
+    True:
+    begin
+      CheckBox1.Text := '>';
+      BASS_ChannelPause(Form1.BassMusicPlayer);
+    end;
+    False:
+    begin
+      CheckBox1.Text := '||';
+      BASS_ChannelPlay(Form1.BassMusicPlayer, false);
+    end;
   end;
 end;
 
@@ -189,8 +189,7 @@ begin
     BASS_ChannelPlay(Form1.BassMusicPlayer, False);
     IniCreate(GetAnySource('..\Resources\BASS_Setting.ini'),'BASS','Radio',
       BASS_UrlRadio);
-  end else
-  begin
+  end else begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
     MessageBox(0,'Failed to change music.', 'Error',
       MB_ICONEXCLAMATION or MB_OK);

@@ -97,7 +97,7 @@ object Form2: TForm2
           TextSettings.Font.Size = 36.000000000000000000
           TextSettings.Font.StyleExt = {00070000000000000004000000}
           TextSettings.HorzAlign = Center
-          Text = 'Mini Compressor AIO v21.3d'
+          Text = 'Mini Compressor AIO v21'
           TabOrder = 1
         end
         object Panel2: TPanel
