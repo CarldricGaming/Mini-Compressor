@@ -968,7 +968,7 @@ begin
   case CheckBox5.IsChecked of
     True:
     begin
-      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe');
+      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe')
     end;
     False:
     begin
@@ -979,7 +979,7 @@ begin
   with TMemo.Create(nil) do
   begin
     Lines.Add('@echo off');
-    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('title Mini Compressor - Compressing...');
     Lines.Add('"' + FA_Exec + '" ' +FA_Result +'');
     Lines.SaveToFile('Run_FA.bat');
     Free;
@@ -1970,9 +1970,9 @@ begin
   with TMemo.Create(nil) do
   begin
     Lines.Add('@echo off');
-    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('title Mini Compressor - Compressing...');
     Lines.Add('"' + FA_Exec + '" ' +FA_Result +'');
-    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('title Mini Compressor - Compressing...');
     Lines.Add('');
     Lines.Add('');
     Lines.Add('');
@@ -2418,9 +2418,9 @@ begin
   with TMemo.Create(nil) do
   begin
     Lines.Add('@echo off');
-    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('title Mini Compressor - Compressing...');
     Lines.Add('"..\Compression\7-Zip\7z.exe" ' +Result7z +'');
-    Lines.Add('title Mini Compressor v' + IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current') + ' - Compressing...');
+    Lines.Add('title Mini Compressor - Compressing...');
     Lines.Add('');
     Lines.Add('');
     Lines.Add('');
