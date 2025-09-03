@@ -92,7 +92,6 @@ type
     CheckBox2: TCheckBox;
     Edit14: TEdit;
     ClearEditButton12: TClearEditButton;
-    CheckBox5: TCheckBox;
     Button36: TButton;
     TabItem3: TTabItem;
     Edit6: TEdit;
@@ -378,6 +377,8 @@ type
     Edit48: TEdit;
     TrackBar1: TTrackBar;
     TrackBar2: TTrackBar;
+    MenuItem14: TMenuItem;
+    MenuItem15: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -829,7 +830,7 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  IMG_Handle := FmxHandleToHWND(TWindowHandle(Form1));
+  IMG_Handle := FmxHandleToHWND(Handle);
   IMG_Error := False;
   ISCmdInit(IMG_Handle);
 
@@ -883,6 +884,9 @@ var
   FA_Solo: TMemo;
   DateAndTimeZ: TDateTime;
   SFXOutput, SFXCommand: string;
+
+  FA_Location: boolean;
+  UNARC_Protect: boolean;
 begin
   TabControl2.TabIndex := 1;
   Button2.Visible:= False;
@@ -918,6 +922,9 @@ begin
     False:
       SFXOutput := '';
   end;
+
+  if (Edit1.Text <> '') or (Edit2.Text <> '') then
+    FA_Location:= True else FA_Location:= False;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -962,17 +969,20 @@ begin
   Memo2.Lines.Add('    Method: ' +FA_Method);
   Memo2.GoToTextEnd;
 
-  FA_Handle := TWinWindowHandle(Form1).Wnd;
+  FA_Handle := FmxHandleToHWND(Handle);
   FA_Error := False;
 
-  case CheckBox5.IsChecked of
+  if IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Config_UnArc', 'Protect') = '1' then
+    UNARC_Protect:= True else UNARC_Protect:= False;
+
+  case UNARC_Protect of
     True:
     begin
-      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe')
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'Protect'));
     end;
     False:
     begin
-      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc.exe');
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'None'));
     end;
   end;
 
@@ -988,10 +998,18 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('Run_FA.bat'), '');
-  Memo1.Lines.LoadFromFile('MC_CMD_Log.txt');
-  DeleteFile('MC_CMD_Log.txt');
-  Edit6.Text:= 'Processing...';
+  if FA_Location = True then
+  begin
+    ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('Run_FA.bat'), '');
+    Memo1.Lines.LoadFromFile('MC_CMD_Log.txt');
+    DeleteFile('MC_CMD_Log.txt');
+    Edit6.Text:= 'Processing...';
+  end else begin
+    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+    MessageBox(0,'Where''s the Input and Output?'
+      +#13 +'Please insert it and try again.', 'Failed',
+      MB_ICONERROR or MB_OK);
+  end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1070,7 +1088,7 @@ begin
           IniCreate('..\Resources\records.ini','Record1','Disk','1');
           IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
 
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+          ExecAndWait(FmxHandleToHWND(Handle),
             GetAnySource('..\Resources\MC_SFX2.exe'), '',
             GetAnySource('..\Resources'));
 
@@ -1088,8 +1106,8 @@ begin
           Application.ProcessMessages;
           Sleep(150);
 
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
-            GetAnySource('SFX_Make.bat'), '', GetAnySource(''));
+          ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('SFX_Make.bat'), '');
+          if FileExists(GetAnySource('MC_CMD.ini')) then DeleteFile(GetAnySource('MC_CMD.ini'));
 
           with TMemo.Create(nil) do
           begin
@@ -1298,7 +1316,7 @@ begin
   begin
     CopyFile(GetAnySource('..\Resources\IM_Bg2.jpg'),
       GetAnySource('..\Installer\Graphics\Background.jpg'), False);
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
+    ExecAndWait(FmxHandleToHWND(Handle),
       GetAnySource('..\Installer\Compiler.exe'), '',
       GetAnySource('..\Installer'));
 
@@ -1307,7 +1325,7 @@ begin
 
     DeleteFile(GetAnySource('..\Installer\Graphics\Background.jpg'));
   end else
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
+    ExecAndWait(FmxHandleToHWND(Handle),
       GetAnySource('..\Installer\Compiler.exe'), '',
       GetAnySource('..\Installer'));
 
@@ -1351,12 +1369,12 @@ begin
     MessageBox(0, 'Looks like the file still exist. Would create another one.', 'Resource Exist',
       MB_ICONINFORMATION or MB_OK);
     DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.ini'));
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
+    ExecAndWait(FmxHandleToHWND(Handle),
       GetAnySource('..\Resources\MC_Update.exe'),'',
       GetAnySource('..\Resources'));
   end
   else if not FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
+    ExecAndWait(FmxHandleToHWND(Handle),
       GetAnySource('..\Resources\MC_Update.exe'),'',
       GetAnySource('..\Resources'))
 end;
@@ -1425,7 +1443,7 @@ begin
     Application.ProcessMessages;
     Sleep(150);
 
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
+    ExecAndWait(FmxHandleToHWND(Handle),
       GetAnySource('..\Resources\7za.exe'),'a -bb3 -r0 -mmt2 -mx9 -pIMP "'
       +FileNameProj +'.7z" "' +GetAnySource('..\Resources\Project') +'\*"',
       GetAnySource('..\Resources'));
@@ -1491,7 +1509,7 @@ begin
     Application.ProcessMessages;
     Sleep(150);
 
-    ExecAndWait(TWinWindowHandle(Form1).Wnd,
+    ExecAndWait(FmxHandleToHWND(Handle),
       GetAnySource('..\Resources\7za.exe'),'x -pIMP -O"'
       +GetAnySource('..\Resources\Project') +'" "' +PChar(LoadProj) +'"',
       GetAnySource('..\Resources'));
@@ -1643,7 +1661,7 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  FA_Handle := TWinWindowHandle(Form1).Wnd;
+  FA_Handle := FmxHandleToHWND(Handle);
   FA_Error := False;
 
   case CheckBox6.IsChecked of
@@ -1742,7 +1760,7 @@ begin
             True:
             begin
               sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+              ExecAndWait(FmxHandleToHWND(Handle),
                 GetAnySource('..\Resources\MC_SFX.exe'), '',
                 GetAnySource('..\Resources'));
             end;
@@ -1755,7 +1773,7 @@ begin
                 'Mini Compressor SFX',
                 MB_OK or MB_ICONINFORMATION);
               sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+              ExecAndWait(FmxHandleToHWND(Handle),
                 GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
                 GetAnySource('..\Resources'));
             end;
@@ -1898,6 +1916,9 @@ var
   FA_Exec: PChar;
   DateAndTimeZ: TDateTime;
   SFXOutput, SFXCommand: string;
+
+  FA_Location: boolean;
+  UNARC_Protect: boolean;
 begin
   if CheckBox9.IsChecked = True then
     with TForm5.Create(nil) do
@@ -1918,6 +1939,9 @@ begin
       SFXOutput := '';
     end;
   end;
+
+  if (Edit1.Text <> '') or (Edit2.Text <> '') then
+    FA_Location:= True else FA_Location:= False;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -1953,14 +1977,17 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  case CheckBox5.IsChecked of
+  if IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Config_UnArc', 'Protect') = '1' then
+    UNARC_Protect:= True else UNARC_Protect:= False;
+
+  case UNARC_Protect of
     True:
     begin
-      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc_P.exe')
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'Protect'));
     end;
     False:
     begin
-      FA_Exec:= GetAnySource('..\Compression\FreeArc\Arc.exe');
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'None'));
     end;
   end;
 
@@ -1992,8 +2019,16 @@ begin
   Sleep(150);
 
   FA_Error := False;
-  ExecAndWait(TWinWindowHandle(Form1).Wnd,
-    GetAnySource('Run_FA.bat'), '', GetAnySource(''));
+  if FA_Location = True then
+  begin
+    ExecAndWait(FmxHandleToHWND(Handle),
+      GetAnySource('Run_FA.bat'), '', GetAnySource(''));
+  end else begin
+    sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
+    MessageBox(0,'Where''s the Input and Output?'
+      +#13 +'Please insert it and try again.', 'Failed',
+      MB_ICONERROR or MB_OK);
+  end;
 
   Application.ProcessMessages;
   Sleep(150);
@@ -2053,7 +2088,7 @@ begin
           IniCreate('..\Resources\records.ini','Record1','Disk','1');
           IniCreate('..\Resources\records.ini','Record1','Password',Edit3.Text);
 
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
+          ExecAndWait(FmxHandleToHWND(Handle),
             GetAnySource('..\Resources\MC_SFX2.exe'),'',GetAnySource('..\Resources'));
 
           with TMemo.Create(nil) do
@@ -2073,8 +2108,8 @@ begin
           Application.ProcessMessages;
           Sleep(150);
 
-          ExecAndWait(TWinWindowHandle(Form1).Wnd,
-            GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
+          ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('SFX_Make.bat'), '');
+          if FileExists(GetAnySource('MC_CMD.ini')) then DeleteFile(GetAnySource('MC_CMD.ini'));
 
           with TMemo.Create(nil) do
           begin
@@ -2238,7 +2273,7 @@ begin
   Sleep(150);
 
   FA_Error := False;
-  ExecAndWait(TWinWindowHandle(Form1).Wnd,
+  ExecAndWait(FmxHandleToHWND(Handle),
     GetAnySource('Run_FA.bat'),'',GetAnySource(''));
 
   Application.ProcessMessages;
@@ -2288,7 +2323,7 @@ begin
             True:
             begin
               sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+              ExecAndWait(FmxHandleToHWND(Handle),
                 GetAnySource('..\Resources\MC_SFX.exe'), '',
                 GetAnySource('..\Resources'));
             end;
@@ -2301,7 +2336,7 @@ begin
                 'Mini Compressor SFX',
                 MB_OK or MB_ICONINFORMATION);
               sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-              ExecAndWait(TWinWindowHandle(Form1).Wnd,
+              ExecAndWait(FmxHandleToHWND(Handle),
                 GetAnySource('..\Resources\MC_UpdateSFX.exe'), '',
                 GetAnySource('..\Resources'));
             end;
@@ -2438,7 +2473,7 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  ExecAndWait(TWinWindowHandle(Form1).Wnd,
+  ExecAndWait(FmxHandleToHWND(Handle),
     GetAnySource('Run_7Z.bat'), '', GetAnySource(''));
   Error7z:= False;
 
@@ -2486,7 +2521,7 @@ begin
         Application.ProcessMessages;
         Sleep(150);
 
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
+        ExecAndWait(FmxHandleToHWND(Handle),
           GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
 
         Application.ProcessMessages;
@@ -2722,7 +2757,7 @@ begin
   Memo3.Lines.Add('    Method: ' +Method7z);
   Memo3.GoToTextEnd;
 
-  Handle7z:= TWinWindowHandle(Form1).Wnd;
+  Handle7z:= FmxHandleToHWND(Handle);
   Error7z:= False;
   ISCmdInit(Handle7z);
 
@@ -2788,8 +2823,8 @@ begin
         Application.ProcessMessages;
         Sleep(150);
 
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
-          GetAnySource('SFX_Make.bat'),'',GetAnySource(''));
+        ExecAndWait(FmxHandleToHWND(Handle), GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('SFX_Make.bat'), '');
+        if FileExists(GetAnySource('MC_CMD.ini')) then DeleteFile(GetAnySource('MC_CMD.ini'));
 
         Application.ProcessMessages;
         Sleep(150);
@@ -3111,7 +3146,7 @@ begin
   ClientWidth:= 1280;
   ClientHeight := 720;
 
-  BassHandle := TWinWindowHandle(Handle).Wnd;
+  BassHandle := FmxHandleToHWND(Handle);
   BASS_Init(-1, 44100, 0, BassHandle, 0);
   BASS_Start();
 
@@ -3141,7 +3176,7 @@ begin
       ShowMessage('Done updated.');
   end;
 
-  BassHandle := TWinWindowHandle(Handle).Wnd;
+  BassHandle := FmxHandleToHWND(Handle);
   BASS_Init(-1, 44100, 0, BassHandle, 0);
   BASS_Start();
 
@@ -3566,12 +3601,12 @@ begin
     if IC_ConfirmReg = '' then
     begin
       if IC_CreateShortcut = True then
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
+        ExecAndWait(FmxHandleToHWND(Handle),
           GetAnySource('..\Resources\IC_Registry2.exe'),'/verysilent',
           GetAnySource('..\Resources'))
       else
       if IC_CreateShortcut = False then
-        ExecAndWait(TWinWindowHandle(Form1).Wnd,
+        ExecAndWait(FmxHandleToHWND(Handle),
           GetAnySource('..\Resources\IC_Registry.exe'),'/verysilent',
           GetAnySource('..\Resources'));
     end;
@@ -3620,22 +3655,15 @@ begin
 
     if IC_ConfirmReg2 = True then
     begin
-      IC_Registry := TRegistry.Create(KEY_READ);
-      with IC_Registry do
-      begin
-        RootKey := HKEY_CLASSES_ROOT;
-        if OpenKey(IC_Root, False) then
-          DeleteKey('');
-        if OpenKey(IC_Root2, False) then
-          DeleteKey('');
-        Free;
-      end;
+      ExecAndWait(FmxHandleToHWND(Handle),
+        GetAnySource('..\Resources\IC_Unregistry.exe'), '',
+        GetAnySource('..\Resources'));
+
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
       MessageBox(0,'Associate ".icp" files was removed', 'Finished',
         MB_ICONINFORMATION or MB_OK);
     end;
-  end
-  else
+  end else
   if IC_ConfirmReg = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
@@ -3722,7 +3750,7 @@ end;
 
 procedure TForm1.MenuItem30Click(Sender: TObject);
 begin
-  ExecAndWait(TWinWindowHandle(Form1).Wnd,
+  ExecAndWait(FmxHandleToHWND(Handle),
     GetAnySource('..\Resources\XTool\XTool_Plugin.exe'), '',
     GetAnySource('..\Resources\XTool'));
 end;
@@ -4061,10 +4089,20 @@ end;
 procedure TForm1.Timer1Timer(Sender: TObject);
 var
   TimeAndDateYo: TDateTime;
+  MemoryOkay: MEMORYSTATUSEX;
 begin
   TimeAndDateYo:= Now;
   MenuItem3.Text:= DateToStr(TimeAndDateYo) +' | ' +TimeToStr(TimeAndDateYo);
   MenuItem31.Text := 'BASS_CPU: ' + FloatToStrF(BASS_GetCPU, ffFixed, 4, 2);
+
+
+  // ===== RISKY TO EDIT ===== //
+
+  FillChar(MemoryOkay, SizeOf(MEMORYSTATUSEX), #0);
+  MemoryOkay.dwLength := SizeOf(MemoryStatusEx);
+  GlobalMemoryStatusEx (MemoryOkay);
+
+  MenuItem15.Text := 'RAM Usage: ' + ConvertBytes(ProcessMemory) + ' - Total Memory: ' + ConvertBytes(MemoryOkay.ullTotalPhys);
 end;
 
 procedure TForm1.TrackBar1Change(Sender: TObject);

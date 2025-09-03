@@ -3,8 +3,8 @@
 	<Transactions>
     <Transaction>2023/03/07 14:35:22.000.081,E:\Doc\Mini Compressor\MC_Ini.dproj=E:\Doc\Mini Compressor\MiniCompressor_Library.dproj</Transaction>
     <Transaction>2023/11/23 11:46:05.000.928,=E:\Doc\MC_2\Unit9.pas</Transaction>
-    <Transaction>2023/11/23 11:46:32.000.258,E:\Doc\MC_2\Unit9.pas=E:\Doc\MC_2\MiniCompressor_Library_FormMemo.pas</Transaction>
     <Transaction>2023/11/23 11:46:32.000.258,E:\Doc\MC_2\Unit9.dfm=E:\Doc\MC_2\MiniCompressor_Library_FormMemo.dfm</Transaction>
+    <Transaction>2023/11/23 11:46:32.000.258,E:\Doc\MC_2\Unit9.pas=E:\Doc\MC_2\MiniCompressor_Library_FormMemo.pas</Transaction>
     <Transaction>2023/11/23 13:15:58.000.696,=E:\Doc\MC_2\MiniCompressor_Library_FormMemo.pas</Transaction>
     <Transaction>2023/11/23 13:16:28.000.895,E:\Doc\MC_2\MiniCompressor_Library_FormMemo.pas=</Transaction>
   </Transactions>

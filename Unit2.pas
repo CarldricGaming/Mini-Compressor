@@ -90,7 +90,7 @@ begin
       MB_ICONERROR or MB_OK);
   end;
 
-  StringGrid1.RowCount:= 33;
+  StringGrid1.RowCount:= 34;
   // The Name of Creator
   StringGrid1.Cells[0,0] := '7-Zip';
     StringGrid1.Cells[1,0] := 'Igor Pavlov and Shelwien';
@@ -190,6 +190,9 @@ begin
 
   StringGrid1.Cells[0,32] := 'WavPack';
     StringGrid1.Cells[1,32] := 'David Bryant';
+
+  StringGrid1.Cells[0,32] := 'BSC-M03';
+    StringGrid1.Cells[1,32] := 'lya Grebnov';
 end;
 
 procedure TForm2.FormShow(Sender: TObject);
