@@ -9064,51 +9064,42 @@ object Form1: TForm1
                                 end
                               end
                             end
-                            object CheckBox6: TCheckBox
-                              Position.X = 11.000000000000000000
-                              Position.Y = 536.000000000000000000
-                              Size.Width = 89.000000000000000000
-                              Size.Height = 19.000000000000000000
-                              Size.PlatformDefault = False
-                              TabOrder = 6
-                              Text = 'Use Protect'
-                            end
                             object CheckBox7: TCheckBox
-                              Position.X = 187.000000000000000000
-                              Position.Y = 536.000000000000000000
+                              Position.X = 104.000000000000000000
+                              Position.Y = 539.000000000000000000
                               Size.Width = 49.000000000000000000
                               Size.Height = 19.000000000000000000
                               Size.PlatformDefault = False
-                              TabOrder = 7
+                              TabOrder = 6
                               Text = 'SFX'
                               OnChange = CheckBox7Change
                             end
                             object Edit34: TEdit
                               Touch.InteractiveGestures = [LongTap, DoubleTap]
-                              TabOrder = 9
+                              TabOrder = 8
                               Text = 'File.exe'
-                              Position.X = 235.000000000000000000
+                              Position.X = 161.000000000000000000
                               Position.Y = 536.000000000000000000
                               Enabled = False
-                              Size.Width = 465.000000000000000000
+                              Size.Width = 539.000000000000000000
                               Size.Height = 22.000000000000000000
                               Size.PlatformDefault = False
                             end
                             object Button37: TButton
                               Position.X = 707.000000000000000000
                               Position.Y = 536.000000000000000000
-                              TabOrder = 10
+                              TabOrder = 9
                               Text = 'Run (CMD)'
                               TextSettings.Trimming = None
                               OnClick = Button37Click
                             end
                             object CheckBox10: TCheckBox
-                              Position.X = 99.000000000000000000
-                              Position.Y = 536.000000000000000000
+                              Position.X = 10.000000000000000000
+                              Position.Y = 539.000000000000000000
                               Size.Width = 97.000000000000000000
                               Size.Height = 19.000000000000000000
                               Size.PlatformDefault = False
-                              TabOrder = 8
+                              TabOrder = 7
                               Text = 'Create MD5'
                             end
                             object GroupBox35: TGroupBox
@@ -9118,7 +9109,7 @@ object Form1: TForm1
                               Size.Height = 112.000000000000000000
                               Size.PlatformDefault = False
                               Text = 'Protection'
-                              TabOrder = 11
+                              TabOrder = 10
                               object CheckBox16: TCheckBox
                                 IsChecked = True
                                 Position.X = 16.000000000000000000

@@ -128,7 +128,6 @@ type
     GroupBox29: TGroupBox;
     Edit37: TEdit;
     ClearEditButton33: TClearEditButton;
-    CheckBox6: TCheckBox;
     CheckBox7: TCheckBox;
     Edit34: TEdit;
     Button37: TButton;
@@ -1612,7 +1611,7 @@ var
   FA_Split: TMemo;
   FA_Exec: PChar;
   SFXOutput, SFXCommand: string;
-  SFX_Confirm: Boolean;
+  SFX_Confirm, UNARC_Protect: Boolean;
 begin
   case CheckBox7.IsChecked of
     True:
@@ -1664,14 +1663,17 @@ begin
   FA_Handle := FmxHandleToHWND(Handle);
   FA_Error := False;
 
-  case CheckBox6.IsChecked of
+  if IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Config_UnArc', 'Protect') = '1' then
+    UNARC_Protect:= True else UNARC_Protect:= False;
+
+  case UNARC_Protect of
     True:
     begin
-      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc_P.exe');
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'Protect'));
     end;
     False:
     begin
-      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc.exe');
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'None'));
     end;
   end;
 
@@ -2197,7 +2199,7 @@ var
   FA_Split: TMemo;
   FA_Exec: PChar;
   SFXOutput, SFXCommand: string;
-  SFX_Confirm: Boolean;
+  SFX_Confirm, UNARC_Protect: Boolean;
 begin
   case CheckBox7.IsChecked of
     True:
@@ -2235,14 +2237,17 @@ begin
   Application.ProcessMessages;
   Sleep(150);
 
-  case CheckBox6.IsChecked of
+  if IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Config_UnArc', 'Protect') = '1' then
+    UNARC_Protect:= True else UNARC_Protect:= False;
+
+  case UNARC_Protect of
     True:
     begin
-      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc_P.exe');
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'Protect'));
     end;
     False:
     begin
-      FA_Exec := GetAnySource('..\Compression\FreeArc\Arc.exe');
+      FA_Exec:= PChar(IniRead(GetAnySource('..\Resources\UnArc.Ini'), 'Exec_Unarc', 'None'));
     end;
   end;
 

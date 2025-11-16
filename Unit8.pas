@@ -102,6 +102,7 @@ begin
   Speed := 0.15;
   PointIn := NullPoint3D;
   RandSeed:= 23;
+  RoundCube1.AutoCapture:= True;
   NextLevel;
 end;
 
