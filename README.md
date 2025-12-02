@@ -73,6 +73,8 @@ So you can get whatever you want to compress.
 * **Metro UI**: by **Gupta**
 * **XHash Library**: by **BLACKFIRE69**
 * **CmdOut**: by **Ele**
+* **Bass Library**: by **Un4seen Developments**
+* **BSC-M03**: by **lya Grebnov**
 
 * And other things I forgot... Many thanks to the Creator.
 
