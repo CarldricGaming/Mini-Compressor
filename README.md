@@ -75,6 +75,7 @@ So you can get whatever you want to compress.
 * **CmdOut**: by **Ele**
 * **Bass Library**: by **Un4seen Developments**
 * **BSC-M03**: by **lya Grebnov**
+* **Universal CLS**: by **Edison007@FileForums**
 
 * And other things I forgot... Many thanks to the Creator.
 
