@@ -61,7 +61,7 @@ begin
   end;
 
   if FileExists(GetAnySource('..\Version.ini')) then
-    Label1.Text := 'Mini Compressor AIO - v' +IniRead(GetAnySource('..\Version.ini'), 'Version', 'Current');
+    Label1.Text := 'Mini Compressor AIO - ' +IniRead(GetAnySource('..\Version.ini'), 'Version', 'Current');
   if FileExists(GetAnySource('..\Version.ini')) then
     Label2.Text := IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Copyright');
 

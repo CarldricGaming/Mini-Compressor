@@ -13467,7 +13467,6 @@ object Form3: TForm3
       Size.PlatformDefault = False
       Stroke.Color = xFF1F9CF4
       Stroke.Thickness = 5.000000000000000000
-      EndAngle = -90.000000000000000000
       object FloatAnimation1: TFloatAnimation
         AnimationType = InOut
         Enabled = True

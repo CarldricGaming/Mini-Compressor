@@ -1,0 +1,136 @@
+object Form10: TForm10
+  Left = 0
+  Top = 0
+  Caption = 'Updater'
+  ClientHeight = 161
+  ClientWidth = 489
+  Position = MainFormCenter
+  StyleBook = Form1.StyleBook1
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Client
+    Size.Width = 489.000000000000000000
+    Size.Height = 161.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Rectangle1: TRectangle
+      Align = Client
+      Fill.Bitmap.WrapMode = TileStretch
+      Fill.Kind = Bitmap
+      Size.Width = 489.000000000000000000
+      Size.Height = 161.000000000000000000
+      Size.PlatformDefault = False
+      object FloatAnimation1: TFloatAnimation
+        AnimationType = InOut
+        Duration = 2.000000000000000000
+        Interpolation = Exponential
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 2.000000000000000000
+      end
+      object TabControl1: TTabControl
+        Align = Client
+        Size.Width = 489.000000000000000000
+        Size.Height = 161.000000000000000000
+        Size.PlatformDefault = False
+        TabIndex = 0
+        TabOrder = 0
+        TabPosition = None
+        Sizes = (
+          489s
+          161s)
+        object TabItem1: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = True
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'TabItem1'
+          object GroupBox1: TGroupBox
+            Position.Y = 40.000000000000000000
+            Size.Width = 489.000000000000000000
+            Size.Height = 49.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Latest:'
+            TabOrder = 0
+            object Edit1: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              TabOrder = 38
+              CanFocus = False
+              TextSettings.Font.StyleExt = {00070000000000000004000000}
+              TextSettings.HorzAlign = Center
+              Position.X = 8.000000000000000000
+              Position.Y = 16.000000000000000000
+              Size.Width = 473.000000000000000000
+              Size.Height = 22.000000000000000000
+              Size.PlatformDefault = False
+              StyledSettings = [Family, Size, FontColor]
+            end
+          end
+          object Label1: TLabel
+            StyledSettings = [Family, FontColor]
+            Position.Y = 8.000000000000000000
+            Size.Width = 489.000000000000000000
+            Size.Height = 33.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 20.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.HorzAlign = Center
+            Text = 'New version is Available!'
+            TabOrder = 1
+          end
+          object Button1: TButton
+            Position.X = 8.000000000000000000
+            Position.Y = 128.000000000000000000
+            TabOrder = 2
+            Text = 'Yes'
+            TextSettings.Trimming = None
+            OnClick = Button1Click
+          end
+          object Button2: TButton
+            Position.X = 401.000000000000000000
+            Position.Y = 128.000000000000000000
+            TabOrder = 3
+            Text = 'No'
+            TextSettings.Trimming = None
+            OnClick = Button2Click
+          end
+          object Label2: TLabel
+            Position.Y = 97.000000000000000000
+            Size.Width = 489.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Center
+            Text = 'Would you like to open the download page?'
+            TabOrder = 4
+          end
+        end
+      end
+      object FloatAnimation2: TFloatAnimation
+        AnimationType = InOut
+        Duration = 1.000000000000000000
+        Interpolation = Exponential
+        PropertyName = 'Opacity'
+        StartValue = 1.000000000000000000
+        StopValue = 0.000000000000000000
+      end
+    end
+  end
+  object Timer1: TTimer
+    Enabled = False
+    OnTimer = Timer1Timer
+    Left = 368
+    Top = 128
+  end
+end

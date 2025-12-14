@@ -130,10 +130,10 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MajorVer>2025</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=FileForums.Com;FileDescription=$(MSBuildProjectName);FileVersion=2025.11.17.0;InternalName=;LegalCopyright=Created by Carldric Clement;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=FileForums.Com;FileDescription=$(MSBuildProjectName);FileVersion=2025.12.14.0;InternalName=;LegalCopyright=Created by Carldric Clement;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <Icon_MainIcon>MiniCompressor_Icon1.ico</Icon_MainIcon>
-        <VerInfo_MinorVer>11</VerInfo_MinorVer>
-        <VerInfo_Release>17</VerInfo_Release>
+        <VerInfo_MinorVer>12</VerInfo_MinorVer>
+        <VerInfo_Release>14</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -182,6 +182,10 @@
         </DCCReference>
         <DCCReference Include="Unit9.pas">
             <Form>Form9</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="Unit10.pas">
+            <Form>Form10</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

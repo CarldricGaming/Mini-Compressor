@@ -80,7 +80,7 @@ begin
   end;
 
   if FileExists(GetAnySource('..\Version.ini')) then
-    Label1.Text := 'Mini Compressor AIO - v' +IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current')
+    Label1.Text := 'Mini Compressor AIO - ' +IniRead(GetAnySource('..\Version.ini') , 'Version' ,'Current')
   else
   if not FileExists(GetAnySource('..\Version.ini')) then
   begin
@@ -193,6 +193,9 @@ begin
 
   StringGrid1.Cells[0,32] := 'BSC-M03';
     StringGrid1.Cells[1,32] := 'lya Grebnov';
+
+  StringGrid1.Cells[0,33] := 'Universal CLS';
+    StringGrid1.Cells[1,33] := 'Edison007@FileForums';
 end;
 
 procedure TForm2.FormShow(Sender: TObject);

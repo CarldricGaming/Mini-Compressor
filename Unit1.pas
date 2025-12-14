@@ -378,6 +378,8 @@ type
     TrackBar2: TTrackBar;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
+    MenuItem26: TMenuItem;
+    MenuItem32: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure SearchEditButton1Click(Sender: TObject);
     procedure SearchEditButton2Click(Sender: TObject);
@@ -485,6 +487,8 @@ type
     procedure TrackBar1Change(Sender: TObject);
     procedure TrackBar2Change(Sender: TObject);
     procedure Memo1ChangeTracking(Sender: TObject);
+    procedure MenuItem26Click(Sender: TObject);
+    procedure MenuItem32Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -506,6 +510,10 @@ var
 implementation
 
 uses
+  System.Net.HttpClient,
+  System.Net.URLClient,
+  System.Net.HttpClientComponent,
+  System.JSON,
   ShellApi,
   FMX.ApplicationHelper,
   uTotalCpuUsagePct,
@@ -513,7 +521,7 @@ uses
   CmdOut,
   XHashNet,
   bass,
-  Unit2, Unit3, Unit4, Unit5, Unit6, Unit7, Unit8, Unit9;
+  Unit2, Unit3, Unit4, Unit5, Unit6, Unit7, Unit8, Unit9, Unit10;
 
 {$R *.fmx}
 
@@ -623,6 +631,38 @@ begin
   finally
     CloseFile(oFile);
   end;
+end;
+
+function CompareVersions(const V1, V2: string): Integer;
+var
+  A1, A2: TArray<string>;
+  I, N1, N2: Integer;
+begin
+  A1 := V1.Replace('v','').Split(['.']);
+  A2 := V2.Replace('v','').Split(['.']);
+
+  for I := 0 to Max(Length(A1), Length(A2)) - 1 do
+  begin
+    if I < Length(A1) then
+      N1 := StrToIntDef(A1[I], 0)
+    else
+      N1 := 0;
+
+    if I < Length(A2) then
+      N2 := StrToIntDef(A2[I], 0)
+    else
+      N2 := 0;
+
+    if N1 > N2 then Exit(1);
+    if N1 < N2 then Exit(-1);
+  end;
+
+  Result := 0; // equal
+end;
+
+function GetAppVersion: string;
+begin
+  Result := IniRead(GetAnySource('..\Version.ini'), 'Version', 'Current');
 end;
 
 //========== _+_ ==========
@@ -794,7 +834,7 @@ begin
   if not FileExists(InfoFileChange) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'Failed to loaded Info file.', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle), 'Failed to loaded Info file.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -847,14 +887,14 @@ begin
     if FileExists(Edit22.Text +'\' +IMGSolidFile) then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your ISO was done.', 'Finished',
+      MessageBox(FmxHandleToHWND(Handle),'Your ISO was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit25.Text := 'Finished.';
     end
     else if not FileExists(Edit22.Text +'\' +IMGSolidFile) then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'The processing was done, But the file didnt exist.', 'Failed',
+      MessageBox(FmxHandleToHWND(Handle),'The processing was done, But the file didnt exist.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit25.Text := 'Process done. ISO file missing.';
     end;
@@ -862,7 +902,7 @@ begin
   else if IMG_Error = True then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Failed to make ISO file.', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle),'Failed to make ISO file.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit25.Text := 'Failed.';
   end;
@@ -1005,7 +1045,7 @@ begin
     Edit6.Text:= 'Processing...';
   end else begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Where''s the Input and Output?'
+    MessageBox(FmxHandleToHWND(Handle),'Where''s the Input and Output?'
       +#13 +'Please insert it and try again.', 'Failed',
       MB_ICONERROR or MB_OK);
   end;
@@ -1107,6 +1147,7 @@ begin
 
           ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('SFX_Make.bat'), '');
           if FileExists(GetAnySource('MC_CMD.ini')) then DeleteFile(GetAnySource('MC_CMD.ini'));
+          DeleteFile('MC_CMD_Log.txt');
 
           with TMemo.Create(nil) do
           begin
@@ -1140,7 +1181,7 @@ begin
         end;
 
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was done.', 'Finished',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was done.', 'Finished',
           MB_ICONINFORMATION or MB_OK);
         Edit6.Text:= 'Finished.';
 
@@ -1159,7 +1200,7 @@ begin
           TimeToStr(DateAndTimeZ));
         Memo2.GoToTextEnd;
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was not done.', 'Failed',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was not done.', 'Failed',
           MB_ICONEXCLAMATION or MB_OK);
         Edit6.Text:= 'Failed.';
 
@@ -1181,7 +1222,7 @@ begin
         TimeToStr(DateAndTimeZ));
       Memo2.GoToTextEnd;
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was failed.', 'Failed',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was failed.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit6.Text:= 'Failed.';
 
@@ -1265,7 +1306,7 @@ begin
   else if not FileExists(BGImageChange) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'), SND_ASYNC);
-    MessageBox(0,'Failed to change bacground installer.', 'Error',
+    MessageBox(FmxHandleToHWND(Handle),'Failed to change bacground installer.', 'Error',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -1337,13 +1378,13 @@ begin
     Sleep(2000);
 
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'Installation was finish to make.', 'Finished',
+    MessageBox(FmxHandleToHWND(Handle), 'Installation was finish to make.', 'Finished',
       MB_ICONINFORMATION or MB_OK);
   end
   else if not FileExists(IM_Output) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'Installation was failed to make.', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle), 'Installation was failed to make.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
   end;
   DeleteFile(GetAnySource('..\Installer\Setup.ini'));
@@ -1365,7 +1406,7 @@ begin
   if FileExists(GetAnySource('..\Resources\ISD_List_Manual.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'Looks like the file still exist. Would create another one.', 'Resource Exist',
+    MessageBox(FmxHandleToHWND(Handle), 'Looks like the file still exist. Would create another one.', 'Resource Exist',
       MB_ICONINFORMATION or MB_OK);
     DeleteFile(GetAnySource('..\Resources\ISD_List_Manual.ini'));
     ExecAndWait(FmxHandleToHWND(Handle),
@@ -1480,7 +1521,7 @@ begin
   else if FileNameProj = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'Failed to save project.', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle), 'Failed to save project.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -1596,7 +1637,7 @@ begin
   else if LoadProj = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'Failed to load project.', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle), 'Failed to load project.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -1616,7 +1657,7 @@ begin
   case CheckBox7.IsChecked of
     True:
     begin
-      if MessageBox(0,
+      if MessageBox(FmxHandleToHWND(Handle),
         'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
         'Mini Compressor SFX',
         MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
@@ -1768,7 +1809,7 @@ begin
             end;
             False:
             begin
-              MessageBox(0,
+              MessageBox(FmxHandleToHWND(Handle),
                 'Please make sure that you following your method you used for tools.'
                 +#13 +'For incase that you don''t know how to make it,'
                 +#13 +'Just use Auto if you need.',
@@ -1797,7 +1838,7 @@ begin
         end;
 
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was done.', 'Finished',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was done.', 'Finished',
           MB_ICONINFORMATION or MB_OK);
         Edit36.Text:= 'Finished.';
 
@@ -1808,7 +1849,7 @@ begin
       if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
       begin
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was not done.', 'Failed',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was not done.', 'Failed',
           MB_ICONEXCLAMATION or MB_OK);
         Edit6.Text:= 'Failed.';
 
@@ -1825,7 +1866,7 @@ begin
     True:
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was failed.', 'Failed',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was failed.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit36.Text:= 'Failed.';
 
@@ -1887,7 +1928,7 @@ begin
     or (CheckBox8.IsChecked = True) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Failed to apply skin.' +#13
+    MessageBox(FmxHandleToHWND(Handle),'Failed to apply skin.' +#13
       +'Please do not Maximize Window or Full Screen first.', 'Error', MB_ICONEXCLAMATION or MB_OK);
   end
   else
@@ -2027,7 +2068,7 @@ begin
       GetAnySource('Run_FA.bat'), '', GetAnySource(''));
   end else begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Where''s the Input and Output?'
+    MessageBox(FmxHandleToHWND(Handle),'Where''s the Input and Output?'
       +#13 +'Please insert it and try again.', 'Failed',
       MB_ICONERROR or MB_OK);
   end;
@@ -2112,6 +2153,7 @@ begin
 
           ExecAndWait(FA_Handle, GetAnySource('Cmd_MiniCompressor.exe'), GetAnySource('SFX_Make.bat'), '');
           if FileExists(GetAnySource('MC_CMD.ini')) then DeleteFile(GetAnySource('MC_CMD.ini'));
+          DeleteFile('MC_CMD_Log.txt');
 
           with TMemo.Create(nil) do
           begin
@@ -2148,7 +2190,7 @@ begin
         end;
 
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was done.', 'Finished',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was done.', 'Finished',
           MB_ICONINFORMATION or MB_OK);
         Edit6.Text:= 'Finished.';
 
@@ -2159,7 +2201,7 @@ begin
       if not FileExists(Edit2.Text +'\' +Edit5.Text) then
       begin
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was not done.', 'Failed',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was not done.', 'Failed',
           MB_ICONEXCLAMATION or MB_OK);
         Edit6.Text:= 'Failed.';
 
@@ -2173,7 +2215,7 @@ begin
     True:
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was not done.', 'Failed',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was not done.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit6.Text:= 'Failed.';
 
@@ -2204,7 +2246,7 @@ begin
   case CheckBox7.IsChecked of
     True:
     begin
-      if MessageBox(0,
+      if MessageBox(FmxHandleToHWND(Handle),
         'Auto or Manual for SFX?' +#13#13 +'Auto = OK' +#13 +'Manual = Cancel',
         'Mini Compressor SFX',
         MB_OKCANCEL or MB_ICONQUESTION) = ID_OK then
@@ -2334,7 +2376,7 @@ begin
             end;
             False:
             begin
-              MessageBox(0,
+              MessageBox(FmxHandleToHWND(Handle),
                 'Please make sure that you following your method you used for tools.'
                 +#13 +'For incase that you don''t know how to make it,'
                 +#13 +'Just use Auto if you need.',
@@ -2368,7 +2410,7 @@ begin
         end;
 
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was done.', 'Finished',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was done.', 'Finished',
           MB_ICONINFORMATION or MB_OK);
         Edit36.Text:= 'Finished.';
 
@@ -2378,7 +2420,7 @@ begin
       else if not FileExists(PChar(Edit33.Text +'\' +Edit37.Text)) then
       begin
         sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-        MessageBox(0,'Your compression was not done.', 'Failed',
+        MessageBox(FmxHandleToHWND(Handle),'Your compression was not done.', 'Failed',
           MB_ICONEXCLAMATION or MB_OK);
         Edit6.Text:= 'Failed.';
 
@@ -2395,7 +2437,7 @@ begin
     True:
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was failed.', 'Failed',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was failed.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit36.Text:= 'Failed.';
 
@@ -2543,7 +2585,7 @@ begin
       end;
 
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was done.', 'Finished',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit12.Text:= 'Finished.';
 
@@ -2553,7 +2595,7 @@ begin
     else if not FileExists(Edit9.Text +'\' +Edit11.Text) then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was not done.', 'Failed',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was not done.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit12.Text:= 'Failed.';
 
@@ -2564,7 +2606,7 @@ begin
   else if Error7z = True then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was failed.', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle),'Your compression was failed.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit12.Text:= 'Failed.';
 
@@ -2586,25 +2628,25 @@ begin
 
   case HashResult of
     H_PROCESS_DONE:
-      MessageBox(0, 'Hash generation successful!', 'XHash', MB_OK or MB_ICONINFORMATION);
+      MessageBox(FmxHandleToHWND(Handle), 'Hash generation successful!', 'XHash', MB_OK or MB_ICONINFORMATION);
 
     H_HASH_GENERATE_ERROR:
-      MessageBox(0,'Hash generation failed!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Hash generation failed!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
 
     H_INVALID_DIRECTORY:
-      MessageBox(0,'Invalid directory!', 'XHash', MB_OK or MB_ICONERROR);
+      MessageBox(FmxHandleToHWND(Handle),'Invalid directory!', 'XHash', MB_OK or MB_ICONERROR);
 
     H_PROCESS_ABORTED:
-      MessageBox(0,'Hash generation was canceled by user!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Hash generation was canceled by user!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
 
     H_EMPTY_DIRECTORY:
-      MessageBox(0,'Empty directory!', 'XHash', MB_OK or MB_ICONERROR);
+      MessageBox(FmxHandleToHWND(Handle),'Empty directory!', 'XHash', MB_OK or MB_ICONERROR);
 
     H_CANNOT_CREATE_HASH_FILE:
-      MessageBox(0,'Cannot create hash file!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Cannot create hash file!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
 
     H_INTERNAL_ERROR:
-      MessageBox(0,'Hash generation failed, Internal error!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Hash generation failed, Internal error!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
   end;
 end;
 
@@ -2616,11 +2658,11 @@ begin
     if FA_Report <> '' then
     begin
       Memo2.Lines.SaveToFile(FA_Report +'\MC_Result1.txt');
-      //Memo1.Lines.SaveToFile(FA_Report +'\MC_Result2.txt');
+      Memo1.Lines.SaveToFile(FA_Report +'\MC_Result2.txt');
     end
     else
     if FA_Report = '' then
-      MessageBox(0, 'Failed to save result.', 'Error', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle), 'Failed to save result.', 'Error', MB_OK or MB_ICONEXCLAMATION);
 end;
 
 procedure TForm1.Button40Click(Sender: TObject);
@@ -2640,25 +2682,25 @@ begin
 
   case HashResult of
     H_PROCESS_DONE:
-      MessageBox(0, 'Hash verification successful!', 'XHash', MB_OK or MB_ICONINFORMATION);
+      MessageBox(FmxHandleToHWND(Handle), 'Hash verification successful!', 'XHash', MB_OK or MB_ICONINFORMATION);
 
     H_HASH_GENERATE_ERROR:
-      MessageBox(0,'Hash verification failed!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Hash verification failed!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
 
     H_INVALID_DIRECTORY:
-      MessageBox(0,'Invalid directory!', 'XHash', MB_OK or MB_ICONERROR);
+      MessageBox(FmxHandleToHWND(Handle),'Invalid directory!', 'XHash', MB_OK or MB_ICONERROR);
 
     H_PROCESS_ABORTED:
-      MessageBox(0,'Hash verification was canceled by user!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Hash verification was canceled by user!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
 
     H_EMPTY_DIRECTORY:
-      MessageBox(0,'Empty directory!', 'XHash', MB_OK or MB_ICONERROR);
+      MessageBox(FmxHandleToHWND(Handle),'Empty directory!', 'XHash', MB_OK or MB_ICONERROR);
 
     H_CANNOT_CREATE_HASH_FILE:
-      MessageBox(0,'Cannot create hash file!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Cannot create hash file!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
 
     H_INTERNAL_ERROR:
-      MessageBox(0,'Hash verification failed, Internal error!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
+      MessageBox(FmxHandleToHWND(Handle),'Hash verification failed, Internal error!', 'XHash', MB_OK or MB_ICONEXCLAMATION);
   end;
 end;
 
@@ -2670,7 +2712,7 @@ end;
 procedure TForm1.Button42Click(Sender: TObject);
 begin
   sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  if MessageBox(0,'Are you sure you want to stop any progress?', 'Really?',
+  if MessageBox(FmxHandleToHWND(Handle),'Are you sure you want to stop any progress?', 'Really?',
     MB_ICONEXCLAMATION or MB_OKCANCEL) = IDOK then
   begin
     ISCmdStop;
@@ -2680,7 +2722,7 @@ end;
 procedure TForm1.Button43Click(Sender: TObject);
 begin
   sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  if MessageBox(0,'Are you sure you want to stop any progress?', 'Really?',
+  if MessageBox(FmxHandleToHWND(Handle),'Are you sure you want to stop any progress?', 'Really?',
     MB_ICONEXCLAMATION or MB_OKCANCEL) = IDOK then
   begin
     ISCmdStop;
@@ -2690,7 +2732,7 @@ end;
 procedure TForm1.Button44Click(Sender: TObject);
 begin
   sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  if MessageBox(0,'Are you sure you want to stop any progress?', 'Really?',
+  if MessageBox(FmxHandleToHWND(Handle),'Are you sure you want to stop any progress?', 'Really?',
     MB_ICONEXCLAMATION or MB_OKCANCEL) = IDOK then
   begin
     ISCmdStop;
@@ -2845,7 +2887,7 @@ begin
       end;
 
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was done.', 'Finished',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was done.', 'Finished',
         MB_ICONINFORMATION or MB_OK);
       Edit12.Text:= 'Finished.';
 
@@ -2863,7 +2905,7 @@ begin
         TimeToStr(DateAndTimeZ));
       Memo3.GoToTextEnd;
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Your compression was not done.', 'Failed',
+      MessageBox(FmxHandleToHWND(Handle),'Your compression was not done.', 'Failed',
         MB_ICONEXCLAMATION or MB_OK);
       Edit12.Text:= 'Failed.';
 
@@ -2882,7 +2924,7 @@ begin
       TimeToStr(DateAndTimeZ));
     Memo3.GoToTextEnd;
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Your compression was failed.', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle),'Your compression was failed.', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
     Edit12.Text:= 'Failed.';
 
@@ -2945,7 +2987,7 @@ begin
   else if not FileExists(IconImageChange) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Failed to change icon.', 'Error',
+    MessageBox(FmxHandleToHWND(Handle),'Failed to change icon.', 'Error',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -3227,7 +3269,7 @@ begin
   if HashExistFile = False then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Resources\Hash_Type.db"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3273,19 +3315,19 @@ begin
   if not FileExists(GetAnySource('..\Resources\Skin\_Skin.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Resources\Skin\_Skin.ini"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
 
   if FileExists(GetAnySource('..\Version.ini')) then
-    MenuItem17.Text := 'v' +IniRead(GetAnySource('..\Version.ini') ,
+    MenuItem17.Text := IniRead(GetAnySource('..\Version.ini') ,
       'Version' ,'Current')
   else
   if not FileExists(GetAnySource('..\Version.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Version.ini"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3296,7 +3338,7 @@ begin
   if not FileExists(GetAnySource('..\Compression\FreeArc\arc.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Installer\Graphics\Background.jpg"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3307,7 +3349,7 @@ begin
   if not FileExists(GetAnySource('..\Resources\IM_Bg.jpg')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Resources\IM_Bg.jpg"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3318,7 +3360,7 @@ begin
   if not FileExists(GetAnySource('..\Resources\IM_Info.txt')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Resources\IM_Info.txt"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3329,7 +3371,7 @@ begin
   if not FileExists(GetAnySource('..\Installer\Resources\Icon.ico')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Installer\Resources\Icon.ico"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3340,7 +3382,7 @@ begin
   if not FileExists(GetAnySource('..\Resources\Wallpaper.jpg')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Resource\Wallpaper.jpg"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3371,7 +3413,7 @@ begin
     if EnoughFA = False then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Failed to read' +#13 +#13
+      MessageBox(FmxHandleToHWND(Handle),'Failed to read' +#13 +#13
         +'"Compression\FreeArc.ini"', 'Error',
         MB_ICONEXCLAMATION or MB_OK);
     end;
@@ -3380,7 +3422,7 @@ begin
   if not FileExists(GetAnySource('..\Compression\FreeArc.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Compression\FreeArc.ini"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3423,7 +3465,7 @@ begin
     if (Enough7za1 = False) and (Enough7za2 = False) then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Failed to read' +#13 +#13
+      MessageBox(FmxHandleToHWND(Handle),'Failed to read' +#13 +#13
         +'"Compression\7Zip.ini"', 'Error',
         MB_ICONEXCLAMATION or MB_OK);
     end;
@@ -3432,7 +3474,7 @@ begin
   if not FileExists(GetAnySource('..\Compression\7Zip.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Compression\7Zip.ini"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3445,7 +3487,7 @@ begin
   if not FileExists(GetAnySource('..\Compression\OSCDIMG.ini')) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-    MessageBox(0,'Missing file' +#13 +#13
+    MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
       +'"Compression\OSCDIMG.ini"', 'Error',
       MB_ICONERROR or MB_OK);
   end;
@@ -3480,7 +3522,7 @@ begin
     if not FileExists(GetAnySource('..\Resources\Music.mp3')) then
     begin
       sndPlaySound(GetAnySource('..\Resources\MC_ERROR.wav'),SND_ASYNC);
-      MessageBox(0,'Missing file' +#13 +#13
+      MessageBox(FmxHandleToHWND(Handle),'Missing file' +#13 +#13
         +'"Resources\Music.mp3"', 'Error',
         MB_ICONERROR or MB_OK);
     end;
@@ -3550,7 +3592,7 @@ begin
   if ChangeJPGFile = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Failed to change wallpaper.', 'Error',
+    MessageBox(FmxHandleToHWND(Handle),'Failed to change wallpaper.', 'Error',
       MB_ICONEXCLAMATION or MB_OK);
   end
   else
@@ -3593,7 +3635,7 @@ begin
   if IC_ConfirmReg = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    if MessageBox(0,'Do you want to create a shortcut?', 'Permission',
+    if MessageBox(FmxHandleToHWND(Handle),'Do you want to create a shortcut?', 'Permission',
       MB_ICONQUESTION or MB_OKCANCEL) = IDOK then
     begin
       IC_CreateShortcut := True;
@@ -3617,14 +3659,14 @@ begin
     end;
 
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Associate ".icp" files was created', 'Finished',
+    MessageBox(FmxHandleToHWND(Handle),'Associate ".icp" files was created', 'Finished',
       MB_ICONINFORMATION or MB_OK);
   end
   else
   if IC_ConfirmReg = 'InstallerCreatorProject' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Associate ".icp" files was exists', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle),'Associate ".icp" files was exists', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -3652,7 +3694,7 @@ begin
   if IC_ConfirmReg = 'InstallerCreatorProject' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    if MessageBox(0,'Do you want to remove associate ".icp" fles?', 'Question',
+    if MessageBox(FmxHandleToHWND(Handle),'Do you want to remove associate ".icp" fles?', 'Question',
       MB_ICONQUESTION or MB_OKCANCEL) = IDOK then
       IC_ConfirmReg2 := True
     else
@@ -3665,14 +3707,14 @@ begin
         GetAnySource('..\Resources'));
 
       sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-      MessageBox(0,'Associate ".icp" files was removed', 'Finished',
+      MessageBox(FmxHandleToHWND(Handle),'Associate ".icp" files was removed', 'Finished',
         MB_ICONINFORMATION or MB_OK);
     end;
   end else
   if IC_ConfirmReg = '' then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Associate ".icp" files wasn''t exists', 'Failed',
+    MessageBox(FmxHandleToHWND(Handle),'Associate ".icp" files wasn''t exists', 'Failed',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -3699,7 +3741,7 @@ begin
   if not FileExists(FA_Filename) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Failed to loaded file.', 'Error',
+    MessageBox(FmxHandleToHWND(Handle),'Failed to loaded file.', 'Error',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -3707,14 +3749,14 @@ end;
 procedure TForm1.MenuItem25Click(Sender: TObject);
 begin
   sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-  if MessageBox(0,'Which do you want to enable?'
+  if MessageBox(FmxHandleToHWND(Handle),'Which do you want to enable?'
     +#13 +#13
     +'OK = Enable UnArc Protect' +#13 +'Cancel = Disable UnArc Protect',
     'UnArc Protect', MB_ICONQUESTION or MB_OKCANCEL) = IDOK then
   begin
     IniCreate(GetAnySource('..\Resources\UnArc.Ini'), 'Config_UnArc', 'Protect', '1');
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'UnArc Protect is Enable. You can compile with:'
+    MessageBox(FmxHandleToHWND(Handle), 'UnArc Protect is Enable. You can compile with:'
       +#13 +#13
       +'* Installer Creator v3.1' +#13
       +'* Inno Maker' +#13
@@ -3725,7 +3767,7 @@ begin
   end else begin
     IniCreate(GetAnySource('..\Resources\UnArc.Ini'), 'Config_UnArc', 'Protect', '0');
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0, 'UnArc Protect is Disable. You can compile with:'
+    MessageBox(FmxHandleToHWND(Handle), 'UnArc Protect is Disable. You can compile with:'
       +#13 +#13
       +'* Installer Creator v3.1' +#13
       +'* Inno Maker' +#13
@@ -3734,6 +3776,11 @@ begin
       +'Feel free to contact developer if you have any problem.', 'Succesful',
       MB_ICONINFORMATION or MB_OK);
   end;
+end;
+
+procedure TForm1.MenuItem26Click(Sender: TObject);
+begin
+  ExecAndNoWait(GetAnySource('..\Tools\UniversalCLS.exe'), '');
 end;
 
 procedure TForm1.MenuItem28Click(Sender: TObject);
@@ -3758,6 +3805,61 @@ begin
   ExecAndWait(FmxHandleToHWND(Handle),
     GetAnySource('..\Resources\XTool\XTool_Plugin.exe'), '',
     GetAnySource('..\Resources\XTool'));
+end;
+
+procedure TForm1.MenuItem32Click(Sender: TObject);
+var
+  HTTP: TNetHTTPClient;
+  Resp: IHTTPResponse;
+  JSON: TJSONObject;
+  LatestVersion: string;
+  CompareResult: Integer;
+begin
+  HTTP:= TNetHTTPClient.Create(nil);
+  try
+    HTTP.UserAgent := 'MiniCompressor-Updater';
+
+    Resp := HTTP.Get(
+      'https://api.github.com/repos/CarldricGaming/Mini-Compressor/releases/latest'
+    );
+
+    if Resp.StatusCode <> 200 then
+    begin
+      MessageBox(FmxHandleToHWND(Handle),'Failed to update.' +#13 +
+        'Please check your connection first.', 'No internet connection.', MB_ICONEXCLAMATION or MB_OK);
+      Exit;
+    end;
+
+    JSON := TJSONObject.ParseJSONValue(Resp.ContentAsString) as TJSONObject;
+    try
+      LatestVersion := JSON.GetValue('tag_name').Value;
+      CompareResult := CompareVersions(LatestVersion, GetAppVersion);
+
+      case CompareResult of
+        1:
+          with TForm10.Create(nil) do
+          try
+            ShowModal;
+          finally
+            Free;
+          end;
+
+        0:
+          MessageBox(FmxHandleToHWND(Handle),'Your software is up to date.' +#13 +
+            'No need to update this time.', 'You''re good to go.', MB_ICONINFORMATION or MB_OK);
+
+       -1:
+          MessageBox(FmxHandleToHWND(Handle),'You''re running a newer version (BETA) version.',
+            'You''re on a BETA mode.', MB_ICONINFORMATION or MB_OK);
+      end;
+
+    finally
+      JSON.Free;
+    end;
+
+  finally
+    HTTP.Free;
+  end;
 end;
 
 procedure TForm1.MenuItem5Click(Sender: TObject);
@@ -4046,7 +4148,7 @@ begin
   else if not FileExists(MusicInstaller) then
   begin
     sndPlaySound(GetAnySource('..\Resources\MC_OK.wav'),SND_ASYNC);
-    MessageBox(0,'Failed to loaded music installer.', 'Error',
+    MessageBox(FmxHandleToHWND(Handle),'Failed to loaded music installer.', 'Error',
       MB_ICONEXCLAMATION or MB_OK);
   end;
 end;
@@ -4120,7 +4222,7 @@ begin
       if TrackBar1.Value > 80 then
       begin
         sndPlaySound(GetAnySource('..\Resources\MC_INFO.wav'),SND_ASYNC);
-        if MessageBox(0,'Above 80% or higher would be getting increasing size.'
+        if MessageBox(FmxHandleToHWND(Handle),'Above 80% or higher would be getting increasing size.'
           +#13+ 'Are you sure about this?', 'Confused Recovery?', MB_ICONINFORMATION or MB_YESNO) = ID_YES then
           begin
             FA_IgnoreProtectRecover := True;
@@ -4144,7 +4246,7 @@ begin
       if TrackBar2.Value > 80 then
       begin
         sndPlaySound(GetAnySource('..\Resources\MC_INFO.wav'),SND_ASYNC);
-        if MessageBox(0,'Above 80% or higher would be getting increasing size.'
+        if MessageBox(FmxHandleToHWND(Handle),'Above 80% or higher would be getting increasing size.'
           +#13+ 'Are you sure about this?', 'Confused Recovery?', MB_ICONINFORMATION or MB_YESNO) = ID_YES then
           begin
             FA_IgnoreProtectRecover2 := True;
