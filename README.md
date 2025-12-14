@@ -15,7 +15,7 @@ So you can get whatever you want to compress.
 
 # Q & A
 * Q: Is there any update for Mini Compressor?
-* A: Yes. But I moved to GitHub as what I can do there.
+* A: Yes. Now you can check for update on Help > Check for updates on menu bar.
 
 * Q: Can I change Music and Wallpaper?
 * A: Yes. Now you can change the Music and Wallpaper from Options in Mini Compressor.
