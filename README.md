@@ -3,7 +3,7 @@
 </p>
 
 <p align="center"Mini Compressor" /p>
-&lt;p align="center"&gt;Toolset for game repacking. Now with Masked Compression v3.0.&lt;/p&gt;
+<p align="center"Toolset for game repacking. Now with Masked Compression v3.0" /p>
 
 ---
 
