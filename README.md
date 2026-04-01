@@ -46,9 +46,9 @@ All versions: [Releases page](https://github.com/CarldricGaming/Mini-Compressor/
 
 ## Screenshot
 
-&lt;p align="center"&gt;
-  &lt;img src="https://github.com/CarldricGaming/Mini-Compressor/assets/46277745/ab77ffe2-8ea9-46fe-b1c8-c393bcc587e4" width="700"&gt;
-&lt;/p&gt;
+<p align="center">
+<img src="https://github.com/CarldricGaming/Mini-Compressor/assets/46277745/ab77ffe2-8ea9-46fe-b1c8-c393bcc587e4" width="700">
+</p>
 
 ## How to use
 
