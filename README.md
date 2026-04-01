@@ -1,99 +1,154 @@
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/46277745/214106133-1d304a0c-b909-42c3-a20b-93bdcaedb9ae.png" />
-</p>
+&lt;p align="center"&gt;
+  &lt;img src="https://user-images.githubusercontent.com/46277745/214106133-1d304a0c-b909-42c3-a20b-93bdcaedb9ae.png" width="600"&gt;
+&lt;/p&gt;
 
-Mini Compressor is a Tool Set for most repacking games.
-It has been bundled with Masked Compression v3.0 now.
-This means you can compress any game what you want.
-By the way, there is a program that has been recently updated.
-So you can get whatever you want to compress.
+&lt;h1 align="center"&gt;Mini Compressor&lt;/h1&gt;
+&lt;p align="center"&gt;Toolset for game repacking. Now with Masked Compression v3.0.&lt;/p&gt;
 
-# Download Mini Compressor
-- [x] **Latest version** - [Latest](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.12.14)
-- [x] **Previous version** - [Previous](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.11.17)
-- [x] **Other version** - [Check here](https://github.com/CarldricGaming/Mini-Compressor/releases)
+---
 
-# Q & A
-* Q: Is there any update for Mini Compressor?
-* A: Yes. Now you can check for update on Help > Check for updates on menu bar.
+## What is this?
 
-* Q: Can I change Music and Wallpaper?
-* A: Yes. Now you can change the Music and Wallpaper from Options in Mini Compressor.
+Mini Compressor is basically a Swiss Army knife for anyone who repacks games or just wants to compress their game folders without messing things up. It bundles a ton of different compression engines and makes them actually usable with a GUI instead of messing with command lines all day.
 
-* Q: Is there any self-extraction on Mini Compressor?
-* A: Yes. It's automatic when you Checkbox to create SFX.
+Been using this for a while now and it's solid. The new masked compression is pretty crazy for ratios if you have the time to wait.
 
-* Q: Some Compressors fail, What should I do?
-* A: as panker1992 said "I'm not responsible for the compressors themselves, I didn't write their code. So I can't be blamed for their Defects. I'm not responsible for your Data loss. Although I'll check if you send me a Picture that problem."
+## Features
 
-* Q: Why can't I compress with DisksPan combined with Masked Compression?
-* A: You can't do compression like that because many files on your game or some bytes will be lost after compression.
+- Masked Compression v3.0 built in
+- Self-extracting archives (SFX) - just check the box
+- Can change the background music and wallpaper if you want
+- Auto-updater built in (Help &gt; Check for updates)
+- Multi-threaded so it actually uses your CPU
+- Game-specific compression methods (works good on textures/audio)
 
-* Q: Why does Mini Compressor seem useful and helpful?
-* A: Well, I don't know why you're looking at that. It's because the software is so easy to use. And not too hard.
+## System Requirements
 
-# Based Plugin Used
-* Bass.dll - v2.4.17
-* basshls.dll - v2.4.3
-* bassopus.dll - v2.4.2
-* cmdout.dll - v1.0
-* MiniCompressor_Library.dll - v1.0
-* XHashNext.dll - v1.0
+**Minimum:**
+- 4GB RAM
+- 320GB storage
+- Windows 7/8/8.1/10 x64
 
-# Special thanks to 
-* **7-Zip**: by **Igor Pavlov** and **Shelwien**
-* **Anvil Forge Recompressor**: by **Edison007** and **ProFrager**
-* **Razor Archiver**: by **Christian Martelock**
-* **CSArc**: by **Siyuan Fu**
-* **SQUID Demo Compressor**: by **Ilya Muravyov**
-* **Freearc**, **SREP** and **FAZip**: by **Bulat Ziganshin**
-* **ISDONE**, **LOLZ**, **UELR** and **MSC**: by **ProFrager**
-* **lzturbo**: by **Hamid Buzidi**
-* **Noodle**: by **Ramiro Cruzo**
-* **DisksPan**, **ZTool**, **pZLib** and **XTool**: by **Razor12911**
-* **Precomp**: by **Christian Schneider**
-* **ECM**: by **Neill Corlett**
-* **NanoZip**: by **Sami Runsas**
-* **UHARC**: by **Uwe Herklotz**
-* **Graphics Studio**: by **Razor12911**
-* **Game File Scanner**: by **Razor12911**
-* **OSCDIMG**: by **Microsoft**
-* **WinRAR**: by **Alexander Roshal**
-* **Inno Setup**: by **Jordan Russell**
-* **Directory Sclicer**: by **Mircea Dragomir**
-* **Masked Compression**: by **panker1992**
-* **Selft-Extract**: by **gozarck**
-* **hkSFV**: by **Big-O Software**
-* **ZCM**: by **Nania Francesco Antonio**
-* **SafeCopy**: by **Roman Ish**
-* **Installer Creator**: by **Razor12911** and **Kitsune1982**
-* **PMT - Parallel Multithreaded encoder/decoder**: by **78372**
-* **lrzip**: by **gozarck**
-* **AllDup**: by **MTSD**
-* **Metro UI**: by **Gupta**
-* **XHash Library**: by **BLACKFIRE69**
-* **CmdOut**: by **Ele**
-* **Bass Library**: by **Un4seen Developments**
-* **BSC-M03**: by **lya Grebnov**
-* **Universal CLS**: by **Edison007@FileForums**
+**Recommended:**
+- 8GB+ RAM  
+- 512GB+ storage
+- Windows 10/11 x64
 
-* And other things I forgot... Many thanks to the Creator.
+Yeah it's x64 only, no 32-bit.
 
-# System Requiredments
-Minimum Spec:
-* RAM: 4GB
-* Storage: 320GB
-* OS: Windows 7, 8, 8.1, 10 (x64 only)
+## Download
 
-Recommended Spec:
-* RAM: 8GB
-* Storage: 512GB
-* OS: Windows 7, 8, 8.1, 10 (x64 only)
+Latest: [v2025.12.14](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.12.14)
 
-# Screenshot
-![image](https://github.com/CarldricGaming/Mini-Compressor/assets/46277745/ab77ffe2-8ea9-46fe-b1c8-c393bcc587e4)
+Previous: [v2025.11.17](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.11.17)
 
-# Installer Plugins for Mini Compressor
-Grab and use it whatever you like. Thanks to **pratikpatel8982**
-[Here](https://fileforums.com/showpost.php?p=491935&postcount=173)
+All versions: [Releases page](https://github.com/CarldricGaming/Mini-Compressor/releases)
 
+## Screenshot
+
+&lt;p align="center"&gt;
+  &lt;img src="https://github.com/CarldricGaming/Mini-Compressor/assets/46277745/ab77ffe2-8ea9-46fe-b1c8-c393bcc587e4" width="700"&gt;
+&lt;/p&gt;
+
+## How to use
+
+1. Open Mini Compressor.exe
+2. Pick your game folder
+3. Choose method (Masked for best compression, Standard for faster)
+4. Check "Create SFX" if you want it self-extracting
+5. Hit compress and wait (might take hours depending on size)
+
+**Important:** Don't use DiskSpan + Masked Compression together. Your files will get corrupted. Use one or the other.
+
+**Pro tip for debug symbols:** If you're compressing PDB files, use SREP filters. They work amazing on those.
+
+**PNG files:** Usually already compressed so don't waste time with heavy methods on them.
+
+## Changing music/wallpaper
+
+Options &gt; Audio Settings for music
+Options &gt; Appearance for wallpaper
+
+Pretty straightforward.
+
+## FAQ
+
+**Q: Some compressor fails, what do I do?**
+
+A: As panker1992 said - he's not responsible for the individual compressors since he didn't write them. Take a screenshot of the error and send it, but backup your data first. Try a different method if one keeps crashing.
+
+**Q: Why can't I combine DiskSpan with Masked?**
+
+A: Technical reasons. DiskSpan splits files, Masked restructures the data stream. Together they break things. Just don't do it.
+
+**Q: Is it free?**
+
+A: Yeah, completely. Freeware.
+
+**Q: Updates?**
+
+A: Help &gt; Check for updates in the menu.
+
+## Plugins & Extras
+
+If you want to make installers for your repacks, pratikpatel8982 made some plugins:
+https://fileforums.com/showpost.php?p=491935&postcount=173
+
+## Credits
+
+Uses a ton of different compression engines and tools:
+
+**Audio:**
+- BASS Library 2.4.17
+- basshls 2.4.3
+- bassopus 2.4.2
+
+**Compression:**
+- 7-Zip (Igor Pavlov, Shelwien)
+- Freearc, SREP, FAZip (Bulat Ziganshin)
+- ISDONE, LOLZ, UELR, MSC (ProFrager)
+- lzturbo (Hamid Buzidi)
+- ZTool, pZLib, XTool (Razor12911)
+- Precomp (Christian Schneider)
+- NanoZip (Sami Runsas)
+- UHARC (Uwe Herklotz)
+- ZCM (Nania Francesco Antonio)
+- BSC-M03 (Ilya Grebnov)
+
+**Tools:**
+- Anvil Forge Recompressor (Edison007, ProFrager)
+- Razor Archiver (Christian Martelock)
+- CSArc (Siyuan Fu)
+- SQUID Demo (Ilya Muravyov)
+- DisksPan (Razor12911)
+- ECM (Neill Corlett)
+- Graphics Studio (Razor12911)
+- Game File Scanner (Razor12911)
+- Directory Slicer (Mircea Dragomir)
+- Masked Compression (panker1992)
+- Selft-Extract (gozarck)
+- hkSFV (Big-O Software)
+- SafeCopy (Roman Ish)
+- Installer Creator (Razor12911, Kitsune1982)
+- PMT (78372)
+- lrzip (gozarck)
+- AllDup (MTSD)
+- Metro UI (Gupta)
+- XHash Library (BLACKFIRE69)
+- CmdOut (Ele)
+- Universal CLS (Edison007)
+
+**Packaging:**
+- Inno Setup (Jordan Russell)
+- OSCDIMG (Microsoft)
+- WinRAR (Alexander Roshal)
+
+And probably others I forgot. Thanks to everyone in the repack scene who contributes tools.
+
+## Disclaimer
+
+Use at your own risk. Always backup your stuff before compressing. Not responsible for data loss or if you violate game EULAs. Verify your archives work before deleting originals.
+
+---
+
+Made by CarldricGaming and the community.
