@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/46277745/214106133-1d304a0c-b909-42c3-a20b-93bdcaedb9ae.png" width="600" />
 </p>
 
-&lt;h1 align="center"&gt;Mini Compressor&lt;/h1&gt;
+<h1 align="center"&gt;Mini Compressor&lt; /h1>
 &lt;p align="center"&gt;Toolset for game repacking. Now with Masked Compression v3.0.&lt;/p&gt;
 
 ---
