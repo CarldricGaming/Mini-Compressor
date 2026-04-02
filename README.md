@@ -49,7 +49,7 @@ All versions: [Releases page](https://github.com/CarldricGaming/Mini-Compressor/
 
 ## How to use
 
-1. Open Mini Compressor.exe
+1. Open Launcher.exe
 2. Pick your game folder
 3. Choose method (Masked for best compression, Standard for faster)
 4. Check "Create SFX" if you want it self-extracting
