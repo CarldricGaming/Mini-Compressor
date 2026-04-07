@@ -37,9 +37,9 @@ Yeah it's x64 only, no 32-bit.
 
 ## Download
 
-Latest: [v2025.12.14](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.12.14)
+Latest: [v2026.04.07](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2026.04.07)
 
-Previous: [v2025.11.17](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.11.17)
+Previous: [v2025.11.17](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.12.14)
 
 All versions: [Releases page](https://github.com/CarldricGaming/Mini-Compressor/releases)
 
