@@ -5799,6 +5799,25 @@ object Form1: TForm1
                 Text = #55356#57250' Skin'
                 OnClick = MenuItem29Click
               end
+              object MenuItem33: TMenuItem
+                Locked = True
+                Text = 'Language'
+                object MenuItem34: TMenuItem
+                  Locked = True
+                  Text = 'English'
+                  OnClick = MenuItem34Click
+                end
+                object MenuItem35: TMenuItem
+                  Locked = True
+                  Text = 'Malaysia'
+                  OnClick = MenuItem35Click
+                end
+                object MenuItem36: TMenuItem
+                  Locked = True
+                  Text = #32321#39636#20013#25991
+                  OnClick = MenuItem36Click
+                end
+              end
             end
             object MenuItem30: TMenuItem
               Bitmap.PNG = {
@@ -11455,7 +11474,7 @@ object Form1: TForm1
                             end
                             object GroupBox4: TGroupBox
                               Position.X = 8.000000000000000000
-                              Position.Y = 224.000000000000000000
+                              Position.Y = 225.000000000000000000
                               Size.Width = 865.000000000000000000
                               Size.Height = 49.000000000000000000
                               Size.PlatformDefault = False
@@ -12626,6 +12645,9 @@ object Form1: TForm1
                         object Button38: TButton
                           Position.X = 705.000000000000000000
                           Position.Y = 560.000000000000000000
+                          Size.Width = 80.000000000000000000
+                          Size.Height = 22.000000000000000000
+                          Size.PlatformDefault = False
                           TabOrder = 6
                           Text = 'Run (CMD)'
                           TextSettings.Trimming = None
@@ -14786,28 +14808,28 @@ object Form1: TForm1
                     object TabControl4: TTabControl
                       Position.X = 96.000000000000000000
                       Size.Width = 785.000000000000000000
-                      Size.Height = 585.000000000000000000
+                      Size.Height = 592.000000000000000000
                       Size.PlatformDefault = False
                       TabIndex = 0
                       TabOrder = 0
                       TabPosition = None
                       Sizes = (
                         785s
-                        585s
+                        592s
                         785s
-                        585s
+                        592s
                         785s
-                        585s
+                        592s
                         785s
-                        585s
+                        592s
                         785s
-                        585s
+                        592s
                         785s
-                        585s
+                        592s
                         785s
-                        585s
+                        592s
                         785s
-                        585s)
+                        592s)
                       object TabItem8: TTabItem
                         CustomIcon = <
                           item
@@ -15185,7 +15207,7 @@ object Form1: TForm1
                           object Label18: TLabel
                             Position.X = 16.000000000000000000
                             Position.Y = 16.000000000000000000
-                            Size.Width = 57.000000000000000000
+                            Size.Width = 96.000000000000000000
                             Size.Height = 25.000000000000000000
                             Size.PlatformDefault = False
                             Text = 'CPU Core'
@@ -15229,7 +15251,7 @@ object Form1: TForm1
                           object Label20: TLabel
                             Position.X = 16.000000000000000000
                             Position.Y = 64.000000000000000000
-                            Size.Width = 89.000000000000000000
+                            Size.Width = 96.000000000000000000
                             Size.Height = 25.000000000000000000
                             Size.PlatformDefault = False
                             Text = 'RAM Size (MB)'
@@ -15251,7 +15273,7 @@ object Form1: TForm1
                           object Label21: TLabel
                             Position.X = 16.000000000000000000
                             Position.Y = 88.000000000000000000
-                            Size.Width = 81.000000000000000000
+                            Size.Width = 96.000000000000000000
                             Size.Height = 25.000000000000000000
                             Size.PlatformDefault = False
                             Text = 'GPU Size (MB)'
@@ -15273,7 +15295,7 @@ object Form1: TForm1
                           object Label22: TLabel
                             Position.X = 16.000000000000000000
                             Position.Y = 112.000000000000000000
-                            Size.Width = 89.000000000000000000
+                            Size.Width = 96.000000000000000000
                             Size.Height = 25.000000000000000000
                             Size.PlatformDefault = False
                             Text = 'DirectX Version'
@@ -15898,7 +15920,7 @@ object Form1: TForm1
                       TabOrder = 10
                       object Button29: TButton
                         Position.X = 8.000000000000000000
-                        Position.Y = 32.000000000000000000
+                        Position.Y = 34.000000000000000000
                         TabOrder = 0
                         Text = 'Save Project'
                         TextSettings.Trimming = None
@@ -16476,8 +16498,11 @@ object Form1: TForm1
                       Size.PlatformDefault = False
                     end
                     object Button39: TButton
-                      Position.X = 705.000000000000000000
-                      Position.Y = 558.000000000000000000
+                      Position.X = 706.000000000000000000
+                      Position.Y = 553.000000000000000000
+                      Size.Width = 80.000000000000000000
+                      Size.Height = 24.000000000000000000
+                      Size.PlatformDefault = False
                       TabOrder = 3
                       Text = 'Generate'
                       TextSettings.Trimming = None
@@ -16498,8 +16523,11 @@ object Form1: TForm1
                       Viewport.Height = 357.000000000000000000
                     end
                     object Button40: TButton
-                      Position.X = 793.000000000000000000
-                      Position.Y = 558.000000000000000000
+                      Position.X = 794.000000000000000000
+                      Position.Y = 553.000000000000000000
+                      Size.Width = 80.000000000000000000
+                      Size.Height = 24.000000000000000000
+                      Size.PlatformDefault = False
                       TabOrder = 5
                       Text = 'Verify'
                       TextSettings.Trimming = None
