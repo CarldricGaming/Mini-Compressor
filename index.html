@@ -51,7 +51,7 @@
 
     <h2 class="text-2xl font-bold mb-4">⬇ Latest Version</h2>
 
-    <p id="version" class="text-blue-400 mb-2">
+    <p id="version2" class="text-blue-400 mb-2">
       Loading version...
     </p>
 
@@ -225,6 +225,10 @@ fetch("https://api.github.com/repos/CarldricGaming/Mini-Compressor/releases/late
 
     // VERSION
     document.getElementById("version").innerText =
+      "Version: " + data.tag_name;
+
+    // VERSION 2
+    document.getElementById("version2").innerText =
       "Version: " + data.tag_name;
 
     // DATE
