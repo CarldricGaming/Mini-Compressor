@@ -10,123 +10,131 @@
   <style>
     body {
       background: radial-gradient(circle at top, #0f172a, #020617);
-      overflow-x: hidden;
     }
 
-    /* Glass */
     .glass {
       background: rgba(255,255,255,0.05);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255,255,255,0.1);
     }
 
-    /* Neon */
     .neon {
-      box-shadow: 0 0 10px #3b82f6, 0 0 40px #3b82f6;
+      box-shadow: 0 0 10px #3b82f6, 0 0 30px #3b82f6;
     }
 
     .neon-text {
-      text-shadow: 0 0 10px #3b82f6, 0 0 30px #3b82f6;
-    }
-
-    /* Animated particles */
-    .particle {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #3b82f6;
-      animation: float 10s linear infinite;
-      opacity: 0.6;
-    }
-
-    @keyframes float {
-      from { transform: translateY(0); }
-      to { transform: translateY(-100vh); }
+      text-shadow: 0 0 10px #3b82f6;
     }
   </style>
 </head>
 
 <body class="text-white font-sans">
 
-  <!-- PARTICLES -->
-  <div id="particles"></div>
+<!-- HERO -->
+<section class="text-center py-24 px-6">
+  <h1 class="text-6xl font-bold neon-text mb-4">Mini Compressor</h1>
+  <p class="text-gray-400 mb-4">
+    Toolset for game repacking — Masked Compression v3
+  </p>
 
-  <!-- HERO -->
-  <section class="text-center py-24 px-6 relative">
-    <h1 class="text-6xl font-bold neon-text mb-4">
-      Mini Compressor
-    </h1>
+  <p id="version" class="text-blue-400 mb-6">Loading version...</p>
 
-    <p class="text-gray-400 mb-6">
-      Game Repacking Tool • Masked Compression v3
+  <a id="downloadBtn"
+     class="px-10 py-4 bg-blue-600 rounded-2xl neon hover:bg-blue-500 transition font-semibold">
+     ⬇ Download Latest
+  </a>
+</section>
+
+<!-- WHAT IS THIS -->
+<section class="max-w-4xl mx-auto px-6 py-12">
+  <div class="glass p-6 rounded-2xl">
+    <h2 class="text-2xl font-bold mb-4">What is this?</h2>
+    <p class="text-gray-400">
+      Mini Compressor is an all-in-one tool for game repacking and file compression.
+      It combines multiple compression engines into an easy-to-use GUI, eliminating
+      the need for complex command-line tools.
+    </p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="max-w-6xl mx-auto px-6 py-16">
+  <h2 class="text-3xl font-bold mb-10 text-center">Features</h2>
+
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="glass p-6 rounded-2xl">📦 Masked Compression v3</div>
+    <div class="glass p-6 rounded-2xl">⚡ Multi-threaded performance</div>
+    <div class="glass p-6 rounded-2xl">🎮 Game optimized compression</div>
+    <div class="glass p-6 rounded-2xl">🎵 Custom music & wallpaper</div>
+    <div class="glass p-6 rounded-2xl">🔄 Auto updater</div>
+    <div class="glass p-6 rounded-2xl">📁 SFX archive support</div>
+  </div>
+</section>
+
+<!-- SCREENSHOT -->
+<section class="text-center py-16 px-6">
+  <h2 class="text-3xl font-bold mb-8">Preview</h2>
+  <div class="glass inline-block p-4 rounded-2xl">
+    <img src="https://github.com/CarldricGaming/Mini-Compressor/assets/46277745/ab77ffe2-8ea9-46fe-b1c8-c393bcc587e4"
+         class="rounded-xl">
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section class="max-w-4xl mx-auto px-6 py-12">
+  <div class="glass p-6 rounded-2xl">
+    <h2 class="text-2xl font-bold mb-4">How to Use</h2>
+    <ol class="list-decimal ml-5 text-gray-400 space-y-2">
+      <li>Open Launcher.exe</li>
+      <li>Select your game folder</li>
+      <li>Choose compression method</li>
+      <li>Enable SFX if needed</li>
+      <li>Click Compress and wait</li>
+    </ol>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="max-w-4xl mx-auto px-6 py-12">
+  <div class="glass p-6 rounded-2xl">
+    <h2 class="text-2xl font-bold mb-4">FAQ</h2>
+
+    <p class="mb-2 font-semibold">Compressor failed?</p>
+    <p class="text-gray-400 mb-4">
+      Try another method and always backup your files.
     </p>
 
-    <p id="version" class="text-blue-400 mb-8">
-      Loading latest version...
-    </p>
+    <p class="mb-2 font-semibold">Is it free?</p>
+    <p class="text-gray-400">Yes, completely free.</p>
+  </div>
+</section>
 
-    <a id="downloadBtn"
-       class="px-10 py-4 rounded-2xl text-lg font-semibold bg-blue-600 neon hover:bg-blue-500 transition">
-       ⬇ Download Latest
-    </a>
-  </section>
+<!-- FOOTER -->
+<footer class="text-center py-10 text-gray-500">
+  <p>Made by CarldricGaming</p>
+  <a href="https://github.com/CarldricGaming/Mini-Compressor"
+     class="underline hover:text-white">
+     GitHub Repository
+  </a>
+</footer>
 
-  <!-- CHANGELOG -->
-  <section class="max-w-3xl mx-auto px-6 py-10">
-    <div class="glass p-6 rounded-2xl">
-      <h2 class="text-xl font-bold mb-4">Latest Changes</h2>
-      <pre id="changelog" class="text-gray-400 whitespace-pre-wrap text-sm">
-Loading changelog...
-      </pre>
-    </div>
-  </section>
+<!-- SCRIPT (AUTO VERSION) -->
+<script>
+fetch("https://api.github.com/repos/CarldricGaming/Mini-Compressor/releases/latest")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("version").innerText =
+      "Latest Version: " + data.tag_name;
 
-  <!-- FEATURES -->
-  <section class="max-w-6xl mx-auto px-6 py-16">
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="glass p-6 rounded-2xl">⚡ Multi-threaded performance</div>
-      <div class="glass p-6 rounded-2xl">📦 Masked Compression v3</div>
-      <div class="glass p-6 rounded-2xl">🎮 Game optimized</div>
-    </div>
-  </section>
-
-  <!-- SCRIPT -->
-  <script>
-    // FETCH LATEST RELEASE
-    fetch("https://api.github.com/repos/CarldricGaming/Mini-Compressor/releases/latest")
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("version").innerText = "Latest Version: " + data.tag_name;
-
-        document.getElementById("changelog").innerText =
-          data.body ? data.body.substring(0, 800) : "No changelog available.";
-
-        // AUTO GET EXE FILE
-        const exe = data.assets.find(a => a.name.endsWith(".exe"));
-        if (exe) {
-          document.getElementById("downloadBtn").href = exe.browser_download_url;
-        } else {
-          document.getElementById("downloadBtn").href = data.html_url;
-        }
-      })
-      .catch(() => {
-        document.getElementById("version").innerText = "Failed to load version";
-      });
-
-    // PARTICLES GENERATOR
-    const container = document.getElementById("particles");
-
-    for (let i = 0; i < 80; i++) {
-      const p = document.createElement("div");
-      p.classList.add("particle");
-
-      p.style.left = Math.random() * 100 + "vw";
-      p.style.top = Math.random() * 100 + "vh";
-      p.style.animationDuration = (5 + Math.random() * 10) + "s";
-
-      container.appendChild(p);
-    }
-  </script>
+    const exe = data.assets.find(a => a.name.endsWith(".exe"));
+    document.getElementById("downloadBtn").href =
+      exe ? exe.browser_download_url : data.html_url;
+  })
+  .catch(() => {
+    document.getElementById("version").innerText =
+      "Unable to fetch latest version";
+  });
+</script>
 
 </body>
 </html>
