@@ -147,6 +147,7 @@ This project uses many tools and libraries:
 - UHARC (Uwe Herklotz)  
 - ZCM (Nania Francesco Antonio)  
 - BSC-M03 (Ilya Grebnov)  
+- HALAC (Hakan Abbas)
 
 ### Tools
 - Anvil Forge Recompressor  
