@@ -1,4 +1,4 @@
-# MiniCompressor
+# Mini Compressor
 
 [![Version](https://img.shields.io/github/v/release/CarldricGaming/Mini-Compressor?color=%230567ff&label=Latest%20Release&style=for-the-badge)](https://github.com/CarldricGaming/Mini-Compressor/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/CarldricGaming/Mini-Compressor/total?label=Total%20Downloads&style=for-the-badge)](https://github.com/CarldricGaming/Mini-Compressor/releases)
