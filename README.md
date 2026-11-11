@@ -24,7 +24,7 @@ An all-in-one GUI toolset for game repacking, combining FreeArc, SREP, XTool, Oo
 
 ## Download
 
-- **Latest:** [v2026.11.11](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2025.11.11)
+- **Latest:** [v2026.11.11](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2026.11.11)
 - **Previous:** [v2026.06.12](https://github.com/CarldricGaming/Mini-Compressor/releases/tag/v2026.06.12)
 - **All versions:** [Releases page](https://github.com/CarldricGaming/Mini-Compressor/releases)
 
